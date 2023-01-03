@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Yantramanav:wght@400;500;700;900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #064663;
+  --secondary: #08597f;
+
+  --font-family: 'Yantramanav', sans-serif;
+  --font-family2: 'Source Sans Pro', sans-serif;
+  --font-family3: 'Roboto', sans-serif;
+
+}
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  outline-width: 0px;
+}
+body {
+  font-family: var(--font-family3);
+  -webkit-font-smoothing: antialiased;
+}
+p {
+  font-family: var(--font-family2);
+
+}
+a {
+  cursor: pointer;
+}
+
+hr {
+  border-top-width: 0px;
+}
+
+/* swiper */
+.swiper-slide-visible {
+  margin-right: unset !important;
+  border: 1px solid;
+}
+
+.swiper:last-child {
+  position: absolute;
+  width: 100%;
+  top: 14rem;
+}
+.swiper:last-child > .swiper-wrapper {
+  height: 4rem;
+  justify-content: center;
+}
+
