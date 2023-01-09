@@ -8,13 +8,13 @@
   import Alert from "$components/Alert.svelte";
   import { modal } from "$services/store";
 
-  const deleteProductApprove = (productId) => {
+  const deletePhaseApprove = (phaseId) => {
     modal.set(
       bind(Alert, {
         message: "Bu işlemi onaylıyor musunuz ?",
         answer: (message) => {
           if (message) {
-            deleteProduct(productId);
+            deletePhase(phaseId);
           }
           modal.set(null);
         },
@@ -22,30 +22,24 @@
     );
   };
 
-  let products;
-  let langs;
-  let lang;
+  let phases;
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
-  const getLangs = async () => {
-    let response = await RestService.getLangs(undefined, undefined);
-    langs = response["langs"];
-  };
-  getLangs();
-  const getProducts = async () => {
-    let response = await RestService.getProducts(limit, skip, lang);
-    products = response["products"];
-    console.log(products, "products");
+
+  const getPhases = async () => {
+    let response = await RestService.getPhases(limit, skip);
+    phases = response["phases"];
+    console.log(phases, "phases");
     totalDataCount = response["count"];
   };
-  getProducts();
+  getPhases();
 
-  const deleteProduct = async (productId) => {
-    let response = await RestService.deleteProduct(productId);
+  const deletePhase = async (phaseId) => {
+    let response = await RestService.deletePhase(phaseId);
     if (response["status"]) {
       ToastService.success($Translate("Successfully-deleted"));
-      getProducts();
+      getPhases();
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -53,7 +47,7 @@
   const ceilAndCalculate = () => {
     if (Math.ceil(skip / limit) != Math.ceil(totalDataCount / limit) - 1) {
       skip = skip + limit;
-      getProducts();
+      getPhases();
     }
   };
 
@@ -74,7 +68,7 @@
       class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
       type="button"
       on:click={() => {
-        navigate("/panel/create-product");
+        navigate("/panel/create-phase");
       }}
     >
       <i class="fa fa-plus" />
@@ -87,12 +81,12 @@
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-lg text-blueGray-700">Ürünler</h3>
+            <h3 class="font-semibold text-lg text-blueGray-700">Kategoriler</h3>
           </div>
         </div>
       </div>
       <div class="block w-full overflow-x-auto">
-        {#if products}
+        {#if phases}
           <table class="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
@@ -102,23 +96,7 @@
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  No
-                </th>
-                <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  Kategori
-                </th>
-                <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  İsim
+                  Kategori İsmi
                 </th>
                 <th
                 class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
@@ -126,16 +104,17 @@
                   ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                   : 'bg-red-700 text-red-200 border-red-600'}"
               >
-                İsim
+                Notlar
               </th>
-                <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  Durum
-                </th>
+              <th
+              class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+              'light'
+                ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                : 'bg-red-700 text-red-200 border-red-600'}"
+            >
+              Durum
+            </th>
+
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -145,34 +124,30 @@
               </tr>
             </thead>
             <tbody>
-              {#each products as product}
+              {#each phases as phase}
                 <tr>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {product.no}
+                    {phase.name}
                   </td>
                   <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {product.cat.name}
-                  </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {product.name}
-                  </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    <button
-                      class="{product.isActive
-                        ? 'bg-green-500'
-                        : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold"
-                    >
-                      {product.isActive ? "Aktif" : "Pasif"}
-                    </button>
-                  </td>
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+                {phase.note?phase.note:"-"}
+                </td>
+                <td
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+              >
+                <button
+                  class="{phase.isActive
+                    ? 'bg-green-500'
+                    : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold cursor-default"
+                >
+                  {phase.isActive ? "Aktif" : "Pasif"}
+                </button>
+              </td>
+
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
@@ -180,14 +155,13 @@
                       class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                       on:click={navigate(
-                        `/panel/update-product/${product._id.toString()}`
+                        `/panel/update-phase/${phase._id.toString()}`
                       )}
                     >
                       {$Translate("Edit")}
                     </button>
                     <button
-                      on:click={() =>
-                        deleteProductApprove(product._id.toString())}
+                      on:click={() => deletePhaseApprove(phase._id.toString())}
                       class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                     >
@@ -201,14 +175,14 @@
         {/if}
       </div>
       <hr class="my-4 md:min-w-full" />
-      {#if products}
+      {#if phases}
         <div
           class="flex flex-row flex-wrap lg:flex-nowrap w-full gap-1 justify-center lg:justify-end items-center p-3"
         >
           <Select
             bind:value={limit}
             change={() => {
-              getProducts();
+              getPhases();
             }}
             values={[
               { limit: 10 },
@@ -227,7 +201,7 @@
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
-              getProducts();
+              getPhases();
             }}
           >
             {$Translate("Prev")}
@@ -241,7 +215,7 @@
               type="button"
               on:click={() => {
                 skip = limit * i;
-                getProducts();
+                getPhases();
               }}
             >
               {i + 1}

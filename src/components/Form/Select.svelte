@@ -50,6 +50,7 @@
   <option disabled={!all} value={null}>{title}</option>
   {#each values as _value}
     <option value={_value[valuesKey]}>
+
       {#if valuesTitleKeySub}
         {_value[valuesTitleKey][valuesTitleKeySub]}
       {:else}

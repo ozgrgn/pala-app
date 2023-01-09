@@ -20,7 +20,7 @@
     { key: "prices", customValue: null },
     { key: "note", customValue: null },
     { key: "order", customValue: null },
-    { key: "isActive", customValue: null },
+    { key: "isActive", customValue: false },
     { key: "images", customValue: null },
     { key: "logos", customValue: null },
   ];
@@ -35,11 +35,7 @@
     images.splice(index, 1);
     images = images;
   };
-  let logos = [];
-  let deleteLogo = (index) => {
-    logos.splice(index, 1);
-    logos = logos;
-  };
+
   const getCats = async () => {
     let response = await RestService.getCats(undefined, undefined);
     cats = response["cats"];
@@ -71,33 +67,24 @@
       product[v.key] = {};
     }
   });
-
-  const updateProductUnits = async (units) => {
-    product.units = [];
-    units.map((unit, index) => {
-      product.units[index] = {};
-      product.units[index]._id = unit._id;
-      product.units[index].number = unit.number;
-    });
-    console.log(product.units, "unşts");
-  };
-  const updateProductPrices = async (memberships) => {
-    product.membership = [];
-    memberships.map((membership, index) => {
-      product.membership[index] = {};
-      product.membership[index]._id = membership._id;
-      product.membership[index].price = membership.price;
-    });
-    console.log(product.membership, "membership");
-  };
   const addProduct = async () => {
     let data = {};
     data.images = images;
-    console.log(product, "product");
+    data.units = units;
+    data.prices = memberships;
+    console.log(product, "productsss");
     console.log(images, "images");
-    data.images = images;
+    if (!product.isActive.value) {
+      product.isActive.value = false;
+    }
     values.map((v) => {
-      if (product[v.key].value) {
+      console.log(v.key, "vkey");
+      if (
+        product[v.key].value &&
+        v.key != "prices" &&
+        v.key != "units" &&
+        v.key != "images"
+      ) {
         data[v.key] = product[v.key]?.value;
       }
     });
@@ -241,6 +228,12 @@
           <div class="lg:w-3/12 px-4">
             <div class="">
               <div class=" ">
+                <label
+                class="block  text-blueGray-600 text-xs font-bold mb-2"
+                for="grid-name"
+              >
+                Üyelik Fiyatı
+              </label>
                 {#if memberships}
                   {#each memberships as membership, index}
                     <div class="border mt-2 p-1 grid grid-cols-2">
@@ -260,28 +253,25 @@
                 {/if}
               </div>
             </div>
-            <div class="w-full flex justify-end">
-              <button
-                on:click={() => updateProductPrices(memberships)}
-                class=" w-full mt-2 bg-green-400 disabled:bg-red-300 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
-                type="button"
-              >
-                Fiyatları Güncelle
-              </button>
-            </div>
           </div>
           <div class="lg:w-3/12 px-4 flex flex-col justify-between">
             <div class="">
+              <label
+              class="block  text-blueGray-600 text-xs font-bold mb-2"
+              for="grid-name"
+            >
+              Birim Adedi
+            </label>
               {#if units}
                 {#each units as unit, index}
                   <div class="border mt-2 p-1 grid grid-cols-2 ">
                     <span
                       class="px-2 flex flex-col justify-center text-blueGray-600 text-sm font-bold"
-                      >{unit.name} Adedi</span
+                      >{units[index].name} Adedi</span
                     >
                     <div class=" flex flex-col justify-center">
                       <NumberInput
-                        bind:value={unit.number}
+                        bind:value={units[index].number}
                         placeholder={"Adet Sayısı"}
                         required={false}
                       />
@@ -290,18 +280,16 @@
                 {/each}
               {/if}
             </div>
-            <div class="w-full flex justify-end">
-              <button
-                on:click={() => updateProductUnits(units)}
-                class=" w-full mt-2 bg-green-400 disabled:bg-red-300 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
-                type="button"
-              >
-                Birimleri Güncelle
-              </button>
-            </div>
+  
           </div>
           <div class="lg:w-6/12 px-4 ">
             <div class="">
+              <label
+              class="block  text-blueGray-600 text-xs font-bold "
+              for="grid-name"
+            >
+              Resimler
+            </label>
               {#each images as Image, index}
                 <div class="border mt-2 p-1 grid grid-flow-col">
                   <span

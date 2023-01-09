@@ -108,6 +108,7 @@
             >
               Üyelikler
             </a>
+            
             <a
             class="text-white font-semibold text-sm {$location.pathname.indexOf(
               'unit'
@@ -132,6 +133,30 @@
           >
             Ürünler
           </a>
+          <a
+          class="text-white font-semibold text-sm {$location.pathname.indexOf(
+            'customer'
+          ) !== -1
+            ? 'hover:text-white text-base'
+            : 'text-white/80 hover:text-white'}"
+          href="/panel/customers"
+          use:link
+          on:click={() => (navbarOpen = false)}
+        >
+          Müşteriler
+        </a>
+        <a
+        class="text-white font-semibold text-sm {$location.pathname.indexOf(
+          'transaction'
+        ) !== -1
+          ? 'hover:text-white text-base'
+          : 'text-white/80 hover:text-white'}"
+        href="/panel/transactions"
+        use:link
+        on:click={() => (navbarOpen = false)}
+      >
+        Satışlar
+      </a>
 
 
 

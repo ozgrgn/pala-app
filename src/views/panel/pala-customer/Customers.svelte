@@ -8,13 +8,13 @@
   import Alert from "$components/Alert.svelte";
   import { modal } from "$services/store";
 
-  const deleteProductApprove = (productId) => {
+  const deleteCustomerApprove = (customerId) => {
     modal.set(
       bind(Alert, {
         message: "Bu işlemi onaylıyor musunuz ?",
         answer: (message) => {
           if (message) {
-            deleteProduct(productId);
+            deleteCustomer(customerId);
           }
           modal.set(null);
         },
@@ -22,30 +22,24 @@
     );
   };
 
-  let products;
-  let langs;
-  let lang;
+  let customers;
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
-  const getLangs = async () => {
-    let response = await RestService.getLangs(undefined, undefined);
-    langs = response["langs"];
-  };
-  getLangs();
-  const getProducts = async () => {
-    let response = await RestService.getProducts(limit, skip, lang);
-    products = response["products"];
-    console.log(products, "products");
+
+  const getCustomers = async () => {
+    let response = await RestService.getCustomers(limit, skip);
+    customers = response["customers"];
+    console.log(customers, "customers");
     totalDataCount = response["count"];
   };
-  getProducts();
+  getCustomers();
 
-  const deleteProduct = async (productId) => {
-    let response = await RestService.deleteProduct(productId);
+  const deleteCustomer = async (customerId) => {
+    let response = await RestService.deleteCustomer(customerId);
     if (response["status"]) {
       ToastService.success($Translate("Successfully-deleted"));
-      getProducts();
+      getCustomers();
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -53,7 +47,7 @@
   const ceilAndCalculate = () => {
     if (Math.ceil(skip / limit) != Math.ceil(totalDataCount / limit) - 1) {
       skip = skip + limit;
-      getProducts();
+      getCustomers();
     }
   };
 
@@ -74,7 +68,7 @@
       class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
       type="button"
       on:click={() => {
-        navigate("/panel/create-product");
+        navigate("/panel/create-customer");
       }}
     >
       <i class="fa fa-plus" />
@@ -92,7 +86,7 @@
         </div>
       </div>
       <div class="block w-full overflow-x-auto">
-        {#if products}
+        {#if customers}
           <table class="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
@@ -145,32 +139,32 @@
               </tr>
             </thead>
             <tbody>
-              {#each products as product}
+              {#each customers as customer}
                 <tr>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {product.no}
+                    {customer.no}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {product.cat.name}
+                    {customer.membership.name}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {product.name}
+                    {customer.name}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     <button
-                      class="{product.isActive
+                      class="{customer.isActive
                         ? 'bg-green-500'
                         : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold"
                     >
-                      {product.isActive ? "Aktif" : "Pasif"}
+                      {customer.isActive ? "Aktif" : "Pasif"}
                     </button>
                   </td>
                   <td
@@ -180,14 +174,14 @@
                       class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                       on:click={navigate(
-                        `/panel/update-product/${product._id.toString()}`
+                        `/panel/update-customer/${customer._id.toString()}`
                       )}
                     >
                       {$Translate("Edit")}
                     </button>
                     <button
                       on:click={() =>
-                        deleteProductApprove(product._id.toString())}
+                        deleteCustomerApprove(customer._id.toString())}
                       class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                     >
@@ -201,14 +195,14 @@
         {/if}
       </div>
       <hr class="my-4 md:min-w-full" />
-      {#if products}
+      {#if customers}
         <div
           class="flex flex-row flex-wrap lg:flex-nowrap w-full gap-1 justify-center lg:justify-end items-center p-3"
         >
           <Select
             bind:value={limit}
             change={() => {
-              getProducts();
+              getCustomers();
             }}
             values={[
               { limit: 10 },
@@ -227,7 +221,7 @@
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
-              getProducts();
+              getCustomers();
             }}
           >
             {$Translate("Prev")}
@@ -241,7 +235,7 @@
               type="button"
               on:click={() => {
                 skip = limit * i;
-                getProducts();
+                getCustomers();
               }}
             >
               {i + 1}

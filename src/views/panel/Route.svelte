@@ -53,6 +53,15 @@
   import UpdateUnit from "./pala-unit/UpdateUnit.svelte";
   import CreateUnit from "./pala-unit/CreateUnit.svelte";
   import Units from "./pala-unit/Units.svelte";
+  import UpdateCustomer from "./pala-customer/UpdateCustomer.svelte";
+  import CreateCustomer from "./pala-customer/CreateCustomer.svelte";
+  import Customers from "./pala-customer/Customers.svelte";
+  import UpdateTransaction from "./pala-transaction.svelte/UpdateTransaction.svelte";
+  import CreateTransaction from "./pala-transaction.svelte/CreateTransaction.svelte";
+  import Transactions from "./pala-transaction.svelte/Transactions.svelte";
+  import UpdatePhase from "./pala-phase/UpdatePhase.svelte";
+  import CreatePhase from "./pala-phase/CreatePhase.svelte";
+  import Phases from "./pala-phase/Phases.svelte";
   // let userAuthSubscription = user.subscribe(async (auth) => {
   //   if (!auth) {
   //     navigate("/auth/login");
@@ -125,19 +134,28 @@
 
         <Route path="products" component={Products} />
 
-
-        <!-- Brand -->
+        <!-- Unit -->
         <Route path="update-unit/:unitId" component={UpdateUnit} />
 
         <Route path="create-unit" component={CreateUnit} />
 
         <Route path="units" component={Units} />
 
+        <!-- Customer -->
+        <Route path="update-customer/:customerId" component={UpdateCustomer} />
 
+        <Route path="create-customer" component={CreateCustomer} />
 
+        <Route path="customers" component={Customers} />
+        <!-- Transaction -->
+        <Route
+          path="update-transaction/:transactionId"
+          component={UpdateTransaction}
+        />
 
+        <Route path="create-transaction" component={CreateTransaction} />
 
-
+        <Route path="transactions" component={Transactions} />
 
 
         <!-- Admin -->
@@ -147,6 +165,14 @@
 
         <Route path="admins" component={Admins} />
 
+
+
+
+
+
+
+
+        
         <!-- Slider -->
         <Route path="update-slider/:sliderId" component={UpdateSlider} />
 

@@ -172,9 +172,67 @@ const deleteProduct = (productId) => {
   return Http.delete(`${ENV.API_URL}/product/${productId}`);
 };
 
+// Customers
+const getCustomers = (limit, skip) => {
+  console.log("fsdgerf")
+  let data = {};
+  if (limit) {
+    data.limit = limit;
+  }
+  if (skip) {
+    data.skip = skip;
+  }
 
+  return Http.get(`${ENV.API_URL}/customer`, { ...data });
+};
+const addCustomer = (data) => {
+  return Http.post(`${ENV.API_URL}/customer`, data);
+};
 
+const updateCustomer = (customerId, data) => {
+  return Http.put(`${ENV.API_URL}/customer/${customerId}`, {
+    customer: data,
+  });
+};
 
+const getCustomer = (customerId) => {
+  return Http.get(`${ENV.API_URL}/customer/${customerId}`);
+};
+
+const deleteCustomer = (customerId) => {
+  return Http.delete(`${ENV.API_URL}/customer/${customerId}`);
+};
+
+// Transactions
+const getTransactions = (limit, skip) => {
+  console.log("fsdgerf")
+  let data = {};
+  if (limit) {
+    data.limit = limit;
+  }
+  if (skip) {
+    data.skip = skip;
+  }
+
+  return Http.get(`${ENV.API_URL}/transaction`, { ...data });
+};
+const addTransaction = (data) => {
+  return Http.post(`${ENV.API_URL}/transaction`, data);
+};
+
+const updateTransaction = (transactionId, data) => {
+  return Http.put(`${ENV.API_URL}/transaction/${transactionId}`, {
+    transaction: data,
+  });
+};
+
+const getTransaction = (transactionId) => {
+  return Http.get(`${ENV.API_URL}/transaction/${transactionId}`);
+};
+
+const deleteTransaction = (transactionId) => {
+  return Http.delete(`${ENV.API_URL}/transaction/${transactionId}`);
+};
 
 
 
@@ -567,6 +625,22 @@ export default {
   addProduct,
   updateProduct,
   deleteProduct,
+  //Customers
+  getCustomers,
+  getCustomer,
+  addCustomer,
+  updateCustomer,
+  deleteCustomer,
+  //Transactions
+  getTransactions,
+  getTransaction,
+  addTransaction,
+  updateTransaction,
+  deleteTransaction,
+
+
+
+
 
   //admin
   verifyToken,
