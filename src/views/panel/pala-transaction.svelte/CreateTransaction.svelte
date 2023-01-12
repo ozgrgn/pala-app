@@ -27,6 +27,7 @@
   let salesItems = [];
   let salesItem = {};
   let products;
+  let total=0
   let images = [];
   let memberships;
   let units;
@@ -50,6 +51,7 @@
     let product = products.find((x) => x._id == salesItem.product);
     let price = product.prices.find((x) => x._id == customer.membership._id);
     salesItem.productName = product.name;
+    salesItem.cat = product.cat;
     salesItem.unitPrice = price.price;
     console.log(price, "price");
   };
@@ -62,15 +64,22 @@
   };
   const addSalesItem = async (index) => {
     salesItem.total =
-      salesItem.unitPrice * salesItem.unitNumber * salesItem.number;
-     salesItems = [...salesItems, salesItem]
+      salesItem.unitPrice *
+      (salesItem.unitNumber ? salesItem.unitNumber : 1) *
+      salesItem.number;
+    salesItems = [ ...salesItems,salesItem];
+    total=total+salesItem.total
 
-
+    salesItem={product:null,number:0,unit:null,unitPrice:0,total:0}
+    
+    console.log(total,"total")
   };
   const deleteSalesItem = async (index) => {
     console.log(index, salesItems);
+    total=total-salesItems[index].total
     salesItems.splice(index, 1);
     salesItems = salesItems;
+   
     console.log(salesItems);
   };
   const getCustomers = async () => {
@@ -101,7 +110,9 @@
   const addTransaction = async () => {
     let data = {};
 
-    data.membership = transaction.customer.membership;
+    data.customerData = customer;
+    data.salesItems = salesItems;
+    data.total = total
     console.log(transaction, "transactionsss");
 
     values.map((v) => {
@@ -312,11 +323,9 @@
                   />
                 </td>
                 <td class="text-center">
-                  {salesItem.unitPrice &&
-                  salesItem.unitNumber &&
-                  salesItem.number
+                  {salesItem.unitPrice && salesItem.number
                     ? salesItem.unitPrice *
-                      salesItem.unitNumber *
+                      (salesItem.unitNumber ? salesItem.unitNumber : 1) *
                       salesItem.number
                     : "-"}
                 </td>

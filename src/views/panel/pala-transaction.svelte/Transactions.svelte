@@ -7,6 +7,7 @@
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
   import { modal } from "$services/store";
+  import moment from "moment";
 
   const deleteTransactionApprove = (transactionId) => {
     modal.set(
@@ -30,7 +31,7 @@
   const getTransactions = async () => {
     let response = await RestService.getTransactions(limit, skip);
     transactions = response["transactions"];
-    console.log(transactions, "transactions");
+    console.log(response, "transactions");
     totalDataCount = response["count"];
   };
   getTransactions();
@@ -81,7 +82,7 @@
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-lg text-blueGray-700">Ürünler</h3>
+            <h3 class="font-semibold text-lg text-blueGray-700">Satışlar</h3>
           </div>
         </div>
       </div>
@@ -99,13 +100,13 @@
                   No
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  Kategori
-                </th>
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                Tarih
+              </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -115,12 +116,20 @@
                   İsim
                 </th>
                 <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Üyelik
+                </th>
+                <th
                 class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                 'light'
                   ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                   : 'bg-red-700 text-red-200 border-red-600'}"
               >
-                İsim
+                Tutar
               </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
@@ -147,26 +156,27 @@
                     {transaction.no}
                   </td>
                   <td
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+               
+                {moment(transaction.date).format("DD/MM/YYYY")}
+               
+                </td>
+                  <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {transaction.membership.name}
+                    {transaction.customer.name}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {transaction.name}
+                    {transaction.customerData.membership.name}
                   </td>
                   <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    <button
-                      class="{transaction.isActive
-                        ? 'bg-green-500'
-                        : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold"
-                    >
-                      {transaction.isActive ? "Aktif" : "Pasif"}
-                    </button>
-                  </td>
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+                  {transaction.total}
+                </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >

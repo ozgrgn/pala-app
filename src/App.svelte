@@ -16,6 +16,7 @@
   import { onDestroy } from "svelte";
   import RestService from "./services/rest";
   import { isDesktop } from "$services/utils";
+  import Register from "./views/auth/Register.svelte";
 
   // const getGenerals = async () => {
   //   let response = await RestService.getGenerals(undefined, undefined, $lang);
@@ -50,12 +51,8 @@
   //   console.log($treatments, "treatments");
   // };
   // getTreatments();
-  if (
-    window.location.pathname == "/auth/login" ||
-    window.location.pathname == "/panel" ||
-    window.location.pathname == "/panel/" ||
-    window.location.pathname.includes("panel")
-  ) {
+  if (!window.location.pathname.includes("panel")
+) {
     let userAuthSubscription = user.subscribe(async (auth) => {
       if (!auth) {
         navigate("/auth/login");
@@ -64,15 +61,16 @@
           navigate("/auth/login");
         }
       } else {
-        let response = await RestService.verifyToken();
+        let response = await RestService.userVerifyToken();
         if (response && response.status) {
           if (
-            window.location.pathname == "/auth/login" ||
-            window.location.pathname == "/panel" ||
-            window.location.pathname == "/" ||
-            window.location.pathname == "/panel/"
+            window.location.pathname.includes("panel")
+          
           ) {
+            console.log("panel")
             navigate("/panel/dashboard");
+          } else {
+            navigate("/home");
           }
         } else {
           user.set(null);
@@ -88,12 +86,11 @@
   if (!$lang) lang.set(browserLang.split("-")[0]);
 </script>
 
-
 <SvelteToast />
 
 <Router primary={false}>
   <Route path="auth/*auth" component={Auth} />
-
+  <Route path="register" component={Register} />
   <Route path="panel/*" component={AdminRoute} />
   {#if isDesktop()}
     <Route component={DesktopRoutes} />

@@ -3,7 +3,12 @@ import ENV from "../env";
 const login = (email, password) => {
   return Http.post(`${ENV.API_URL}/admin/login`, { email, password });
 };
-
+const userLogin = (email, password) => {
+  return Http.post(`${ENV.API_URL}/user/login`, { email, password });
+};
+const userVerifyToken = () => {
+  return Http.post(`${ENV.API_URL}/user/verifyToken`);
+};
 const uploadImage = (file) => {
   const formData = new FormData();
 
@@ -142,14 +147,22 @@ const deleteUnit = (unitId) => {
 
 
 // Products
-const getProducts = (limit, skip) => {
-  console.log("fsdgerf")
+const getProducts = (limit, skip, isActive, cat, brand) => {
   let data = {};
   if (limit) {
     data.limit = limit;
   }
   if (skip) {
     data.skip = skip;
+  }
+  if (isActive) {
+    data.isActive = isActive;
+  }
+  if (cat) {
+    data.cat = cat;
+  }
+  if (brand) {
+    data.brand = brand;
   }
 
   return Http.get(`${ENV.API_URL}/product`, { ...data });
@@ -234,11 +247,30 @@ const deleteTransaction = (transactionId) => {
   return Http.delete(`${ENV.API_URL}/transaction/${transactionId}`);
 };
 
+//USER
+const signup = (customer, name, surname, email, phone, password,) => {
+  let fullName = name + " " + surname;
+  return Http.post(`${ENV.API_URL}/user/signup`, {
+    customer,
+    fullName,
+    email,
+    phone,
+    password,
+  });
+};
 
 
-
-
-
+const changePassword = (oldPassword, newPassword) => {
+  return Http.post(`${ENV.API_URL}/user/change-password`, {
+    oldPassword,
+    newPassword,
+  });
+};
+const resetPasswordRequestWithEmail = (email) => {
+  return Http.post(`${ENV.API_URL}/user/resetPasswordRequestWithEmail`, {
+    email,
+  });
+};
 
 // Sliders
 const getSliders = (limit, skip, lang) => {
@@ -587,9 +619,15 @@ const verifyToken = () => {
 };
 
 export default {
-  login,
-  uploadImage,
 
+  uploadImage,
+  //User
+  login,
+  userLogin,
+  signup,
+  changePassword,
+  resetPasswordRequestWithEmail,
+  userVerifyToken,
 
   //Cats
   getCats,

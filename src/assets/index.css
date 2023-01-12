@@ -39,7 +39,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 p {
-  font-family: var(--font-family2);
+  font-family: var(--font-familsy);
 
 }
 a {
@@ -49,7 +49,9 @@ a {
 hr {
   border-top-width: 0px;
 }
-
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--font-family3);
+}
 /* swiper */
 .swiper-slide-visible {
   margin-right: unset !important;

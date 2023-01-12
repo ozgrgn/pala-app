@@ -65,6 +65,7 @@
     let editedProduct = {};
     editedProduct.prices = product.prices;
     editedProduct.units = product.units;
+    editedProduct.images = product.images;
     values.map((v) => {
       if (v.key != "prices" && v.key != "units" && v.key != "images") {
         editedProduct[v.key] = product[v.key].value;
@@ -370,7 +371,7 @@ console.log(product.prices,"agaga")
               >
                 Resimler
               </label>
-                {#each images as Image, index}
+                {#each product.images  as Image, index}
                   <div class="border mt-2 p-1 grid grid-flow-col">
                     <span
                       class="px-2 flex flex-col justify-center text-blueGray-600 text-xs font-bold"
@@ -399,7 +400,7 @@ console.log(product.prices,"agaga")
                 {/each}
               </div>
               <button
-                on:click={() => (images = [...images, { image: null }])}
+                on:click={() => (product.images = [...product.images, { image: null }])}
                 class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
                 type="button"
               >
