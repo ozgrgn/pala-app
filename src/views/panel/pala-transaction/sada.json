@@ -1,0 +1,39 @@
+{
+  "customerData": {
+    "_id": "63c184c6b4914ab487f0ca0a",
+    "name": "rrrewrrewer",
+    "country": "tr",
+    "street": "rrrewref werwe fewfa. gagaewrf",
+    "post": "33454",
+    "city": "gerger",
+    "phone": "909152901820",
+    "isActive": true,
+    "user": {
+      "_id": "63c184c6b4914ab487f0ca07",
+      "fullName": "Özgür Ergün",
+      "email": "ozgrgn@gmail.com",
+      "password": "$2a$10$duaOa5bz1NWsHc9D4.DegOxRnQchz3.LsagVxEPkBgzPzoJ1D0xIG",
+      "phone": "905332960826",
+      "isActive": true,
+      "createdAt": "2023-01-13T16:20:22.113Z",
+      "updatedAt": "2023-01-13T18:12:43.204Z",
+      "__v": 0,
+      "membership": "63b32d726d9c8bbabacfd3c8"
+    },
+    "images": [
+      {
+        "image": "https://storage.googleapis.com/palabucket/6835195500603679_20221130 (2).pdf"
+      }
+    ],
+    "createdAt": "2023-01-13T16:20:22.198Z",
+    "updatedAt": "2023-01-13T17:02:23.776Z",
+    "__v": 0
+  },
+  "salesItems": [],
+  "total": 0,
+  "membership": "63b32d726d9c8bbabacfd3c8",
+  "no": "123123",
+  "customer": "63c184c6b4914ab487f0ca0a",
+  "date": "2023-01-20T20:14:04.230Z",
+  "phase": "order"
+}

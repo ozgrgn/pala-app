@@ -1,10 +1,12 @@
-const post = async (url, body) => {
+const post = async (url, body, tokenType) => {
+
+
   try {
     let response = await fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user"))?.token}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem(tokenType))?.token}`,
         "Content-Type": "application/json",
       },
     });
@@ -15,13 +17,13 @@ const post = async (url, body) => {
   }
 };
 
-const postFormData = async (url, body) => {
+const postFormData = async (url, body, tokenType) => {
   try {
     let response = await fetch(url, {
       method: "POST",
       body,
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user"))?.token}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem(tokenType))?.token}`,
       },
     });
 
@@ -31,13 +33,13 @@ const postFormData = async (url, body) => {
   }
 };
 
-const put = async (url, body) => {
+const put = async (url, body, tokenType) => {
   try {
     let response = await fetch(url, {
       method: "PUT",
       body: JSON.stringify(body),
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user"))?.token}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem(tokenType))?.token}`,
         "Content-Type": "application/json",
       },
     });
@@ -48,13 +50,13 @@ const put = async (url, body) => {
   }
 };
 
-const patch = async (url, body) => {
+const patch = async (url, body, tokenType) => {
   try {
     let response = await fetch(url, {
       method: "PATCH",
       body: JSON.stringify(body),
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user"))?.token}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem(tokenType))?.token}`,
         "Content-Type": "application/json",
       },
     });
@@ -65,7 +67,7 @@ const patch = async (url, body) => {
   }
 };
 
-const get = async (url, params) => {
+const get = async (url, params, tokenType) => {
   let requestUrl = new URL(url);
   requestUrl.search = new URLSearchParams(params).toString();
 
@@ -73,7 +75,7 @@ const get = async (url, params) => {
     let response = await fetch(requestUrl, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user"))?.token}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem(tokenType))?.token}`,
       },
     });
     return response.json();
@@ -83,7 +85,7 @@ const get = async (url, params) => {
   }
 };
 
-const _delete = async (url, params) => {
+const _delete = async (url, params, tokenType) => {
   let requestUrl = new URL(url);
   requestUrl.search = new URLSearchParams(params).toString();
 
@@ -91,7 +93,7 @@ const _delete = async (url, params) => {
     let response = await fetch(requestUrl, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${JSON.parse(localStorage.getItem("user"))?.token}`,
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem(tokenType))?.token}`,
       },
     });
     return response.json();

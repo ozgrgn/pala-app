@@ -6,13 +6,16 @@
   import Select from "$components/Form/Select.svelte";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
-  const deleteTreatmentPageApprove = (treatmentPageId) => {
+  import { modal } from "$services/store";
+  import moment from "moment";
+
+  const deleteTransactionApprove = (transactionId) => {
     modal.set(
       bind(Alert, {
         message: "Bu işlemi onaylıyor musunuz ?",
         answer: (message) => {
           if (message) {
-            deleteTreatmentPage(treatmentPageId);
+            deleteTransaction(transactionId);
           }
           modal.set(null);
         },
@@ -20,29 +23,24 @@
     );
   };
 
-  let treatmentPages;
-  let lang=undefined;
+  let transactions;
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
-  const getLang = async () => {
-    let response = await RestService.getLangs(undefined, undefined);
-    langs = response["langs"];
-  };
-  getLang();
-  const getTreatmentPages = async () => {
-    let response = await RestService.getTreatmentPages(limit, skip, lang);
-    treatmentPages = response["treatmentPages"];
-    console.log(treatmentPages, "treatmentPages");
+
+  const getTransactions = async () => {
+    let response = await RestService.getTransactions(limit, skip);
+    transactions = response["transactions"];
+    console.log(response, "transactions");
     totalDataCount = response["count"];
   };
-  getTreatmentPages();
+  getTransactions();
 
-  const deleteTreatmentPage = async (treatmentPageId) => {
-    let response = await RestService.deleteTreatmentPage(treatmentPageId);
+  const deleteTransaction = async (transactionId) => {
+    let response = await RestService.deleteTransaction(transactionId);
     if (response["status"]) {
       ToastService.success($Translate("Successfully-deleted"));
-      getTreatmentPages();
+      getTransactions();
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -50,7 +48,7 @@
   const ceilAndCalculate = () => {
     if (Math.ceil(skip / limit) != Math.ceil(totalDataCount / limit) - 1) {
       skip = skip + limit;
-      getTreatmentPages();
+      getTransactions();
     }
   };
 
@@ -71,7 +69,7 @@
       class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
       type="button"
       on:click={() => {
-        navigate("/panel/create-treatmentpage");
+        navigate("/panel/create-transaction");
       }}
     >
       <i class="fa fa-plus" />
@@ -84,12 +82,12 @@
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-lg text-blueGray-700">Tedavi Sayfası</h3>
+            <h3 class="font-semibold text-lg text-blueGray-700">Satışlar</h3>
           </div>
         </div>
       </div>
       <div class="block w-full overflow-x-auto">
-        {#if treatmentPages}
+        {#if transactions}
           <table class="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
@@ -99,9 +97,48 @@
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Dil
+                  No
                 </th>
-
+                <th
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                Tarih
+              </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  İsim
+                </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Üyelik
+                </th>
+                <th
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                Tutar
+              </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Durum
+                </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -111,29 +148,51 @@
               </tr>
             </thead>
             <tbody>
-              {#each treatmentPages as treatmentPage}
+              {#each transactions as transaction}
                 <tr>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {treatmentPage.lang}
+                    {transaction.no}
                   </td>
-
+                  <td
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+               
+                {moment(transaction.date).format("DD/MM/YYYY")}
+               
+                </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {transaction.customer?.name}
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {transaction.membership.name}
+                  </td>
+                  <td
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+                  {transaction.total}
+                </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     <button
-                      class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                       on:click={navigate(
-                        `/panel/update-treatmentpage/${treatmentPage._id.toString()}`
+                        `/panel/update-transaction/${transaction._id.toString()}`
                       )}
                     >
                       {$Translate("Edit")}
                     </button>
                     <button
-                      on:click={() => deleteTreatmentPageApprove(treatmentPage._id.toString())}
-                      class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      on:click={() =>
+                        deleteTransactionApprove(transaction._id.toString())}
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                     >
                       {$Translate("Delete")}
@@ -146,14 +205,14 @@
         {/if}
       </div>
       <hr class="my-4 md:min-w-full" />
-      {#if treatmentPages}
+      {#if transactions}
         <div
           class="flex flex-row flex-wrap lg:flex-nowrap w-full gap-1 justify-center lg:justify-end items-center p-3"
         >
           <Select
             bind:value={limit}
             change={() => {
-              getTreatmentPages();
+              getTransactions();
             }}
             values={[
               { limit: 10 },
@@ -168,11 +227,11 @@
           />
 
           <button
-            class="bg-blue-600 text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
-              getTreatmentPages();
+              getTransactions();
             }}
           >
             {$Translate("Prev")}
@@ -180,13 +239,13 @@
           {#each pages() as page, i}
             <button
               class="border {skip == limit * i
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#6e6e85] text-white'
                 : 'bg-white text-blue-600 border-blue-600'} font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
               class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
               type="button"
               on:click={() => {
                 skip = limit * i;
-                getTreatmentPages();
+                getTransactions();
               }}
             >
               {i + 1}
@@ -195,7 +254,7 @@
 
           <button
             onclick={ceilAndCalculate}
-            class="bg-blue-600 text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
             type="button"
           >
             {$Translate("Next")}

@@ -20,7 +20,19 @@ const error = (message) => {
   });
 };
 
+const warning = (message) => {
+  toast.push(message, {
+    theme: {
+      "--toastBackground": "#F56565",
+      "--toastBarBackground": "#C53030",
+    },
+    pausable: true,
+    duration:10000
+  });
+};
+
 export default {
   success,
   error,
+  warning
 };

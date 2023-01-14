@@ -44,7 +44,7 @@
   let brands;
   let memberships;
   let units;
-  let processing=false;
+  let processing = false;
 
   let values = [
     { key: "no", customValue: null },
@@ -82,7 +82,7 @@
   };
 
   const getProduct = async () => {
-    processing=true
+    processing = true;
     let response = await RestService.getProduct($params.productId);
 
     if (response["status"]) {
@@ -92,11 +92,11 @@
           response["product"][v.key] = {
             value: response["product"][v.key][v.customValue],
           };
-        } else if(v.key!="prices" && v.key!="units"&& v.key!="images"){
+        } else if (v.key != "prices" && v.key != "units" && v.key != "images") {
           response["product"][v.key] = { value: response["product"][v.key] };
         }
       });
-    
+
       product = {
         ...response["product"],
       };
@@ -104,7 +104,6 @@
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
-    
   };
 
   getProduct();
@@ -121,35 +120,32 @@
   };
   getBrands();
 
-
   const getMemberships = async () => {
     let response = await RestService.getMemberships(undefined, undefined);
     memberships = response["memberships"];
-    memberships.map((membership,index)=>{
+    memberships.map((membership, index) => {
+      const result = product.prices.find(({ _id }) => _id == membership._id);
+      if (!result) {
+        product.prices.push({ _id: membership._id, name: membership.name });
+      }
 
- const result = product.prices.find(({_id})=>_id==membership._id)
- if(!result) {
-  product.prices.push({_id:membership._id,name:membership.name})
- }
-
-console.log(product.prices,"agaga")
-    })
-    processing=false
+      console.log(product.prices, "agaga");
+    });
+    processing = false;
     console.log(product, "en son");
   };
-  
+
   const getUnits = async () => {
     let response = await RestService.getUnits(undefined, undefined);
     units = response["units"];
-    units.map((unit,index)=>{
+    units.map((unit, index) => {
+      const result = product.units.find(({ _id }) => _id == unit._id);
+      if (!result) {
+        product.units.push({ _id: unit._id, name: unit.name });
+      }
 
-const result = product.units.find(({_id})=>_id==unit._id)
-if(!result) {
- product.units.push({_id:unit._id,name:unit.name})
-}
-
-console.log(product.prices,"agaga")
-   })
+      console.log(product.prices, "agaga");
+    });
     console.log(units, "units");
   };
   getUnits();
@@ -309,12 +305,12 @@ console.log(product.prices,"agaga")
               <div class="">
                 <div class=" ">
                   <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
-                  for="grid-name"
-                >
-                  Fiyatlar
-                </label>
-                 {#if !processing}
+                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    for="grid-name"
+                  >
+                    Fiyatlar
+                  </label>
+                  {#if !processing}
                     {#each product.prices as price, index}
                       <div class="border mt-2 p-1 grid grid-cols-2">
                         <span
@@ -330,19 +326,18 @@ console.log(product.prices,"agaga")
                         </div>
                       </div>
                     {/each}
-            {/if}
+                  {/if}
                 </div>
               </div>
-    
             </div>
             <div class="lg:w-3/12 px-4 flex flex-col justify-between">
               <div class="">
                 <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Birimler
-              </label>
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Birimler
+                </label>
                 {#if units}
                   {#each units as unit, index}
                     <div class="border mt-2 p-1 grid grid-cols-2 ">
@@ -361,17 +356,16 @@ console.log(product.prices,"agaga")
                   {/each}
                 {/if}
               </div>
-
             </div>
             <div class="lg:w-6/12 px-4 ">
               <div class="">
                 <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Resimler
-              </label>
-                {#each product.images  as Image, index}
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Resimler
+                </label>
+                {#each product.images as Image, index}
                   <div class="border mt-2 p-1 grid grid-flow-col">
                     <span
                       class="px-2 flex flex-col justify-center text-blueGray-600 text-xs font-bold"
@@ -400,8 +394,9 @@ console.log(product.prices,"agaga")
                 {/each}
               </div>
               <button
-                on:click={() => (product.images = [...product.images, { image: null }])}
-                class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+                on:click={() =>
+                  (product.images = [...product.images, { image: null }])}
+                class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
                 type="button"
               >
                 Ürün Resmi Ekle
@@ -413,7 +408,7 @@ console.log(product.prices,"agaga")
               <button
                 on:click={() => updateProduct()}
                 disabled={!product.name.isValid}
-                class="bg-blue-600 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+                class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
                 type="button"
               >
                 {$Translate("Update")}

@@ -214,7 +214,7 @@
               <button
                 on:click={updateAdmin}
                 disabled={!admin.fullName.isValid || !admin.email.isValid}
-                class="bg-blue-600 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+                class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
                 type="button"
               >
                 {$Translate("Update")}

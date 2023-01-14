@@ -1,5 +1,5 @@
 <script>
-  import { link,navigate } from "svelte-navigator";
+  import { link, navigate } from "svelte-navigator";
   import Input from "../../components/Form/Input.svelte";
   import PasswordInput from "../../components/Form/PasswordInput.svelte";
   import { Translate, TranslateApiMessage } from "../../services/language";
@@ -8,31 +8,37 @@
   import ToastService from "../../services/toast";
   let emailFromInput;
   let password;
-
   let emailFromInputIsValid;
   let passwordIsValid;
 
   const login = async () => {
     let response = await RestService.userLogin(emailFromInput, password);
     if (response && response.status) {
-      console.log(response,"response")
+      console.log(response, "response");
       user.set({
         email: response.username,
         fullName: response.fullName,
         token: response.token,
         userId: response.userId,
+        membership: response.membership,
       });
       console.log($user);
       if ($user.super) {
         navigate("/panel/dashboard");
       } else {
-        navigate("/home");
+        navigate("/store/home");
       }
 
       ToastService.success("İşlem başarılı");
     } else {
       console.log("eerrro", response);
-      ToastService.error($TranslateApiMessage(response.message));
+      if (
+        $TranslateApiMessage(response.message) ==
+        "Giriş yaptığınız kullanıcı aktif değil. Lütfen iletişime geçin"
+      ) {
+        ToastService.warning($TranslateApiMessage(response.message));
+        console.log("no active");
+      } else ToastService.error($TranslateApiMessage(response.message));
     }
   };
 </script>
@@ -48,7 +54,6 @@
           <div
             class="relative flex flex-col min-w-0 break-words w-full  rounded-lg bg-blueGray-200 border-0"
           >
-        
             <div class="flex-auto px-4 lg:px-10 pt-10 pt-0">
               <div class="relative w-full mb-3">
                 <label
@@ -104,7 +109,7 @@
                   class="disabled:bg-blueGray-400 bg-red-500 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full "
                   type="button"
                 >
-                 GİRİŞ YAP
+                  GİRİŞ YAP
                 </button>
               </div>
             </div>
@@ -129,7 +134,7 @@
       </div>
     </div>
     <div class="lg:w-1/2">
-      <h1 class="text-2xl font-bold py-4">YENİ BAYİ OL</h1>
+      <h1 class="text-2xl font-bold py-4">YENİ BAYİ OLUŞTUR</h1>
       <div
         class="flex content-center items-start justify-center h-full pt-10 border"
       >
@@ -137,29 +142,29 @@
           <div
             class="relative flex flex-col min-w-0 break-words w-full  rounded-lg bg-blueGray-200 border-0"
           >
-        
             <div class="flex-auto px-4 lg:px-10 pt-0">
-              <h3 class="font-bold text-black/80 text-md"> KULLANICI OLUŞTUR</h3>
-             
-         <p class="pt-6 leading-7">Sign up for a free account at our store. Registration is quick and easy. It allows you to be able to order from our shop. To start shopping click register.</p>
-        
+              <h3 class="font-bold text-black/80 text-md">
+                KULLANICI ve FİRMA KAYDI
+              </h3>
 
-           
-          
+              <p class="pt-6 leading-7">
+                Sign up for a free account at our store. Registration is quick
+                and easy. It allows you to be able to order from our shop. To
+                start shopping click register.
+              </p>
 
               <a use:link href="/register">
-                <div   class="text-center w-fit mt-6">
-                <button
-                  class="disabled:bg-blueGray-400 bg-red-500 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full "
-                  type="button"
-                >
-                 YENİ BAYİ OLUŞTUR
-                </button>
-              </div>
+                <div class="text-center w-fit mt-6">
+                  <button
+                    class="disabled:bg-blueGray-400 bg-red-500 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full "
+                    type="button"
+                  >
+                    YENİ BAYİ OLUŞTUR
+                  </button>
+                </div>
               </a>
             </div>
           </div>
-       
         </div>
       </div>
     </div>

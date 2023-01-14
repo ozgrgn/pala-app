@@ -29,7 +29,7 @@
 </script>
 
 <input
-  class="border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full  {customClass}"
+  class="appearance-none	 border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full  {customClass}"
   type="number"
   bind:value
   {placeholder}

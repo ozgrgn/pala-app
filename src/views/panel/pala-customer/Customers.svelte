@@ -81,7 +81,7 @@
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-lg text-blueGray-700">Ürünler</h3>
+            <h3 class="font-semibold text-lg text-blueGray-700">Firmalar</h3>
           </div>
         </div>
       </div>
@@ -98,21 +98,14 @@
                 >
                   No
                 </th>
+                
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Kategori
-                </th>
-                <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  İsim
+                  Firma İsmi
                 </th>
                 <th
                 class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
@@ -120,7 +113,32 @@
                   ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                   : 'bg-red-700 text-red-200 border-red-600'}"
               >
-                İsim
+                Kullanıcı İsmi
+              </th>
+              <th
+              class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+              'light'
+                ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                : 'bg-red-700 text-red-200 border-red-600'}"
+            >
+              Kullanıcı Tel
+            </th>
+            <th
+            class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+            'light'
+              ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+              : 'bg-red-700 text-red-200 border-red-600'}"
+          >
+            Firma Tel
+          </th>
+      
+                <th
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                Durum
               </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
@@ -144,18 +162,29 @@
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {customer.no}
+                    {customer.no?customer.no:"-"}
                   </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {customer.membership.name}
-                  </td>
+             
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     {customer.name}
                   </td>
+                  <td
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+                  {customer.user?.fullName?customer.user?.fullName:"-"}
+                </td>
+                <td
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+              >
+                {customer.user?.phone?customer.user?.phone:"-"}
+              </td>
+              <td
+              class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+            >
+              {customer.phone}
+            </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
@@ -171,7 +200,7 @@
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     <button
-                      class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                       on:click={navigate(
                         `/panel/update-customer/${customer._id.toString()}`
@@ -182,7 +211,7 @@
                     <button
                       on:click={() =>
                         deleteCustomerApprove(customer._id.toString())}
-                      class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                     >
                       {$Translate("Delete")}
@@ -217,7 +246,7 @@
           />
 
           <button
-            class="bg-blue-600 text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
@@ -229,7 +258,7 @@
           {#each pages() as page, i}
             <button
               class="border {skip == limit * i
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#6e6e85] text-white'
                 : 'bg-white text-blue-600 border-blue-600'} font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
               class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
               type="button"
@@ -244,7 +273,7 @@
 
           <button
             onclick={ceilAndCalculate}
-            class="bg-blue-600 text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
             type="button"
           >
             {$Translate("Next")}

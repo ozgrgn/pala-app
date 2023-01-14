@@ -55,7 +55,6 @@
     { key: "mobile", customValue: null },
     { key: "email", customValue: null },
     { key: "note", customValue: null },
-    { key: "membership", customValue: null },
     { key: "status", customValue: null },
     { key: "isActive", customValue: false },
     { key: "images", customValue: null },
@@ -65,6 +64,7 @@
     let editedCustomer = {};
     editedCustomer.prices = customer.prices;
     editedCustomer.units = customer.units;
+    editedCustomer.images = customer.images;
     values.map((v) => {
       if (v.key != "prices" && v.key != "units" && v.key != "images") {
         editedCustomer[v.key] = customer[v.key].value;
@@ -99,7 +99,6 @@
       customer = {
         ...response["customer"],
       };
-      getMemberships();
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -110,11 +109,6 @@
 
 
 
-  const getMemberships = async () => {
-    let response = await RestService.getMemberships(undefined, undefined);
-    memberships = response["memberships"];
-    processing=false
-  };
 
   const deleteCustomer = async (customerId) => {
     let response = await RestService.deleteCustomer(customerId);
@@ -173,7 +167,7 @@
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         {#if customer}
         <div class="flex flex-wrap my-4">
-          <div class="w-full lg:w-2/12 px-4">
+          <div class="w-full lg:w-4/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -190,7 +184,7 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-3/12 px-4">
+          <div class="w-full lg:w-4/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -207,7 +201,7 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-3/12 px-4">
+          <div class="w-full lg:w-4/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -224,48 +218,8 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-2/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Üyelik
-              </label>
-              {#if memberships}
-                <Select
-                  bind:value={customer.membership.value}
-                  bind:isValid={customer.membership.isValid}
-                  values={memberships}
-                  title={"Üyelik Seçin"}
-                  valuesKey={"_id"}
-                  valuesTitleKey={"name"}
-                  customClass={"w-full"}
-                />
-              {/if}
-            </div>
-          </div>
-          <div class="w-full lg:w-2/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Durum
-              </label>
-              {#if memberships}
-                <Select
-                  bind:value={customer.status.value}
-                  bind:isValid={customer.status.isValid}
-                  values={memberships}
-                  title={"Durum Seçin"}
-                  valuesKey={"_id"}
-                  valuesTitleKey={"name"}
-                  customClass={"w-full"}
-                />
-              {/if}
-            </div>
-          </div>
+      
+   
         </div>
         <div class="flex flex-wrap my-4">
           <div class="w-full lg:w-3/12 px-4">
@@ -424,7 +378,7 @@
             >
             Evrak
             </label>
-              {#each images as Image, index}
+              {#each customer.images as Image, index}
                 <div class="border mt-2 p-1 grid grid-flow-col">
                   <span
                     class="px-2 flex flex-col justify-center text-blueGray-600 text-xs font-bold"
@@ -446,8 +400,8 @@
               {/each}
             </div>
             <button
-              on:click={() => (images = [...images, { image: null }])}
-              class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+              on:click={() => (customer.images = [...customer.images, { image: null }])}
+              class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
             >
               Evrak Ekle
@@ -459,7 +413,7 @@
               <button
                 on:click={() => updateCustomer()}
                 disabled={!customer.name.isValid}
-                class="bg-blue-600 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+                class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
                 type="button"
               >
                 {$Translate("Update")}

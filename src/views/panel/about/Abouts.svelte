@@ -124,7 +124,7 @@
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     <button
-                      class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                       on:click={navigate(
                         `/panel/update-about/${about._id.toString()}`
@@ -134,7 +134,7 @@
                     </button>
                     <button
                       on:click={() => deleteAboutApprove(about._id.toString())}
-                      class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                     >
                       {$Translate("Delete")}
@@ -169,7 +169,7 @@
           />
 
           <button
-            class="bg-blue-600 text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
@@ -181,7 +181,7 @@
           {#each pages() as page, i}
             <button
               class="border {skip == limit * i
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#6e6e85] text-white'
                 : 'bg-white text-blue-600 border-blue-600'} font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
               class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
               type="button"
@@ -196,7 +196,7 @@
 
           <button
             onclick={ceilAndCalculate}
-            class="bg-blue-600 text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
             type="button"
           >
             {$Translate("Next")}

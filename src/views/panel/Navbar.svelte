@@ -2,6 +2,8 @@
   import { link, useLocation } from "svelte-navigator";
   import { Translate } from "../../services/language";
   import { lang, user } from "../../services/store";
+  import { desktopDrawer } from "$services/store";
+
   const location = useLocation();
   const langTrigger = (_lang) => {
     document.documentElement.setAttribute("lang", _lang);
@@ -21,12 +23,14 @@
 <nav
   class="absolute top-0 left-0 w-full z-10 bg-transparent md:flex-row md:flex-nowrap md:justify-start flex items-center p-4"
 >
+
   <div
     class="w-full items-center flex justify-end lg:justify-between md:flex-nowrap flex-wrap"
   >
     <!-- Brand -->
 
     <nav class="flex flex-row gap-2 items-center w-full">
+      
       <div class="flex flex-wrap justify-between items-center w-full">
         <a
           href="/panel/dashboard"
@@ -49,114 +53,18 @@
           id="navbar-default"
         >
           <div
-            class="min-h-[50vh] md:min-h-0 w-full flex flex-col justify-center md:justify-between items-center bg-blue-600 rounded border md:border-0 md:flex-row gap-2 w-full"
+            class="md:min-h-0 w-full flex flex-col justify-center md:justify-between items-center bg-[#6e6e85] rounded border md:border-0 md:flex-row gap-2 w-full"
           >
+        
             <div
-              class="flex flex-col md:flex-row text-white font-bold mb-4 md:mb-0 w-3/12"
+              class="w-full flex flex-col md:flex-row flex-wrap  items-start justify-start transition-all {$desktopDrawer?"lg:pl-[18rem]":""}"
             >
-              Pala-Export Panel
-            </div>
-            <div
-              class="flex flex-col md:flex-row flex-wrap gap-2 items-center justify-center lg:px-44"
-            >
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  '/panel/dashboard'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/dashboard"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Dashboard
-              </a>
-
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'cat'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/cats"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Kategoriler
-              </a>
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'brand'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/brands"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Markalar
-              </a>
-              <a
-              class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                'membership'
-              ) !== -1
-                ? 'hover:text-white text-base'
-                : 'text-white/80 hover:text-white'}"
-              href="/panel/memberships"
-              use:link
-              on:click={() => (navbarOpen = false)}
-            >
-              Üyelikler
-            </a>
-            
-            <a
-            class="text-white font-semibold text-sm {$location.pathname.indexOf(
-              'unit'
-            ) !== -1
-              ? 'hover:text-white text-base'
-              : 'text-white/80 hover:text-white'}"
-            href="/panel/units"
-            use:link
-            on:click={() => (navbarOpen = false)}
-          >
-            Birimler
-          </a>
-            <a
-            class="text-white font-semibold text-sm {$location.pathname.indexOf(
-              'product'
-            ) !== -1
-              ? 'hover:text-white text-base'
-              : 'text-white/80 hover:text-white'}"
-            href="/panel/products"
-            use:link
-            on:click={() => (navbarOpen = false)}
-          >
-            Ürünler
-          </a>
-          <a
-          class="text-white font-semibold text-sm {$location.pathname.indexOf(
-            'customer'
-          ) !== -1
-            ? 'hover:text-white text-base'
-            : 'text-white/80 hover:text-white'}"
-          href="/panel/customers"
-          use:link
-          on:click={() => (navbarOpen = false)}
-        >
-          Müşteriler
-        </a>
-        <a
-        class="text-white font-semibold text-sm {$location.pathname.indexOf(
-          'transaction'
-        ) !== -1
-          ? 'hover:text-white text-base'
-          : 'text-white/80 hover:text-white'}"
-        href="/panel/transactions"
-        use:link
-        on:click={() => (navbarOpen = false)}
-      >
-        Satışlar
-      </a>
+            <button
+      class="btn btn-sm btn-ghost"
+      on:click={() => desktopDrawer.set(!$desktopDrawer)}
+    >
+      <i class="bi bi-list text-3xl text-white" />
+    </button>
 
 
 
@@ -165,116 +73,7 @@
 
 
 
-              <a
-              class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                'home'
-              ) !== -1
-                ? 'hover:text-white text-base'
-                : 'text-white/80 hover:text-white'}"
-              href="/panel/homes"
-              use:link
-              on:click={() => (navbarOpen = false)}
-            >
-              AnaSayfa
-            </a>
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'about'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/abouts"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Hakkımızda
-              </a>
-
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'treatments_page'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/treatmentpages"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Tedavi Sayfası
-              </a>
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'treatment'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/treatments"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Tedavi
-              </a>
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'contact'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/contacts"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                İletişim
-              </a>
-
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'general'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/generals"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Genel Bilgiler
-              </a>
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'translate'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/translates"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Çeviriler
-              </a>
-              <a
-                class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                  'admin'
-                ) !== -1
-                  ? 'hover:text-white text-base'
-                  : 'text-white/80 hover:text-white'}"
-                href="/panel/admins"
-                use:link
-                on:click={() => (navbarOpen = false)}
-              >
-                Admin
-              </a>
-              <a
-              class="text-white font-semibold text-sm {$location.pathname.indexOf(
-                'lang'
-              ) !== -1
-                ? 'hover:text-white text-base'
-                : 'text-white/80 hover:text-white'}"
-              href="/panel/langs"
-              use:link
-              on:click={() => (navbarOpen = false)}
-            >
-              Diller
-            </a>
+           
             </div>
             <div
               class="flex flex-col md:flex-row items-center justify-center gap-2 w-4/12"

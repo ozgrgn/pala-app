@@ -1,16 +1,16 @@
 <div class="lds-spinner w-10 h-10">
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
-  <div class="after:bg-blue-600" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
+  <div class="after:bg-[#6e6e85]" />
 </div>
 
 <style>

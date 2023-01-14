@@ -7,15 +7,14 @@
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
   import { modal } from "$services/store";
-  import moment from "moment";
 
-  const deleteTransactionApprove = (transactionId) => {
+  const deleteUserApprove = (userId) => {
     modal.set(
       bind(Alert, {
         message: "Bu işlemi onaylıyor musunuz ?",
         answer: (message) => {
           if (message) {
-            deleteTransaction(transactionId);
+            deleteUser(userId);
           }
           modal.set(null);
         },
@@ -23,24 +22,24 @@
     );
   };
 
-  let transactions;
+  let users;
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
 
-  const getTransactions = async () => {
-    let response = await RestService.getTransactions(limit, skip);
-    transactions = response["transactions"];
-    console.log(response, "transactions");
+  const getUsers = async () => {
+    let response = await RestService.getUsers(limit, skip);
+    users = response["users"];
+    console.log(users, "users");
     totalDataCount = response["count"];
   };
-  getTransactions();
+  getUsers();
 
-  const deleteTransaction = async (transactionId) => {
-    let response = await RestService.deleteTransaction(transactionId);
+  const deleteUser = async (userId) => {
+    let response = await RestService.deleteUser(userId);
     if (response["status"]) {
       ToastService.success($Translate("Successfully-deleted"));
-      getTransactions();
+      getUsers();
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -48,7 +47,7 @@
   const ceilAndCalculate = () => {
     if (Math.ceil(skip / limit) != Math.ceil(totalDataCount / limit) - 1) {
       skip = skip + limit;
-      getTransactions();
+      getUsers();
     }
   };
 
@@ -64,30 +63,19 @@
 </script>
 
 <div class="flex flex-wrap mt-4 h-screen relative">
-  <div class="w-full mb-12 px-2 lg:px-4 ">
-    <button
-      class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
-      type="button"
-      on:click={() => {
-        navigate("/panel/create-transaction");
-      }}
-    >
-      <i class="fa fa-plus" />
-      {$Translate("Add")}
-    </button>
-
+  <div class="w-full mb-12 px-2 lg:px-4 pt-10">
     <div
       class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-white"
     >
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-lg text-blueGray-700">Satışlar</h3>
+            <h3 class="font-semibold text-lg text-blueGray-700">Birimler</h3>
           </div>
         </div>
       </div>
       <div class="block w-full overflow-x-auto">
-        {#if transactions}
+        {#if users}
           <table class="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
@@ -97,23 +85,7 @@
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  No
-                </th>
-                <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Tarih
-              </th>
-                <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  İsim
+                  Kullanıcı İsmi
                 </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
@@ -124,14 +96,6 @@
                   Üyelik
                 </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Tutar
-              </th>
-                <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
@@ -139,6 +103,7 @@
                 >
                   Durum
                 </th>
+
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -148,51 +113,46 @@
               </tr>
             </thead>
             <tbody>
-              {#each transactions as transaction}
+              {#if users}
+              {#each users as user}
                 <tr>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {transaction.no}
-                  </td>
-                  <td
-                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                >
-               
-                {moment(transaction.date).format("DD/MM/YYYY")}
-               
-                </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {transaction.customer.name}
+                    {user.fullName}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {transaction.customerData.membership.name}
+                    {user.membership?.name ? user.membership?.name : "-"}
                   </td>
-                  <td
-                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                >
-                  {transaction.total}
-                </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     <button
-                      class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="{user.isActive
+                        ? 'bg-green-500'
+                        : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold cursor-default"
+                    >
+                      {user.isActive ? "Aktif" : "Pasif"}
+                    </button>
+                  </td>
+
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    <button
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                       on:click={navigate(
-                        `/panel/update-transaction/${transaction._id.toString()}`
+                        `/panel/update-user/${user._id.toString()}`
                       )}
                     >
                       {$Translate("Edit")}
                     </button>
                     <button
-                      on:click={() =>
-                        deleteTransactionApprove(transaction._id.toString())}
-                      class="bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      on:click={() => deleteUserApprove(user._id.toString())}
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                     >
                       {$Translate("Delete")}
@@ -200,19 +160,20 @@
                   </td>
                 </tr>
               {/each}
+              {/if}
             </tbody>
           </table>
         {/if}
       </div>
       <hr class="my-4 md:min-w-full" />
-      {#if transactions}
+      {#if users}
         <div
           class="flex flex-row flex-wrap lg:flex-nowrap w-full gap-1 justify-center lg:justify-end items-center p-3"
         >
           <Select
             bind:value={limit}
             change={() => {
-              getTransactions();
+              getUsers();
             }}
             values={[
               { limit: 10 },
@@ -227,11 +188,11 @@
           />
 
           <button
-            class="bg-blue-600 text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
-              getTransactions();
+              getUsers();
             }}
           >
             {$Translate("Prev")}
@@ -239,13 +200,13 @@
           {#each pages() as page, i}
             <button
               class="border {skip == limit * i
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#6e6e85] text-white'
                 : 'bg-white text-blue-600 border-blue-600'} font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
               class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
               type="button"
               on:click={() => {
                 skip = limit * i;
-                getTransactions();
+                getUsers();
               }}
             >
               {i + 1}
@@ -254,7 +215,7 @@
 
           <button
             onclick={ceilAndCalculate}
-            class="bg-blue-600 text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
             type="button"
           >
             {$Translate("Next")}

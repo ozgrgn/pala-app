@@ -1,9 +1,11 @@
 <script>
   export let value;
+  export let disabled
 </script>
 
 <label class="switch">
-  <input type="checkbox" bind:checked={value} />
+  <input type="checkbox" bind:checked={value}    {disabled}
+  />
   <span class="slider" />
 </label>
 

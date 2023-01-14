@@ -7,14 +7,20 @@ const userLogin = (email, password) => {
   return Http.post(`${ENV.API_URL}/user/login`, { email, password });
 };
 const userVerifyToken = () => {
-  return Http.post(`${ENV.API_URL}/user/verifyToken`);
+  return Http.post(`${ENV.API_URL}/user/verifyToken`, {}, "user");
 };
+const getMe = (userId) => {
+  return Http.get(`${ENV.API_URL}/user/me`, { userId });
+};
+
+
+
 const uploadImage = (file) => {
   const formData = new FormData();
 
   formData.append("file", file);
 
-  return Http.postFormData(`${ENV.API_URL}/services/file-upload`, formData);
+  return Http.postFormData(`${ENV.API_URL}/services/file-upload`, formData, "admin");
 };
 
 // Cats
@@ -85,7 +91,7 @@ const deleteBrand = (brandId) => {
 
 // Memberships
 const getMemberships = (limit, skip) => {
-  console.log("fsdgerf")
+
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -116,7 +122,6 @@ const deleteMembership = (membershipId) => {
 
 // Units
 const getUnits = (limit, skip) => {
-  console.log("fsdgerf")
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -168,26 +173,25 @@ const getProducts = (limit, skip, isActive, cat, brand) => {
   return Http.get(`${ENV.API_URL}/product`, { ...data });
 };
 const addProduct = (data) => {
-  return Http.post(`${ENV.API_URL}/product`, data);
+  return Http.post(`${ENV.API_URL}/product`, data, "admin");
 };
 
 const updateProduct = (productId, data) => {
   return Http.put(`${ENV.API_URL}/product/${productId}`, {
     product: data,
-  });
+  }, "admin");
 };
 
 const getProduct = (productId) => {
-  return Http.get(`${ENV.API_URL}/product/${productId}`);
+  return Http.get(`${ENV.API_URL}/product/${productId}`, {}, "admin");
 };
 
 const deleteProduct = (productId) => {
-  return Http.delete(`${ENV.API_URL}/product/${productId}`);
+  return Http.delete(`${ENV.API_URL}/product/${productId}`, {}, "admin");
 };
 
 // Customers
-const getCustomers = (limit, skip) => {
-  console.log("fsdgerf")
+const getCustomers = (limit, skip, isActive) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -195,8 +199,16 @@ const getCustomers = (limit, skip) => {
   if (skip) {
     data.skip = skip;
   }
+  if (isActive) {
+    data.isActive = isActive;
+  }
 
-  return Http.get(`${ENV.API_URL}/customer`, { ...data });
+
+  return Http.get(`${ENV.API_URL}/customer`, { ...data }, "admin");
+};
+
+const getCustomersByUserId = () => {
+  return Http.get(`${ENV.API_URL}/customer/byUserId`, {}, "user");
 };
 const addCustomer = (data) => {
   return Http.post(`${ENV.API_URL}/customer`, data);
@@ -218,7 +230,6 @@ const deleteCustomer = (customerId) => {
 
 // Transactions
 const getTransactions = (limit, skip) => {
-  console.log("fsdgerf")
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -227,24 +238,28 @@ const getTransactions = (limit, skip) => {
     data.skip = skip;
   }
 
-  return Http.get(`${ENV.API_URL}/transaction`, { ...data });
+  return Http.get(`${ENV.API_URL}/transaction`, { ...data }, "admin");
 };
 const addTransaction = (data) => {
-  return Http.post(`${ENV.API_URL}/transaction`, data);
+  return Http.post(`${ENV.API_URL}/transaction`, data, "admin");
+};
+
+const addTransactionByUser = (data) => {
+  return Http.post(`${ENV.API_URL}/transaction/byUserId`, data, "user");
 };
 
 const updateTransaction = (transactionId, data) => {
   return Http.put(`${ENV.API_URL}/transaction/${transactionId}`, {
     transaction: data,
-  });
+  }, "admin");
 };
 
 const getTransaction = (transactionId) => {
-  return Http.get(`${ENV.API_URL}/transaction/${transactionId}`);
+  return Http.get(`${ENV.API_URL}/transaction/${transactionId}`, {}, "admin");
 };
 
 const deleteTransaction = (transactionId) => {
-  return Http.delete(`${ENV.API_URL}/transaction/${transactionId}`);
+  return Http.delete(`${ENV.API_URL}/transaction/${transactionId}`, {}, "admin");
 };
 
 //USER
@@ -271,6 +286,45 @@ const resetPasswordRequestWithEmail = (email) => {
     email,
   });
 };
+
+// Users
+const getUsers = (limit, skip) => {
+  let data = {};
+  if (limit) {
+    data.limit = limit;
+  }
+  if (skip) {
+    data.skip = skip;
+  }
+
+  return Http.get(`${ENV.API_URL}/user`, { ...data },"admin");
+};
+const addUser = (data) => {
+  return Http.post(`${ENV.API_URL}/user`, data,"admin");
+};
+
+const updateUser = (userId, data) => {
+  return Http.patch(`${ENV.API_URL}/user/${userId}`, {
+    user: data,
+  },"admin");
+};
+
+const getUser = (userId) => {
+  return Http.get(`${ENV.API_URL}/user/${userId}`,{},"admin");
+};
+
+const deleteUser = (userId) => {
+  return Http.delete(`${ENV.API_URL}/user/${userId}`,{},"admin");
+};
+
+
+
+
+
+
+
+
+
 
 // Sliders
 const getSliders = (limit, skip, lang) => {
@@ -615,7 +669,7 @@ const renewPassword = (adminId, newPassword) => {
 };
 
 const verifyToken = () => {
-  return Http.post(`${ENV.API_URL}/admin/verifyToken`);
+  return Http.post(`${ENV.API_URL}/admin/verifyToken`, {}, "admin");
 };
 
 export default {
@@ -628,6 +682,7 @@ export default {
   changePassword,
   resetPasswordRequestWithEmail,
   userVerifyToken,
+  getMe,
 
   //Cats
   getCats,
@@ -656,7 +711,12 @@ export default {
   updateUnit,
   deleteUnit,
 
-
+  //Users
+  getUsers,
+  getUser,
+  addUser,
+  updateUser,
+  deleteUser,
   //Products
   getProducts,
   getProduct,
@@ -665,6 +725,7 @@ export default {
   deleteProduct,
   //Customers
   getCustomers,
+  getCustomersByUserId,
   getCustomer,
   addCustomer,
   updateCustomer,
@@ -673,6 +734,7 @@ export default {
   getTransactions,
   getTransaction,
   addTransaction,
+  addTransactionByUser,
   updateTransaction,
   deleteTransaction,
 
@@ -700,59 +762,5 @@ export default {
   updateSlider,
   deleteSlider,
 
-  //lang
-  getLangs,
-  getLang,
-  addLang,
-  updateLang,
-  deleteLang,
 
-  //home
-  getHomes,
-  getHome,
-  addHome,
-  updateHome,
-  deleteHome,
-
-  //about
-  getAbouts,
-  getAbout,
-  addAbout,
-  updateAbout,
-  deleteAbout,
-
-  //treatmentPage
-  getTreatmentPages,
-  getTreatmentPage,
-  addTreatmentPage,
-  updateTreatmentPage,
-  deleteTreatmentPage,
-
-  //tedavi
-  getTreatments,
-  getTreatment,
-  addTreatment,
-  updateTreatment,
-  deleteTreatment,
-  getTreatmentViaPerma,
-
-  //contact
-  getContacts,
-  getContact,
-  addContact,
-  updateContact,
-  deleteContact,
-
-  //general
-  getGenerals,
-  getGeneral,
-  addGeneral,
-  updateGeneral,
-  deleteGeneral,
-  //translate
-  getTranslates,
-  getTranslate,
-  addTranslate,
-  updateTranslate,
-  deleteTranslate,
 };

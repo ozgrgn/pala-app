@@ -1,18 +1,36 @@
 <script>
   import RestService from "$services/rest";
-  import { useLocation, link } from "svelte-navigator";
   import { user } from "$services/store";
+  import { link, useLocation } from "svelte-navigator";
 
-  import Svg from "../../../assets/svg.json";
+  import { onDestroy } from "svelte";
   import AItem from "./AItem.svelte";
-
+  console.log($user, "usersrsers");
+  let userSub;
   const location = useLocation();
-
+  let userInfo;
   $: {
     if ($location) {
       window.scrollTo(0, 0);
     }
   }
+
+  const getUserInformation = async () => {
+    let userInfoResponse = await RestService.getMe($user.userId);
+
+    if (userInfoResponse && userInfoResponse.status) {
+      userInfo = userInfoResponse["info"];
+      console.log(userInfoResponse, "userinfo");
+    }
+  };
+
+  userSub = user.subscribe((userSubValue) => {
+    if (userSubValue) {
+      getUserInformation();
+    }
+  });
+
+  onDestroy(userSub);
 
   const changeNavStatus = () => {
     setTimeout(() => {
@@ -22,7 +40,7 @@
   const logout = () => {
     user.set(null);
   };
-  console.log($user,"user")
+  console.log($user, "user");
   let cats = [{ name: "sef", title: "sfg", perma: "/" }];
   let hover;
 </script>
@@ -65,17 +83,23 @@
     </div>
     <div class="w-1/4 flex flex-col justify-center">
       {#if $user}
-      <div   on:click={() => {
-        logout();
-      }} class="flex cursor-pointer">
-        <i class="text-black bi bi-person-fill px-2" /> Çıkış Yap
-      </div>
+        <div
+          on:click={() => {
+            logout();
+          }}
+          class="flex cursor-pointer"
+        >
+          <i class="text-black bi bi-person-fill px-2" /> Çıkış Yap
+        </div>
       {:else}
-      <a use:link href="/register"   on:click={() => {
-       
-      }} class="flex cursor-pointer">
-        <i class="text-black bi bi-person-fill px-2" /> Kayıt Ol
-    </a>
+        <a
+          use:link
+          href="/register"
+          on:click={() => {}}
+          class="flex cursor-pointer"
+        >
+          <i class="text-black bi bi-person-fill px-2" /> Kayıt Ol
+        </a>
       {/if}
     </div>
   </div>

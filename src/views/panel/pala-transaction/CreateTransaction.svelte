@@ -9,8 +9,9 @@
   import Textarea from "$components/Form/Textarea.svelte";
   import NumberInput from "$components/Form/NumberInput.svelte";
   import Switch from "$components/Switch.svelte";
-  import { DateInput } from "date-picker-svelte";
   import Transactions from "./Transactions.svelte";
+  import DateInput from "$components/Form/DateInput.svelte";
+  import Date from "$components/Form/Date.svelte";
 
   let values = [
     { key: "no", customValue: null },
@@ -27,19 +28,18 @@
   let salesItems = [];
   let salesItem = {};
   let products;
-  let total=0
+  let total = 0;
   let images = [];
   let memberships;
   let units;
   let customers;
   let customer;
   let phases = [
-    { name: "BASKET", step: "1" },
-    { name: "ORDER", step: "2" },
-    { name: "PREPARED", step: "3" },
-    { name: "CARGO", step: "4" },
-    { name: "DELIVERED", step: "5" },
-    { name: "CANCEL", step: "0" },
+    { name: "ORDER", step: "order" },
+    { name: "PREPARED", step: "prepared" },
+    { name: "CARGO", step: "cargo" },
+    { name: "DELIVERED", step: "delivered" },
+    { name: "CANCEL", step: "cancel" },
   ];
   export let color = "light";
 
@@ -49,7 +49,8 @@
   };
   const findPrice = async () => {
     let product = products.find((x) => x._id == salesItem.product);
-    let price = product.prices.find((x) => x._id == customer.membership._id);
+    let price = product.prices.find((x) => x._id == customer.user.membership);
+    console.log(price);
     salesItem.productName = product.name;
     salesItem.cat = product.cat;
     salesItem.unitPrice = price.price;
@@ -58,36 +59,41 @@
   const findUnit = async () => {
     let product = products.find((x) => x._id == salesItem.product);
     let unit = product.units.find((x) => x._id == salesItem.unit);
-    salesItem.unitNumber = unit.number;
+    salesItem.totalNumber = unit.number;
     salesItem.unitName = unit.name;
     console.log(unit, "unit");
   };
   const addSalesItem = async (index) => {
     salesItem.total =
-      salesItem.unitPrice *
-      (salesItem.unitNumber ? salesItem.unitNumber : 1) *
-      salesItem.number;
-    salesItems = [ ...salesItems,salesItem];
-    total=total+salesItem.total
+      salesItem.unitPrice * (salesItem.totalNumber ? salesItem.totalNumber : 1);
+    salesItems = [...salesItems, salesItem];
+    total = total + salesItem.total;
 
-    salesItem={product:null,number:0,unit:null,unitPrice:0,total:0}
-    
-    console.log(total,"total")
+    salesItem = {
+      product: null,
+      number: 0,
+      unit: null,
+      unitPrice: 0,
+      total: 0,
+    };
+
+    console.log(total, "total");
   };
   const deleteSalesItem = async (index) => {
     console.log(index, salesItems);
-    total=total-salesItems[index].total
+    total = total - salesItems[index].total;
     salesItems.splice(index, 1);
     salesItems = salesItems;
-   
+
     console.log(salesItems);
   };
   const getCustomers = async () => {
-    let response = await RestService.getCustomers(undefined, undefined);
+    let response = await RestService.getCustomers(undefined, undefined, true);
     customers = response["customers"];
     console.log(customers, "customers");
   };
   getCustomers();
+
   const getProducts = async () => {
     let response = await RestService.getProducts(undefined, undefined);
     products = response["products"];
@@ -112,7 +118,9 @@
 
     data.customerData = customer;
     data.salesItems = salesItems;
-    data.total = total
+    data.total = total;
+    data.membership = customer.user.membership;
+
     console.log(transaction, "transactionsss");
 
     values.map((v) => {
@@ -162,11 +170,12 @@
               >
                 İşlem Tarihi
               </label>
-              <DateInput
+              <Date
                 bind:value={transaction.date.value}
                 bind:isValid={transaction.date.isValid}
                 placeholder={"İşlem Tarihi"}
-                required={false}
+                required={true}
+                customClass="w-full text-black"
               />
             </div>
           </div>
@@ -302,7 +311,10 @@
                   />
                 </td>
                 <td class="px-4 lg:w-24">
-                  <NumberInput bind:value={salesItem.number} required={false} />
+                  <NumberInput
+                    bind:value={salesItem.quantity}
+                    required={false}
+                  />
                 </td>
                 <td class="px-4 lg:w-32 ">
                   <Select
@@ -323,10 +335,10 @@
                   />
                 </td>
                 <td class="text-center">
-                  {salesItem.unitPrice && salesItem.number
+                  {salesItem.unitPrice && salesItem.quantity
                     ? salesItem.unitPrice *
-                      (salesItem.unitNumber ? salesItem.unitNumber : 1) *
-                      salesItem.number
+                      (salesItem.totalNumber ? salesItem.totalNumber : 1) *
+                      salesItem.quantity
                     : "-"}
                 </td>
                 <td class="text-center">
@@ -335,14 +347,15 @@
                     class="bg-green-600 disabled:bg-green-400 cursor text-white active:bg-bred-400 font-bold text-xs px-2 py-1 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
                     type="button"
                     disabled={!salesItem.unitPrice &&
-                      !salesItem.unitNumber &&
-                      !salesItem.number}
+                      !salesItem.totalNumber &&
+                      !salesItem.quantity}
                   >
                     <i class="bi bi-bag-check-fill text-xl" />
                   </button>
                 </td>
               </tr>
 
+              {JSON.stringify(salesItems)}
               {#each salesItems as item, index}
                 <tr class="h-20">
                   <td class="text-center">
@@ -469,7 +482,7 @@
               on:click={addTransaction}
               disabled={!transaction.customer.isValid ||
                 transaction.customer.value == null}
-              class="bg-blue-600 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+              class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
               type="button"
             >
               {$Translate("Save")}

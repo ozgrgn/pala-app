@@ -196,7 +196,7 @@
             </div>
             <button
               on:click={() => (images = [...images, { image: null }])}
-              class=" mt-2 bg-red-400 disabled:bg-red-300 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+              class=" mt-2 bg-red-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
             >
               Hakkımızda Resmi Ekle
@@ -229,7 +229,7 @@
             </div>
             <button
               on:click={() => (logos = [...logos, { image: null }])}
-              class=" mt-2 bg-red-400 disabled:bg-red-300 text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+              class=" mt-2 bg-red-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
             >
               Logo Ekle
@@ -241,7 +241,7 @@
             <button
               on:click={addAbout}
               disabled={!about.lang.isValid || about.lang.value == null}
-              class="bg-blue-600 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+              class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
               type="button"
             >
               {$Translate("Save")}
