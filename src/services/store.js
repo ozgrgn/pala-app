@@ -30,8 +30,9 @@ lang.subscribe((value) => {
 });
 
 export const toast = writable({});
-
 export const langs = writable(0);
+export const cats = writable(null);
+export const search = writable(null);
 export const general = writable(0)
 export const translate = writable(0)
 export const treatments = writable(0)

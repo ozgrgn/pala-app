@@ -5,9 +5,9 @@
 
   import Dashboard from "./Dashboard.svelte";
 
-  import CreateSlider from "./slider/CreateSlider.svelte";
-  import Sliders from "./slider/Sliders.svelte";
-  import UpdateSlider from "./slider/UpdateSlider.svelte";
+  import CreateSlider from "./pala-slider/CreateSlider.svelte";
+  import Sliders from "./pala-slider/Sliders.svelte";
+  import UpdateSlider from "./pala-slider/UpdateSlider.svelte";
 
   import Admins from "./admin/Admins.svelte";
   import CreateAdmin from "./admin/CreateAdmin.svelte";

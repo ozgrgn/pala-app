@@ -13,13 +13,15 @@
 
 <HomeSlider />
 
-<div class="container  mx-auto my-5">
+<div class="container  mx-auto my-8">
   <div class="grid grid-cols-4 gap-6">
     {#if cats}
       {#each cats as cat}
         <a use:link href="category/{cat._id}">
-          <div class="shadow-xl rounded text-center">
-            <img class="border-b" src="/assets/img/cats/1.jpeg" alt="" />
+          <div class="shadow-xl rounded text-center ">
+            <div class="flex justify-center border-b">
+            <img class=" h-52 object-fit" src="{cat?.images[0]?.image?cat?.images[0]?.image:"/assets/img/gorsel.jpeg"}" alt="" />
+          </div>
             <h3 class="text-lg font-semibold uppercase py-2">{cat.name}</h3>
             <p class="pb-3 text-ellipsis overflow-hidden px-4 h-20">
               {cat.note?cat.note:""}

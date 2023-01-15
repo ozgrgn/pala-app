@@ -3,11 +3,11 @@
   export let answer = () => {};
 </script>
 
-<div>
+<div class="text-center">
   {message}
 </div>
 
-<div class="flex flex-row justify-center items-center gap-4 mt-4">
+<div class="w-full flex flex-row justify-center items-center text-center gap-4 mt-4">
   <button
     on:click={answer(true)}
     class="bg-green-500 hover:bg-green-600 text-white font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"

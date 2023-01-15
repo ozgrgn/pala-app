@@ -6,6 +6,7 @@
   import Select from "$components/Form/Select.svelte";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
+  import { modal } from "$services/store";
   const deleteSliderApprove = (sliderId) => {
     modal.set(
       bind(Alert, {
@@ -20,17 +21,14 @@
     );
   };
 
+
   let sliders;
   let langs;
   let lang;
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
-  const getLang = async () => {
-    let response = await RestService.getLangs(undefined,undefined);
-    langs = response["langs"];
-}
-getLang();
+
   const getSliders = async () => {
     let response = await RestService.getSliders(limit, skip, lang);
     sliders = response["sliders"];
@@ -139,21 +137,28 @@ getLang();
             <tbody>
               {#each sliders as slider}
                 <tr>
+             
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {slider.lang}
-                  </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {slider.title}
+                   <img class="h-16 object-fit" src="{slider?.image}" alt="">
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     {slider.order}
                   </td>
+                  <td
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+                  <button
+                    class="{slider.isActive
+                      ? 'bg-green-500'
+                      : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold"
+                  >
+                    {slider.isActive ? "Aktif" : "Pasif"}
+                  </button>
+                </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >

@@ -4,21 +4,15 @@
   import { Translate, TranslateApiMessage } from "$services/language.js";
   import { onMount } from "svelte";
   import { navigate } from "svelte-navigator";
-  import Input from "$components/Form/Input.svelte";
-  import Textarea from "$components/Form/Textarea.svelte";
   import NumberInput from "$components/Form/NumberInput.svelte";
   import Image from "$components/Form/Image.svelte";
-  import Select from "$components/Form/Select.svelte";
   import Switch from "$components/Switch.svelte";
 
+
   let values = [
-    { key: "lang", customValue: null },
-    { key: "title", customValue: null },
-    { key: "description", customValue: null },
     { key: "order", customValue: null },
     { key: "isActive", customValue: null },
-    { key: "backgroundBanner", customValue: null },
-    { key: "mobileBanner", customValue: null },
+    { key: "image", customValue: null },
   ];
 
   let slider = {};
@@ -31,11 +25,10 @@
     }
   });
 
-  onMount(() => {
-
-  });
+  onMount(() => {});
   const addSlider = async () => {
     let data = {};
+
     values.map((v) => {
       data[v.key] = slider[v.key]?.value;
     });
@@ -78,28 +71,6 @@
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-name"
               >
-                Dil
-              </label>
-              <Select
-              bind:value={slider.lang.value}
-              values={[
-                { lang: "tr" },
-                { lang: "en"},
-                { lang: "ru" },
-              ]}
-              title={"Dil Seçin"}
-              valuesKey={"lang"}
-              valuesTitleKey={"lang"}
-              customClass={"w-full"}
-            />
-            </div>
-          </div>
-          <div class="w-full lg:w-3/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
                 Sıra
               </label>
 
@@ -124,84 +95,28 @@
             </div>
           </div>
           <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Slider Spot
-              </label>
-
-              <Input
-                bind:value={slider.title.value}
-                bind:isValid={slider.title.isValid}
-                placeholder={"Spot"}
-                required={true}
-              />
-            </div>
-          </div>
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Slider Başlık
-              </label>
-
-              <Input
-                bind:value={slider.description.value}
-                bind:isValid={slider.description.isValid}
-                placeholder={"Başlık"}
-                required={true}
-              />
-            </div>
-          </div>
-   
-
-          <div class="w-full lg:w-6/12 px-4">
             <div class="border relative w-full h-72 mb-3">
               <label
                 class="block text-blueGray-600 text-xs font-bold mb-2"
                 for="backgroundBanner"
               >
-                Arka plan banner
+                Slider
               </label>
               <div class="flex h-full flex-col justify-center my-2">
                 <Image
-                  bind:value={slider.backgroundBanner.value}
-                  bind:isValid={slider.backgroundBanner.isValid}
+                  bind:value={slider.image.value}
+                  bind:isValid={slider.image.isValid}
                 />
               </div>
             </div>
           </div>
-   
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="border relative w-full h-72 mb-3">
-              <label
-                class="block text-blueGray-600 text-xs font-bold mb-2"
-                for="rectangleBanner"
-              >
-                Mobile Banner
-              </label>
-              <div class="flex h-full flex-col justify-center my-2">
-                <Image
-                  bind:value={slider.mobileBanner.value}
-                  bind:isValid={slider.mobileBanner.isValid}
-                />
-              </div>
-            </div>
-          </div>
-   
         </div>
 
         <div class="flex flex-wrap">
           <div class="w-full lg:w-12/12 px-4 text-right mt-2">
             <button
               on:click={addSlider}
-              disabled={!slider.title.isValid ||
-                !slider.description.isValid ||
-                !slider.order.isValid}
+              disabled={!slider.order.isValid}
               class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
               type="button"
             >

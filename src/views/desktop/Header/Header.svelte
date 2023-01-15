@@ -1,6 +1,6 @@
 <script>
   import RestService from "$services/rest";
-  import { user } from "$services/store";
+  import { user, cats } from "$services/store";
   import { link, useLocation } from "svelte-navigator";
 
   import { onDestroy } from "svelte";
@@ -41,7 +41,13 @@
     user.set(null);
   };
   console.log($user, "user");
-  let cats = [{ name: "sef", title: "sfg", perma: "/" }];
+
+  const getCats = async () => {
+    let response = await RestService.getCats(undefined, undefined, true);
+    $cats = response["cats"];
+    console.log($cats, "cats");
+  };
+  getCats();
   let hover;
 </script>
 
@@ -50,8 +56,8 @@
     <a href="/" class="z-10">
       <img class="" src="/assets/img/logos/logo-light.png" alt="" />
     </a>
-    <div class="flex font-medium justify-start self-center w-full px-28">
-      <a use:link href={`/home`} class=""><span>Home </span></a>
+    <div class="flex justify-center self-center w-full">
+      <a use:link href={`/store/home`} class=""><span>Home</span></a>
 
       <div
         class="relative flex flex-col justify-center z-10 cursor-pointer"
@@ -66,19 +72,25 @@
             ? 'opacity-100'
             : '  opacity-0 h-0'} transition-opacity ease-in-out delay:75 duration-500 z-1"
         >
-          {#if cats}
-            {#each cats as car}
+          {#if $cats}
+            {#each $cats as cat}
               <AItem
                 bind:hover
                 customClass="justify-start w-fit pl-2  {hover
                   ? 'opacity-100'
                   : '  opacity-0 h-0'}"
-                active={$location.pathname == `/cats/${car.perma}`}
-                path="/cats/{car.perma}">{car.title}</AItem
+                active={$location.pathname == `/cats/${cat.perma}`}
+                path="/store/category/{cat._id}">{cat.name}</AItem
               >
             {/each}
           {/if}
         </div>
+      </div>
+   
+      <div class="">
+        <a use:link href={`/store/member-info`} class=""
+          ><span>Üyelik Bilgilerim</span></a
+        >
       </div>
     </div>
     <div class="w-1/4 flex flex-col justify-center">

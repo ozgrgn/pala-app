@@ -1,4 +1,4 @@
 const env = {
-    API_URL: "https://side-dental-api-slkqzmagvq-ew.a.run.app",
+    API_URL: "https://pala-backend.herokuapp.com/" ,
 };
 export default env

@@ -1,10 +1,15 @@
 <script>
-  import ENV from "../../../env";
-
+  import RestService from "$services/rest";
   import { Splide, SplideSlide } from "@splidejs/svelte-splide";
   import "@splidejs/svelte-splide/css";
-  let banners = [{ name: 1 }, { name: 2 }];
-</script>
+  let sliders;
+  const getSliders = async () => {
+    let response = await RestService.getSliders(undefined, undefined, true);
+    sliders = response["sliders"];
+  };
+  getSliders();
+  
+  </script>
 
 <Splide
   options={{
@@ -22,10 +27,10 @@
     },
   }}
 >
-  {#if banners}
-    {#each banners as banner}
+  {#if sliders}
+    {#each sliders as slider}
       <SplideSlide>
-        <img src={`/assets/img/sliders/${banner.name}.jpeg`} alt="1" />
+        <img class="h-full object-fit" src={slider.image} alt="1" />
       </SplideSlide>
     {/each}{/if}
 </Splide>

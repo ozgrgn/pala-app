@@ -24,8 +24,8 @@
   {#if images}
     {#each images as image}
       <SplideSlide>
-        <div class="flex items-center justify-center">
-        <img class="h-96" src={image.image} alt="1" /></div>
+        <div class="w-full flex items-center justify-center">
+        <img class="max-h-96 " src={image.image} alt="1" /></div>
       </SplideSlide>
     {/each}{/if}
 </Splide>

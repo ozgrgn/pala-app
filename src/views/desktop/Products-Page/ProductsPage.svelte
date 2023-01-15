@@ -1,6 +1,6 @@
 <script>
   import { link } from "svelte-navigator";
-  import { salesItems } from "$services/store";
+  import { salesItems,search } from "$services/store";
   import RestService from "$services/rest";
   let cats;
 
@@ -13,20 +13,26 @@
   let products;
   let customerId;
   let customers;
-  const getProducts = async () => {
+  
+  const getProducts = async (prm,search) => {
+
+    console.log(prm,"prprprprprp")
+    if(prm.catid=="all"){
+      prm.catid=undefined
+    }
+
     let response = await RestService.getProducts(
       undefined,
       undefined,
       true,
-      $params.catid,
-      undefined
+      prm.catid,
+      undefined,
+      search
     ); 
     products = response["products"];
     console.log(products, "pro ducts");
   };
-  getProducts();
-
-
+ $: getProducts($params,$search);
 
 
   const getCats = async () => {

@@ -22,7 +22,7 @@
     { key: "order", customValue: null },
     { key: "isActive", customValue: false },
     { key: "images", customValue: null },
-    { key: "logos", customValue: null },
+    { key: "stockCount", customValue: null },
   ];
 
   let product = {};
@@ -35,15 +35,17 @@
     images.splice(index, 1);
     images = images;
   };
-
+  const unitPiece = async (i) => {
+    units[i].number = 1;
+  };
   const getCats = async () => {
-    let response = await RestService.getCats(undefined, undefined,true);
+    let response = await RestService.getCats(undefined, undefined, true);
     cats = response["cats"];
     console.log(cats, "cats");
   };
   getCats();
   const getBrands = async () => {
-    let response = await RestService.getBrands(undefined, undefined,true);
+    let response = await RestService.getBrands(undefined, undefined, true);
     brands = response["brands"];
     console.log(brands, "brands");
   };
@@ -78,7 +80,6 @@
       product.isActive.value = false;
     }
     values.map((v) => {
-      console.log(v.key, "vkey");
       if (
         product[v.key].value &&
         v.key != "prices" &&
@@ -180,7 +181,7 @@
               />
             </div>
           </div>
-          <div class="w-full lg:w-3/12 px-4">
+          <div class="w-full lg:w-2/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -202,7 +203,7 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-3/12 px-4">
+          <div class="w-full lg:w-2/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -223,6 +224,23 @@
               {/if}
             </div>
           </div>
+          <div class="w-full lg:w-2/12 px-4">
+            <div class="relative w-full mb-3 ap">
+              <label
+                class="block  text-blueGray-600 text-xs font-bold mb-2"
+                for="grid-name"
+              >
+                Stok Adedi
+              </label>
+              <NumberInput
+                bind:value={product.stockCount.value}
+                bind:isValid={product.stockCount.isValid}
+                placeholder={"Stok"}
+                required={true}
+                customClass="appearance-none "
+              />
+            </div>
+          </div>
         </div>
 
         <div class="flex flex-wrap my-4">
@@ -230,11 +248,11 @@
             <div class="">
               <div class=" ">
                 <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Üyelik Fiyatı
-              </label>
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Üyelik Fiyatı
+                </label>
                 {#if memberships}
                   {#each memberships as membership, index}
                     <div class="border mt-2 p-1 grid grid-cols-2">
@@ -258,41 +276,44 @@
           <div class="lg:w-3/12 px-4 flex flex-col justify-between">
             <div class="">
               <label
-              class="block  text-blueGray-600 text-xs font-bold mb-2"
-              for="grid-name"
-            >
-              Birim Adedi
-            </label>
+                class="block  text-blueGray-600 text-xs font-bold mb-2"
+                for="grid-name"
+              >
+                Birim Adedi
+              </label>
               {#if units}
                 {#each units as unit, index}
-                {#if unit._id!="63bb0c70f638ea468ffd4942"}
-                  <div class="border mt-2 p-1 grid grid-cols-2 ">
-                    <span
-                      class="px-2 flex flex-col justify-center text-blueGray-600 text-sm font-bold"
-                      >{units[index].name} Adedi</span
-                    >
-                    <div class=" flex flex-col justify-center">
-                      <NumberInput
-                        bind:value={units[index].number}
-                        placeholder={"Adet Sayısı"}
-                        required={false}
-                      />
+                  {#if unit._id != "63bb0c70f638ea468ffd4942"}
+                    <div class="border mt-2 p-1 grid grid-cols-2 ">
+                      <span
+                        class="px-2 flex flex-col justify-center text-blueGray-600 text-sm font-bold"
+                        >{units[index].name} Adedi</span
+                      >
+                      <div class=" flex flex-col justify-center">
+                        <NumberInput
+                          bind:value={units[index].number}
+                          placeholder={"Adet Sayısı"}
+                          required={false}
+                        />
+                      </div>
                     </div>
+                  {:else}
+                  <div class="hidden">
+                    {@html unitPiece(index)}
                   </div>
                   {/if}
                 {/each}
               {/if}
             </div>
-  
           </div>
           <div class="lg:w-6/12 px-4 ">
             <div class="">
               <label
-              class="block  text-blueGray-600 text-xs font-bold "
-              for="grid-name"
-            >
-              Resimler
-            </label>
+                class="block  text-blueGray-600 text-xs font-bold "
+                for="grid-name"
+              >
+                Resimler
+              </label>
               {#each images as Image, index}
                 <div class="border mt-2 p-1 grid grid-flow-col">
                   <span

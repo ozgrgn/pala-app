@@ -10,7 +10,7 @@ const userVerifyToken = () => {
   return Http.post(`${ENV.API_URL}/user/verifyToken`, {}, "user");
 };
 const getMe = (userId) => {
-  return Http.get(`${ENV.API_URL}/user/me`, { userId });
+  return Http.get(`${ENV.API_URL}/user/me`, { userId },"user");
 };
 
 
@@ -152,7 +152,7 @@ const deleteUnit = (unitId) => {
 
 
 // Products
-const getProducts = (limit, skip, isActive, cat, brand) => {
+const getProducts = (limit, skip, isActive, cat, brand,search) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -168,6 +168,10 @@ const getProducts = (limit, skip, isActive, cat, brand) => {
   }
   if (brand) {
     data.brand = brand;
+  }
+
+  if (search) {
+    data.search = search;
   }
 
   return Http.get(`${ENV.API_URL}/product`, { ...data });
@@ -347,21 +351,21 @@ const getSliders = (limit, skip, lang) => {
   return Http.get(`${ENV.API_URL}/slider`, { ...data });
 };
 const addSlider = (data) => {
-  return Http.post(`${ENV.API_URL}/slider`, data);
+  return Http.post(`${ENV.API_URL}/slider`, data,"admin");
 };
 
 const updateSlider = (sliderId, data) => {
   return Http.put(`${ENV.API_URL}/slider/${sliderId}`, {
     slider: data,
-  });
+  },"admin");
 };
 
 const getSlider = (sliderId) => {
-  return Http.get(`${ENV.API_URL}/slider/${sliderId}`);
+  return Http.get(`${ENV.API_URL}/slider/${sliderId}`,{},"admin");
 };
 
 const deleteSlider = (sliderId) => {
-  return Http.delete(`${ENV.API_URL}/slider/${sliderId}`);
+  return Http.delete(`${ENV.API_URL}/slider/${sliderId}`,{},"admin");
 };
 
 

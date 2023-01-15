@@ -91,11 +91,20 @@
         <SideMenuButton
         icon={"bi bi-basket2"}
           title={"Satışlar"}
-          href={"/transactions"}
+          href={"/panel/transactions"}
         />
 
       </div>
+      <div class="rounded bg-neutral p-2 flex flex-col gap-1 mb-2">
+        <h2 class="text-black text-bold border-b text-md py-1">SİTE VERİLERİ</h2>
 
+        <SideMenuButton
+          icon={"bi bi-images"}
+          title={"Sliderlar"}
+          href={"/panel/sliders"}
+        />
+
+      </div>
     </div>
     
   </div>

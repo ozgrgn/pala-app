@@ -4,6 +4,7 @@
   import { createFieldValidator } from "../Validators/validation.js";
   import { requiredValidator } from "../Validators/validator.js";
   export let value = null;
+  export let isUnit = false;
   export let values;
   export let valuesKey;
   export let valuesTitleKey;
@@ -50,12 +51,11 @@
   <option disabled={!all} value={null}>{title}</option>
   {#each values as _value}
     <option value={_value[valuesKey]}>
-
       {#if valuesTitleKeySub}
         {_value[valuesTitleKey][valuesTitleKeySub]}
-      {:else}
-        {_value[valuesTitleKey]}
-
+      {:else if isUnit}
+        {_value[valuesTitleKey] + " (" + _value["number"] + ")"}
+      {:else}{_value[valuesTitleKey]}
         {#if secondTitleKey}
           - {_value[secondTitleKey]}
         {/if}

@@ -29,7 +29,9 @@
   };
 
   const params = useParams();
-
+  const unitPiece = async (i) => {
+    product.units[i].number = 1;
+  };
   let deleteImage = (index) => {
     product.images.splice(index, 1);
     product.images = product.images;
@@ -58,7 +60,7 @@
     { key: "order", customValue: null },
     { key: "isActive", customValue: null },
     { key: "images", customValue: null },
-    { key: "logos", customValue: null },
+    { key: "stockCount", customValue: null },
   ];
 
   const updateProduct = async () => {
@@ -255,7 +257,7 @@
                 />
               </div>
             </div>
-            <div class="w-full lg:w-3/12 px-4">
+            <div class="w-full lg:w-2/12 px-4">
               <div class="relative w-full mb-3">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -277,7 +279,7 @@
               </div>
             </div>
 
-            <div class="w-full lg:w-3/12 px-4">
+            <div class="w-full lg:w-2/12 px-4">
               <div class="relative w-full mb-3">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -285,7 +287,7 @@
                 >
                   Marka
                 </label>
-                {#if brands}
+                {#if brands && product}
                   <Select
                     bind:value={product.brand.value}
                     bind:isValid={product.brand.isValid}
@@ -296,6 +298,23 @@
                     customClass={"w-full"}
                   />
                 {/if}
+              </div>
+            </div>
+            <div class="w-full lg:w-2/12 px-4">
+              <div class="relative w-full mb-3 ap">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Stok Adedi
+                </label>
+                <NumberInput
+                  bind:value={product.stockCount.value}
+                  bind:isValid={product.stockCount.isValid}
+                  placeholder={"Stok"}
+                  required={true}
+                  customClass="appearance-none "
+                />
               </div>
             </div>
           </div>
@@ -339,7 +358,9 @@
                   Birimler
                 </label>
                 {#if units}
-                  {#each units as unit, index}
+                  {#each product.units as unit, index}
+                  {#if unit._id != "63bb0c70f638ea468ffd4942"}
+
                     <div class="border mt-2 p-1 grid grid-cols-2 ">
                       <span
                         class="px-2 flex flex-col justify-center text-blueGray-600 text-sm font-bold"
@@ -353,6 +374,11 @@
                         />
                       </div>
                     </div>
+                    {:else}
+                    <div class="hidden">
+                      {@html unitPiece(index)}
+                    </div>
+                    {/if}
                   {/each}
                 {/if}
               </div>

@@ -11,6 +11,7 @@
   import RestService from "$services/rest";
   import ProductDetailPage from "./ProductDetail-Page/ProductDetailPage.svelte";
   import ProductsPage from "./Products-Page/ProductsPage.svelte";
+  import MemberInfo from "./MemberInfo-Page/MemberInfo.svelte";
 
   const location = useLocation();
 
@@ -53,6 +54,9 @@
       </Route>
       <Route path="/product/:productid">
         <ProductDetailPage />
+      </Route>
+      <Route path="/member-info">
+        <MemberInfo />
       </Route>
     </Router>
   </div>

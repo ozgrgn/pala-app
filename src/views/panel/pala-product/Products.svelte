@@ -6,7 +6,8 @@
   import Select from "$components/Form/Select.svelte";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
-  import { modal } from "$services/store";
+  import { modal, search } from "$services/store";
+  import Input from "$components/Form/Input.svelte";
 
   const deleteProductApprove = (productId) => {
     modal.set(
@@ -28,18 +29,21 @@
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
-  const getLangs = async () => {
-    let response = await RestService.getLangs(undefined, undefined);
-    langs = response["langs"];
-  };
-  getLangs();
-  const getProducts = async () => {
-    let response = await RestService.getProducts(limit, skip, lang);
+
+  const getProducts = async (search) => {
+    let response = await RestService.getProducts(
+      limit,
+      skip,
+      undefined,
+      undefined,
+      undefined,
+      search
+    );
     products = response["products"];
     console.log(products, "products");
     totalDataCount = response["count"];
   };
-  getProducts();
+  $:getProducts($search);
 
   const deleteProduct = async (productId) => {
     let response = await RestService.deleteProduct(productId);
@@ -87,7 +91,18 @@
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
+            <div class="flex justify-between">
             <h3 class="font-semibold text-lg text-blueGray-700">Ürünler</h3>
+            <div class="relative">
+              <Input
+                bind:value={$search}
+                placeholder={"Ürün Arama"}
+                customClass="pl-10 border-2"
+          
+              />
+              <div class="absolute top-2 left-2"><i class="bi bi-search" /></div>
+            </div>
+          </div>
           </div>
         </div>
       </div>
@@ -104,6 +119,14 @@
                 >
                   No
                 </th>
+                <th
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                Sıra
+              </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -126,8 +149,16 @@
                   ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                   : 'bg-red-700 text-red-200 border-red-600'}"
               >
-                İsim
+                Marka
               </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Stok
+                </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -150,17 +181,32 @@
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {product.no}
+                    {product?.no}
+                  </td>
+                  <td
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+                  {product?.order}
+                </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {product?.cat?.name ? product?.cat?.name : "-"}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {product.cat.name}
+                    {product?.name}
                   </td>
+                  <td
+                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                >
+                  {product?.brand?.name?product?.brand?.name:"-"}
+                </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {product.name}
+                    {product?.stockCount}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
