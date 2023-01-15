@@ -40,6 +40,7 @@
   on:input={input(value)}
   min="0"
   {disabled}
+  {customClass}
 />
 
 {#if $validity.dirty && !$validity.valid}
@@ -47,3 +48,13 @@
     {$TranslateApiMessage($validity.message)}
   </span>
 {/if}
+<style>
+ 
+ :global(.ap input[type="number"])::-webkit-inner-spin-button,
+ :global(.ap input[type="number"])::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+</style>
+

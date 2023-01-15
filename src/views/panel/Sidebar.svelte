@@ -31,7 +31,7 @@
   {$desktopDrawer && $desktopDrawerMyAccount ? 'w-[36rem] ' : ''}
   bg-[#f6f8fa] h-screen flex flex-row z-[100]"
 >
-  <div class="w-[18rem]">
+  <div class="w-[18rem] shadow-lg">
     <div class="py-2 flex justify-center">
       <img class=" h-20" src="/assets/img/logos/logo-light.png" alt="" />
 
@@ -47,7 +47,7 @@
 
         <SideMenuButton
           icon={"bi bi-person"}
-          title={"Üyeler"}
+          title={"Kullanıcılar"}
           href={"/panel/users"}
         />
 

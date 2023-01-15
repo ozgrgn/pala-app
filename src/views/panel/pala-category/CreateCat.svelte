@@ -13,11 +13,12 @@
     { key: "name", customValue: null },
     { key: "note", customValue: null },
     { key: "isActive", customValue: null },
-   
+    { key: "images", customValue: null },
+
   ];
 
   let cat = {};
-
+  let images = [];
   values.map((v) => {
     if (v.defaultValue) {
       cat[v.key] = { value: v.defaultValue };
@@ -25,12 +26,16 @@
       cat[v.key] = {};
     }
   });
-
+  let deleteImage = (index) => {
+    images.splice(index, 1);
+    images = images;
+  };
 
   const addCat = async () => {
     let data = {};
+    data.images = images;
     values.map((v) => {
-      if (cat[v.key].value) {
+      if (cat[v.key].value && v.key != "images") {
       data[v.key] = cat[v.key]?.value;}
     });
     let response = await RestService.addCat(data);
@@ -91,12 +96,12 @@
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-name"
               >
-                Not
+                Kısa Açıklama
               </label>
-              <Textarea
+              <Input
                 bind:value={cat.note.value}
                 bind:isValid={cat.note.isValid}
-                placeholder={"Kategori Notu"}
+                placeholder={"Kategori Açıklaması"}
                 required={false}
               />
             </div>
@@ -116,13 +121,49 @@
           </div>
   
         </div>
- 
+        <div class="lg:w-6/12 px-4 ">
+          <div class="">
+            <label
+            class="block  text-blueGray-600 text-xs font-bold"
+            for="grid-name"
+          >
+          Resim
+          </label>
+            {#each images as Image, index}
+              <div class="border mt-2 p-1 grid grid-flow-col">
+                <span
+                  class="px-2 flex flex-col justify-center text-blueGray-600 text-xs font-bold"
+                  >{"Resim"}</span
+                >
+                <div class="col-span-2">
+                  <ImageArray bind:value={Image.image} />
+                </div>
+                <div class="flex justify-end ">               
+                  <button
+                    on:click={() => deleteImage(index)}
+                    class="w-14 bg-red-500 hover:bg-red-600 text-white font-bold text-xs my-2 ml-4 px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+                    type="button"
+                  >
+                    SİL
+                  </button>
+                </div>
+              </div>
+            {/each}
+          </div>
+          <button
+            on:click={() => (images = [...images, { image: null }])}
+            class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+            type="button"
+          >
+            Resim Ekle
+          </button>
+        </div>
         <div class="flex flex-wrap">
           <div class="w-full lg:w-12/12 px-4 text-right mt-2">
             <button
               on:click={addCat}
               disabled={!cat.name.isValid || cat.name.value == null}
-              class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+              class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
               type="button"
             >
               {$Translate("Save")}

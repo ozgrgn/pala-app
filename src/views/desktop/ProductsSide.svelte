@@ -1,37 +1,31 @@
 <script>
-  import { link } from "svelte-navigator";
-  import { salesItems } from "$services/store";
-  import Card from "$components/Shared/Card.svelte";
-  import RestService from "$services/rest";
+    import RestService from "$services/rest.js";
 
-  $: total =
-    $salesItems && $salesItems.length > 0
-      ? $salesItems.reduce((a, b) => a + b?.total, 0)
-      : 0;
-
-  let cats;
-
-  import { useParams } from "svelte-navigator";
   import Select from "$components/Form/Select.svelte";
-  const params = useParams();
-  let products;
-  let customerId;
-  let customers;
-  const getProducts = async () => {
-    let response = await RestService.getProducts(
-      undefined,
-      undefined,
-      true,
-      $params.catid,
-      undefined
-    );
-    products = response["products"];
-    console.log(products, "pro ducts");
-  };
-  getProducts();
+    import { salesItems } from "$services/store";
+    import { link } from "svelte-navigator";
+    import { modal } from "$services/store";
+    import { bind } from "svelte-simple-modal";
+    import Alert from "$components/Alert.svelte";
 
-  const getCats = async () => {
-    let response = await RestService.getCats(undefined, undefined);
+
+const deleteItemApprove = () => {
+  console.log("çkmn")
+  modal.set(
+    bind(Alert, {
+      message: "Bu işlemi onaylıyor musunuz ?",
+      answer: (message) => {
+        if (message) {
+          salesItem=null;
+        }
+        modal.set(null);
+      },
+    })
+  );
+};
+
+const getCats = async () => {
+    let response = await RestService.getCats(undefined, undefined,true);
     cats = response["cats"];
     console.log(cats, "cats");
   };
@@ -55,7 +49,16 @@
 
   getCustomersByUserId();
 
-  const addTransactionByUser = async () => {
+
+let cats
+let customers
+let customerId
+$: total =
+    $salesItems && $salesItems.length > 0
+      ? $salesItems.reduce((a, b) => a + b?.total, 0)
+      : 0;
+
+      const addTransactionByUser = async () => {
     let addTransactionByUserResponse = await RestService.addTransactionByUser({
       salesItems: $salesItems,
       customerId,
@@ -64,17 +67,15 @@
 
     console.log(addTransactionByUserResponse, "addTransactionByUser response");
   };
-</script>
 
-{JSON.stringify($salesItems)}
-<div class="grid grid-cols-4 mt-5 gap-4 container mx-auto">
+</script>
   <div class="flex flex-col gap-4">
     <div class="border p-4">
       <h3 class="text-lg font-bold pb-2">KATEGORİLER</h3>
       <div class="flex flex-col justify-center">
         {#if cats}
           {#each cats as cat}
-            <a use:link href="category/{cat._id}">
+            <a use:link href="/store/category/{cat._id}">
               <h2 class="text-[#777] mb-1">{cat.name}</h2></a
             >
           {/each}
@@ -83,7 +84,7 @@
     </div>
     <div class="border p-4">
       <h3 class="text-lg font-bold pb-2">SEPETİM</h3>
-      {#if $salesItems.length > 0}
+      {#if $salesItems && $salesItems.length > 0}
         <div class="flex flex-col gap-y-2">
           {#each $salesItems as salesItem}
             <div class="flex">
@@ -93,13 +94,22 @@
               <span class="text-sm text-[#777] w-1/4"
                 >x {salesItem.totalNumber}</span
               >
+              <!-- <button
+              on:click={() => {
+                deleteItemApprove();
+              }}
+              type="button"
+            >
+            <i class=" flex justify-start  hover:text-red-600 text-red-500 bi bi-bag-x-fill ease-linear transition-all duration-150"
+/>
+            </button> -->
             </div>
           {/each}
           <div class="flex justify-end pt-3">
-            <span class="text-sm font-medium text-right text-[#777] w-3/4"
+            <span class="text-sm font-medium text-right text-[#777] w-2/3"
               >Total:
             </span>
-            <span class="text-sm font-medium text-[#777] w-1/4 pl-1"
+            <span class="text-sm font-medium text-[#777] w-1/3 pl-1"
               >{total} €</span
             >
           </div>
@@ -127,16 +137,9 @@
             >
               ONAYLA
             </button>
+   
           </div>
         </div>
       {/if}
     </div>
   </div>
-  <div class="col-span-3 grid grid-cols-4 gap-4">
-    {#if products}
-      {#each products as product}
-        <Card {product} />
-      {/each}
-    {/if}
-  </div>
-</div>

@@ -147,7 +147,7 @@
                   {unit.isActive ? "Aktif" : "Pasif"}
                 </button>
               </td>
-
+{#if unit._id!="63bb0c70f638ea468ffd4942"}
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
@@ -168,7 +168,9 @@
                       {$Translate("Delete")}
                     </button>
                   </td>
+                  {/if}
                 </tr>
+            
               {/each}
             </tbody>
           </table>

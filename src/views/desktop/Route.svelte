@@ -2,13 +2,15 @@
   import Footer from "$components/Footers/Footer.svelte";
   import { onDestroy } from "svelte";
   import { Route, Router } from "svelte-navigator";
-  import Cat from "./Cat/Cat.svelte";
-
+  import Modal from "svelte-simple-modal";
+  import { modal } from "../../services/store";
   import Header from "./Header/Header.svelte";
   import Home from "./Home/Home.svelte";
   import { user } from "$services/store";
   import { navigate, useLocation } from "svelte-navigator";
   import RestService from "$services/rest";
+  import ProductDetailPage from "./ProductDetail-Page/ProductDetailPage.svelte";
+  import ProductsPage from "./Products-Page/ProductsPage.svelte";
 
   const location = useLocation();
 
@@ -33,6 +35,7 @@
     userAuthSubscription();
   });
 </script>
+<Modal show={$modal} />
 
 <div class="min-h-screen">
   <Header />
@@ -46,7 +49,10 @@
         <Home />
       </Route>
       <Route path="/category/:catid">
-        <Cat />
+        <ProductsPage />
+      </Route>
+      <Route path="/product/:productid">
+        <ProductDetailPage />
       </Route>
     </Router>
   </div>

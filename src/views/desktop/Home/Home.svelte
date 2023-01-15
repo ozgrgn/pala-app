@@ -4,13 +4,9 @@
   import { link } from "svelte-navigator";
 
   let cats;
-  let totalDataCount;
   const getCats = async () => {
-    let response = await RestService.getCats(undefined, undefined);
+    let response = await RestService.getCats(undefined, undefined,true);
     cats = response["cats"];
-    totalDataCount = response["count"];
-
-    console.log(cats, "cats");
   };
   getCats();
 </script>
@@ -23,11 +19,10 @@
       {#each cats as cat}
         <a use:link href="category/{cat._id}">
           <div class="shadow-xl rounded text-center">
-            <img class="border-b" src="assets/img/cats/1.jpeg" alt="" />
-            <h3 class="text-lg font-semibold py-2">{cat.name}</h3>
-            <p class="pb-3 px-2">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry....
+            <img class="border-b" src="/assets/img/cats/1.jpeg" alt="" />
+            <h3 class="text-lg font-semibold uppercase py-2">{cat.name}</h3>
+            <p class="pb-3 text-ellipsis overflow-hidden px-4 h-20">
+              {cat.note?cat.note:""}
             </p>
             <button
               class=" bottom-2 mb-4 border-2 border-red-500 hover:bg-red-500 px-4 py-2 text-black hover:text-white active:bg-dark-300 text-sm font-bold uppercase rounded outline-none focus:outline-none  ease-linear transition-all duration-150"

@@ -14,20 +14,12 @@
   import UpdateAdmin from "./admin/UpdateAdmin.svelte";
   import { desktopDrawer } from "$services/store";
 
-  import CreateHome from "./homePage/CreateHome.svelte";
-  import Homes from "./homePage/Homes.svelte";
-  import UpdateHome from "./homePage/UpdateHome.svelte";
 
   import RestService from "$services/rest";
   import { onDestroy, onMount } from "svelte";
   import Modal from "svelte-simple-modal";
   import { modal } from "../../services/store";
-  import Contacts from "./contact/Contacts.svelte";
-  import CreateContact from "./contact/CreateContact.svelte";
-  import UpdateContact from "./contact/UpdateContact.svelte";
-  import CreateGeneral from "./general/CreateGeneral.svelte";
-  import Generals from "./general/Generals.svelte";
-  import UpdateGeneral from "./general/UpdateGeneral.svelte";
+
   import Brands from "./pala-brand/Brands.svelte";
   import CreateBrand from "./pala-brand/CreateBrand.svelte";
   import UpdateBrand from "./pala-brand/UpdateBrand.svelte";
@@ -52,9 +44,7 @@
   import CreateUser from "./pala-user/CreateUser.svelte";
   import UpdateUser from "./pala-user/UpdateUser.svelte";
   import Users from "./pala-user/Users.svelte";
-  import CreateTranslate from "./translate/CreateTranslate.svelte";
-  import Translates from "./translate/Translates.svelte";
-  import UpdateTranslate from "./translate/UpdateTranslate.svelte";
+
 
   import { admin } from "$services/store";
   import { navigate, useLocation } from "svelte-navigator";
@@ -209,34 +199,7 @@
 
         <Route path="sliders" component={Sliders} />
 
-        <!-- Ana Sayfa -->
-        <Route path="update-home/:homeId" component={UpdateHome} />
 
-        <Route path="create-home" component={CreateHome} />
-
-        <Route path="homes" component={Homes} />
-
-        <!-- İletişim -->
-        <Route path="update-contact/:contactId" component={UpdateContact} />
-
-        <Route path="create-contact" component={CreateContact} />
-
-        <Route path="contacts" component={Contacts} />
-        <!-- Genel Bilgiler -->
-        <Route path="update-general/:generalId" component={UpdateGeneral} />
-
-        <Route path="create-general" component={CreateGeneral} />
-
-        <Route path="generals" component={Generals} />
-        <!-- Çeviriler -->
-        <Route
-          path="update-translate/:translateId"
-          component={UpdateTranslate}
-        />
-
-        <Route path="create-translate" component={CreateTranslate} />
-
-        <Route path="translates" component={Translates} />
       </Router>
 
       <FooterAdmin />

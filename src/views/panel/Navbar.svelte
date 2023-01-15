@@ -57,7 +57,7 @@
           >
         
             <div
-              class="w-full flex flex-col md:flex-row flex-wrap  items-start justify-start transition-all {$desktopDrawer?"lg:pl-[18rem]":""}"
+              class="w-full flex flex-col md:flex-row flex-wrap  items-start justify-start mx-1 transition-all {$desktopDrawer?"lg:pl-[18rem]":""}"
             >
             <button
       class="btn btn-sm btn-ghost"

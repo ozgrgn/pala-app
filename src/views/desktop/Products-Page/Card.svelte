@@ -5,13 +5,15 @@
   import { user, salesItems } from "$services/store";
   import Input from "$components/Form/Input.svelte";
   import { onMount } from "svelte";
+  import ToastService from "$services/toast";
 
   export let product;
   export let membershipName;
   let price;
   export let unit;
   export let selectedUnit;
-
+  console.log($salesItems, "salesıtem");
+  console.log(unit, "ununununnu");
   let salesItem = {};
   salesItem.product = product._id;
   salesItem.productName = product.name;
@@ -19,7 +21,7 @@
   salesItem.quantity = 0;
 
   const salesItemAction = async () => {
-    console.log(salesItem,selectedUnit)
+    console.log(salesItem, selectedUnit);
     salesItem.total = salesItem.quantity * selectedUnit?.number * price;
     salesItem.totalNumber = salesItem.quantity * selectedUnit?.number;
     salesItem.unit = selectedUnit?._id;
@@ -40,12 +42,16 @@
   };
 
   let maxPrice = 0;
+  if (product.unit) {
+    findUnit(product.unit);
+    console.log("aley aley");
+  }
 
   const findUnit = async (unit) => {
-    console.log("find unit")
+    console.log("find unit");
     selectedUnit = product.units.find(({ _id }) => _id == unit);
 
-    console.log("find unit",selectedUnit)
+    console.log("find unit", selectedUnit);
     if (salesItem && salesItem.quantity) {
       salesItem.quantity = 0;
       salesItemAction();
@@ -53,10 +59,20 @@
   };
 
   const plusItem = async () => {
+    if (!selectedUnit) {
+      ToastService.error("Lütfen Birim Seçiniz");
+      console.log(selectedUnit);
+      return;
+    }
     salesItem.quantity = salesItem.quantity + 1;
     salesItemAction();
   };
   const minusItem = async () => {
+    if (!selectedUnit) {
+      ToastService.error("Lütfen Birim Seçiniz");
+      console.log(selectedUnit);
+      return;
+    }
     if (salesItem.quantity != 0) salesItem.quantity = salesItem.quantity - 1;
     salesItemAction();
   };
@@ -84,11 +100,14 @@
     $salesItems.map((item) => {
       if (item?.product == product?._id) {
         salesItem.quantity = item?.quantity;
+        console.log(unitsMap[item?.unit]);
 
         unit = unitsMap[item?.unit]?._id;
+        selectedUnit = product.units.find(({ _id }) => _id == unit);
       }
     });
   });
+
   // product.prices.find(({_id})=>_id==$user.membership)
 </script>
 
@@ -96,7 +115,8 @@
   <div
     class="flex flex-col hover:scale-105 transition-all relative rounded-md shadow py-4"
   >
-    <div
+    <a
+      href="/store/product/{product._id}"
       class="bg-white border-1 border-b border-gray-300  my-4 flex justify-center items-center "
     >
       <img
@@ -104,7 +124,7 @@
         src={product?.images[0]?.image}
         alt=""
       />
-    </div>
+    </a>
     <div class="h-54 w-full text-center  xl:px-7 px-2 rounded-b-md">
       <div class="h-16">
         <h2 class="text-sm text-[#1c1e40] leading-4 ">

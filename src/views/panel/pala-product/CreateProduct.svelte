@@ -37,13 +37,13 @@
   };
 
   const getCats = async () => {
-    let response = await RestService.getCats(undefined, undefined);
+    let response = await RestService.getCats(undefined, undefined,true);
     cats = response["cats"];
     console.log(cats, "cats");
   };
   getCats();
   const getBrands = async () => {
-    let response = await RestService.getBrands(undefined, undefined);
+    let response = await RestService.getBrands(undefined, undefined,true);
     brands = response["brands"];
     console.log(brands, "brands");
   };
@@ -164,7 +164,7 @@
             </div>
           </div>
           <div class="w-full lg:w-1/12 px-4">
-            <div class="relative w-full mb-3">
+            <div class="relative w-full mb-3 ap">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-name"
@@ -176,6 +176,7 @@
                 bind:isValid={product.order.isValid}
                 placeholder={"Sıra No"}
                 required={true}
+                customClass="appearance-none "
               />
             </div>
           </div>
@@ -264,6 +265,7 @@
             </label>
               {#if units}
                 {#each units as unit, index}
+                {#if unit._id!="63bb0c70f638ea468ffd4942"}
                   <div class="border mt-2 p-1 grid grid-cols-2 ">
                     <span
                       class="px-2 flex flex-col justify-center text-blueGray-600 text-sm font-bold"
@@ -277,6 +279,7 @@
                       />
                     </div>
                   </div>
+                  {/if}
                 {/each}
               {/if}
             </div>
@@ -332,7 +335,7 @@
             <button
               on:click={addProduct}
               disabled={!product.name.isValid || product.name.value == null}
-              class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+              class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
               type="button"
             >
               {$Translate("Save")}

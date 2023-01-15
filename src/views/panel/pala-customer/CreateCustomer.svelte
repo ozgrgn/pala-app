@@ -23,6 +23,7 @@
     { key: "mobile", customValue: null },
     { key: "email", customValue: null },
     { key: "note", customValue: null },
+    { key: "user", customValue: null },
     { key: "status", customValue: null },
     { key: "isActive", customValue: false },
     { key: "images", customValue: null },
@@ -30,17 +31,12 @@
 
   let customer = {};
   let images = [];
-  let cats;
-  let brands;
-  let memberships;
+  let users;
   let units;
   let deleteImage = (index) => {
     images.splice(index, 1);
     images = images;
   };
-
-
-  getMemberships();
 
   values.map((v) => {
     if (v.defaultValue) {
@@ -49,11 +45,17 @@
       customer[v.key] = {};
     }
   });
+  const getUsers = async () => {
+    let response = await RestService.getUsers(undefined, undefined,true);
+    users = response["users"];
+    console.log(users, "users");
+  };
+  getUsers();
+
   const addCustomer = async () => {
     let data = {};
     data.images = images;
     data.units = units;
-    data.prices = memberships;
     console.log(customer, "customersss");
     console.log(images, "images");
     if (!customer.isActive.value) {
@@ -96,7 +98,7 @@
     >
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="text-center flex justify-between">
-          <h3 class="font-semibold text-lg text-blueGray-700">Firma/Kişi ekle</h3>
+          <h3 class="font-semibold text-lg text-blueGray-700">Firma ekle</h3>
           <div class="relative mb-3 px-10">
             <label
               class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -111,7 +113,7 @@
       </div>
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         <div class="flex flex-wrap my-4">
-          <div class="w-full lg:w-2/12 px-4">
+          <div class="w-full lg:w-3/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -151,7 +153,7 @@
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-name"
               >
-                Soyadı
+                Soyadı (Kişi İse)
               </label>
               <Input
                 bind:value={customer.surname.value}
@@ -162,48 +164,27 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-2/12 px-4">
+          <div class="w-full lg:w-3/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-name"
               >
-                Üyelik
+                Kullanıcı Seçin
               </label>
-              {#if memberships}
-                <Select
-                  bind:value={customer.membership.value}
-                  bind:isValid={customer.membership.isValid}
-                  values={memberships}
-                  title={"Üyelik Seçin"}
-                  valuesKey={"_id"}
-                  valuesTitleKey={"name"}
-                  customClass={"w-full"}
-                />
-              {/if}
+              {#if users}
+              <Select
+              bind:value={customer.user.value}
+              values={users}
+              title={"Kullanıcılar"}
+              valuesKey={"_id"}
+              valuesTitleKey={"fullName"}
+              customClass={"w-full focus:ring-0 ring-0 w-24"}
+            />
+            {/if}
             </div>
           </div>
-          <div class="w-full lg:w-2/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Durum
-              </label>
-              {#if memberships}
-                <Select
-                  bind:value={customer.status.value}
-                  bind:isValid={customer.status.isValid}
-                  values={memberships}
-                  title={"Durum Seçin"}
-                  valuesKey={"_id"}
-                  valuesTitleKey={"name"}
-                  customClass={"w-full"}
-                />
-              {/if}
-            </div>
-          </div>
+       
         </div>
         <div class="flex flex-wrap my-4">
           <div class="w-full lg:w-3/12 px-4">
@@ -212,7 +193,7 @@
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-name"
               >
-                Yetkili İsmi
+                Yetkili İsmi (Kullanıcı Harici)
               </label>
               <Input
                 bind:value={customer.person.value}
@@ -396,8 +377,8 @@
           <div class="w-full lg:w-12/12 px-4 text-right mt-2 ">
             <button
               on:click={addCustomer}
-              disabled={!customer.name.isValid || customer.name.value == null|| customer.membership.value == null}
-              class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+              disabled={!customer.name.isValid || customer.name.value == null|| customer.user.value == null}
+              class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
               type="button"
             >
               {$Translate("Save")}

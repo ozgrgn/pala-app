@@ -26,20 +26,27 @@
   };
 
   const params = useParams();
-
+  let deleteImage = (index) => {
+    cat.images.splice(index, 1);
+    cat.images = cat.images;
+  };
   let cat;
 
   let values = [
     { key: "name", customValue: null },
     { key: "note", customValue: null },
     { key: "isActive", customValue: null },
+    { key: "images", customValue: null },
   ];
 
   const updateCat = async () => {
     let editedCat = {};
+    editedCat.images = cat.images;
 
     values.map((v) => {
-      editedCat[v.key] = cat[v.key].value;
+      if (v.key != "images") {
+        editedCat[v.key] = cat[v.key].value;
+      }
     });
 
     let response = await RestService.updateCat(cat._id, editedCat);
@@ -53,14 +60,14 @@
 
   const getCat = async () => {
     let response = await RestService.getCat($params.catId);
-console.log(response,"response")
+    console.log(response, "response");
     if (response["status"]) {
       values.map((v) => {
         if (v.customValue) {
           response["cat"][v.key] = {
             value: response["cat"][v.key][v.customValue],
           };
-        } else {
+        } else if (v.key!="images") {
           response["cat"][v.key] = { value: response["cat"][v.key] };
         }
       });
@@ -121,61 +128,97 @@ console.log(response,"response")
       </div>
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         {#if cat}
-        <div class="flex flex-wrap my-4">
-          <div class="w-full lg:w-3/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-              Kategori İsmi
-              </label>
-              <Input
-                bind:value={cat.name.value}
-                bind:isValid={cat.name.isValid}
-                placeholder={"Üyelik İsmi"}
-                required={true}
-              />
+          <div class="flex flex-wrap my-4">
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Kategori İsmi
+                </label>
+                <Input
+                  bind:value={cat.name.value}
+                  bind:isValid={cat.name.isValid}
+                  placeholder={"Üyelik İsmi"}
+                  required={true}
+                />
+              </div>
             </div>
-          </div>
-          <div class="w-full lg:w-7/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Not
-              </label>
-              <Textarea
-                bind:value={cat.note.value}
-                bind:isValid={cat.note.isValid}
-                placeholder={"Marka Notu"}
-                required={false}
-              />
+            <div class="w-full lg:w-7/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Kısa Açıklama
+                </label>
+                <Input
+                  bind:value={cat.note.value}
+                  bind:isValid={cat.note.isValid}
+                  placeholder={"Kısa Açıklama"}
+                  required={false}
+                />
+              </div>
             </div>
-          </div>
-      
-          <div class="w-full lg:w-2/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="rectangleBanner"
-              >
-                Aktif mi ?
-              </label>
 
-              <Switch bind:value={cat.isActive.value} />
+            <div class="w-full lg:w-2/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="rectangleBanner"
+                >
+                  Aktif mi ?
+                </label>
+
+                <Switch bind:value={cat.isActive.value} />
+              </div>
+            </div>
+            <div class="lg:w-6/12 px-4 ">
+              <div class="">
+                <label
+                class="block  text-blueGray-600 text-xs font-bold"
+                for="grid-name"
+              >
+              Resim
+              </label>
+                {#each cat.images as Image, index}
+                  <div class="border mt-2 p-1 grid grid-flow-col">
+                    <span
+                      class="px-2 flex flex-col justify-center text-blueGray-600 text-xs font-bold"
+                      >{"Resim"}</span
+                    >
+                    <div class="col-span-2">
+                      <ImageArray bind:value={Image.image} />
+                    </div>
+                    <div class="flex justify-end ">               
+                      <button
+                        on:click={() => deleteImage(index)}
+                        class="w-14 bg-red-500 hover:bg-red-600 text-white font-bold text-xs my-2 ml-4 px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+                        type="button"
+                      >
+                        SİL
+                      </button>
+                    </div>
+                  </div>
+                {/each}
+              </div>
+              <button
+                on:click={() => (cat.images = [...cat.images, { image: null }])}
+                class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+                type="button"
+              >
+                Resim Ekle
+              </button>
             </div>
           </div>
-  
-        </div>
 
           <div class="flex flex-wrap">
             <div class="w-full lg:w-12/12 px-4 text-right mt-5">
               <button
                 on:click={() => updateCat()}
-                disabled={!cat.name.isValid }
-                class="bg-[#6e6e85] disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+                disabled={!cat.name.isValid}
+                class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
                 type="button"
               >
                 {$Translate("Update")}

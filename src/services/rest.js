@@ -24,7 +24,7 @@ const uploadImage = (file) => {
 };
 
 // Cats
-const getCats = (limit, skip, lang) => {
+const getCats = (limit, skip, isActive) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -32,33 +32,33 @@ const getCats = (limit, skip, lang) => {
   if (skip) {
     data.skip = skip;
   }
-  if (lang) {
-    data.lang = lang;
+  if (isActive) {
+    data.isActive = isActive;
   }
   return Http.get(`${ENV.API_URL}/cat`, { ...data });
 };
 const addCat = (data) => {
-  return Http.post(`${ENV.API_URL}/cat`, data);
+  return Http.post(`${ENV.API_URL}/cat`, data, "admin");
 };
 
 const updateCat = (catId, data) => {
   return Http.put(`${ENV.API_URL}/cat/${catId}`, {
     cat: data,
-  });
+  },"admin");
 };
 
 const getCat = (catId) => {
-  return Http.get(`${ENV.API_URL}/cat/${catId}`);
+  return Http.get(`${ENV.API_URL}/cat/${catId}`,{},"admin");
 };
 
 const deleteCat = (catId) => {
-  return Http.delete(`${ENV.API_URL}/cat/${catId}`);
+  return Http.delete(`${ENV.API_URL}/cat/${catId}`,{},"admin");
 };
 
 
 
 // Brands
-const getBrands = (limit, skip, lang) => {
+const getBrands = (limit, skip, isActive) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -66,27 +66,27 @@ const getBrands = (limit, skip, lang) => {
   if (skip) {
     data.skip = skip;
   }
-  if (lang) {
-    data.lang = lang;
+  if (isActive) {
+    data.isActive = isActive;
   }
   return Http.get(`${ENV.API_URL}/brand`, { ...data });
 };
 const addBrand = (data) => {
-  return Http.post(`${ENV.API_URL}/brand`, data);
+  return Http.post(`${ENV.API_URL}/brand`, data,"admin");
 };
 
 const updateBrand = (brandId, data) => {
   return Http.put(`${ENV.API_URL}/brand/${brandId}`, {
     brand: data,
-  });
+  },"admin");
 };
 
 const getBrand = (brandId) => {
-  return Http.get(`${ENV.API_URL}/brand/${brandId}`);
+  return Http.get(`${ENV.API_URL}/brand/${brandId}`,{},"admin");
 };
 
 const deleteBrand = (brandId) => {
-  return Http.delete(`${ENV.API_URL}/brand/${brandId}`);
+  return Http.delete(`${ENV.API_URL}/brand/${brandId}`,{},"admin");
 };
 
 // Memberships
@@ -133,21 +133,21 @@ const getUnits = (limit, skip) => {
   return Http.get(`${ENV.API_URL}/unit`, { ...data });
 };
 const addUnit = (data) => {
-  return Http.post(`${ENV.API_URL}/unit`, data);
+  return Http.post(`${ENV.API_URL}/unit`, data,"admin");
 };
 
 const updateUnit = (unitId, data) => {
   return Http.put(`${ENV.API_URL}/unit/${unitId}`, {
     unit: data,
-  });
+  },"admin");
 };
 
 const getUnit = (unitId) => {
-  return Http.get(`${ENV.API_URL}/unit/${unitId}`);
+  return Http.get(`${ENV.API_URL}/unit/${unitId}`,{},"admin");
 };
 
 const deleteUnit = (unitId) => {
-  return Http.delete(`${ENV.API_URL}/unit/${unitId}`);
+  return Http.delete(`${ENV.API_URL}/unit/${unitId}`,{},"admin");
 };
 
 
@@ -182,10 +182,13 @@ const updateProduct = (productId, data) => {
   }, "admin");
 };
 
+const getProductById = (productId) => {
+  return Http.get(`${ENV.API_URL}/product/user/${productId}`, {}, "user");
+};
+
 const getProduct = (productId) => {
   return Http.get(`${ENV.API_URL}/product/${productId}`, {}, "admin");
 };
-
 const deleteProduct = (productId) => {
   return Http.delete(`${ENV.API_URL}/product/${productId}`, {}, "admin");
 };
@@ -211,21 +214,21 @@ const getCustomersByUserId = () => {
   return Http.get(`${ENV.API_URL}/customer/byUserId`, {}, "user");
 };
 const addCustomer = (data) => {
-  return Http.post(`${ENV.API_URL}/customer`, data);
+  return Http.post(`${ENV.API_URL}/customer`, data, "admin");
 };
 
 const updateCustomer = (customerId, data) => {
   return Http.put(`${ENV.API_URL}/customer/${customerId}`, {
     customer: data,
-  });
+  }, "admin");
 };
 
 const getCustomer = (customerId) => {
-  return Http.get(`${ENV.API_URL}/customer/${customerId}`);
+  return Http.get(`${ENV.API_URL}/customer/${customerId}`, {}, "admin");
 };
 
 const deleteCustomer = (customerId) => {
-  return Http.delete(`${ENV.API_URL}/customer/${customerId}`);
+  return Http.delete(`${ENV.API_URL}/customer/${customerId}`, {}, "admin");
 };
 
 // Transactions
@@ -288,7 +291,7 @@ const resetPasswordRequestWithEmail = (email) => {
 };
 
 // Users
-const getUsers = (limit, skip) => {
+const getUsers = (limit, skip, isActive) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -296,25 +299,28 @@ const getUsers = (limit, skip) => {
   if (skip) {
     data.skip = skip;
   }
+  if (isActive) {
+    data.isActive = isActive;
+  }
 
-  return Http.get(`${ENV.API_URL}/user`, { ...data },"admin");
+  return Http.get(`${ENV.API_URL}/user`, { ...data }, "admin");
 };
 const addUser = (data) => {
-  return Http.post(`${ENV.API_URL}/user`, data,"admin");
+  return Http.post(`${ENV.API_URL}/user`, data, "admin");
 };
 
 const updateUser = (userId, data) => {
   return Http.patch(`${ENV.API_URL}/user/${userId}`, {
     user: data,
-  },"admin");
+  }, "admin");
 };
 
 const getUser = (userId) => {
-  return Http.get(`${ENV.API_URL}/user/${userId}`,{},"admin");
+  return Http.get(`${ENV.API_URL}/user/${userId}`, {}, "admin");
 };
 
 const deleteUser = (userId) => {
-  return Http.delete(`${ENV.API_URL}/user/${userId}`,{},"admin");
+  return Http.delete(`${ENV.API_URL}/user/${userId}`, {}, "admin");
 };
 
 
@@ -358,263 +364,6 @@ const deleteSlider = (sliderId) => {
   return Http.delete(`${ENV.API_URL}/slider/${sliderId}`);
 };
 
-// Langs
-const getLangs = (limit, skip) => {
-  let data = {};
-  if (limit) {
-    data.limit = limit;
-  }
-  if (skip) {
-    data.skip = skip;
-  }
-  return Http.get(`${ENV.API_URL}/lang`, { ...data });
-};
-const addLang = (data) => {
-  return Http.post(`${ENV.API_URL}/lang`, data);
-};
-
-const updateLang = (langId, data) => {
-  return Http.put(`${ENV.API_URL}/lang/${langId}`, {
-    lang: data,
-  });
-};
-
-const getLang = (langId) => {
-  return Http.get(`${ENV.API_URL}/lang/${langId}`);
-};
-
-const deleteLang = (langId) => {
-  return Http.delete(`${ENV.API_URL}/lang/${langId}`);
-};
-
-// Homes
-const getHomes = (limit, skip, lang) => {
-  let data = {};
-  if (limit) {
-    data.limit = limit;
-  }
-  if (skip) {
-    data.skip = skip;
-  }
-  if (lang) {
-    data.lang = lang;
-  }
-  return Http.get(`${ENV.API_URL}/home`, { ...data });
-};
-const addHome = (data) => {
-  return Http.post(`${ENV.API_URL}/home`, data);
-};
-
-const updateHome = (homeId, data) => {
-  return Http.put(`${ENV.API_URL}/home/${homeId}`, {
-    home: data,
-  });
-};
-
-const getHome = (homeId) => {
-  return Http.get(`${ENV.API_URL}/home/${homeId}`);
-};
-
-const deleteHome = (homeId) => {
-  return Http.delete(`${ENV.API_URL}/home/${homeId}`);
-};
-
-// Abouts
-const getAbouts = (limit, skip, lang) => {
-  let data = {};
-  if (limit) {
-    data.limit = limit;
-  }
-  if (skip) {
-    data.skip = skip;
-  }
-  if (lang) {
-    data.lang = lang;
-  }
-  return Http.get(`${ENV.API_URL}/about`, { ...data });
-};
-const addAbout = (data) => {
-  return Http.post(`${ENV.API_URL}/about`, data);
-};
-
-const updateAbout = (aboutId, data) => {
-  return Http.put(`${ENV.API_URL}/about/${aboutId}`, {
-    about: data,
-  });
-};
-
-const getAbout = (aboutId) => {
-  return Http.get(`${ENV.API_URL}/about/${aboutId}`);
-};
-
-const deleteAbout = (aboutId) => {
-  return Http.delete(`${ENV.API_URL}/about/${aboutId}`);
-};
-
-// Treatments
-const getTreatments = (limit, skip, lang, isActive, hp) => {
-  let data = {};
-  if (limit) {
-    data.limit = limit;
-  }
-  if (skip) {
-    data.skip = skip;
-  }
-  if (lang) {
-    data.lang = lang;
-  }
-  if (isActive) {
-    data.isActive = isActive;
-  }
-  if (hp) {
-    data.hp = hp;
-  }
-  return Http.get(`${ENV.API_URL}/treatment`, { ...data });
-};
-const addTreatment = (data) => {
-  return Http.post(`${ENV.API_URL}/treatment`, data);
-};
-
-const updateTreatment = (treatmentId, data) => {
-  return Http.put(`${ENV.API_URL}/treatment/${treatmentId}`, {
-    treatment: data,
-  });
-};
-
-const getTreatment = (treatmentId) => {
-  return Http.get(`${ENV.API_URL}/treatment/${treatmentId}`);
-};
-const getTreatmentViaPerma = (perma) => {
-  return Http.get(`${ENV.API_URL}/treatment/perma/${perma}`);
-};
-
-const deleteTreatment = (treatmentId) => {
-  return Http.delete(`${ENV.API_URL}/treatment/${treatmentId}`);
-};
-// TreatmentPages
-const getTreatmentPages = (limit, skip, lang) => {
-  let data = {};
-  if (limit) {
-    data.limit = limit;
-  }
-  if (skip) {
-    data.skip = skip;
-  }
-  if (lang) {
-    data.lang = lang;
-  }
-  return Http.get(`${ENV.API_URL}/treatmentpage`, { ...data });
-};
-const addTreatmentPage = (data) => {
-  return Http.post(`${ENV.API_URL}/treatmentpage`, data);
-};
-
-const updateTreatmentPage = (treatmentPageId, data) => {
-  return Http.put(`${ENV.API_URL}/treatmentpage/${treatmentPageId}`, {
-    treatmentPage: data,
-  });
-};
-
-const getTreatmentPage = (treatmentPageId) => {
-  return Http.get(`${ENV.API_URL}/treatmentPage/${treatmentPageId}`);
-};
-
-const deleteTreatmentPage = (treatmentPageId) => {
-  return Http.delete(`${ENV.API_URL}/treatmentPage/${treatmentPageId}`);
-};
-// Contacts
-const getContacts = (limit, skip, lang) => {
-  let data = {};
-  if (limit) {
-    data.limit = limit;
-  }
-  if (skip) {
-    data.skip = skip;
-  }
-  if (lang) {
-    data.lang = lang;
-  }
-  return Http.get(`${ENV.API_URL}/contact`, { ...data });
-};
-const addContact = (data) => {
-  return Http.post(`${ENV.API_URL}/contact`, data);
-};
-
-const updateContact = (contactId, data) => {
-  return Http.put(`${ENV.API_URL}/contact/${contactId}`, {
-    contact: data,
-  });
-};
-
-const getContact = (contactId) => {
-  return Http.get(`${ENV.API_URL}/contact/${contactId}`);
-};
-
-const deleteContact = (contactId) => {
-  return Http.delete(`${ENV.API_URL}/contact/${contactId}`);
-};
-const getGenerals = (limit, skip, lang) => {
-  let data = {};
-  if (limit) {
-    data.limit = limit;
-  }
-  if (skip) {
-    data.skip = skip;
-  }
-  if (lang) {
-    data.lang = lang;
-  }
-  return Http.get(`${ENV.API_URL}/general`, { ...data });
-};
-const addGeneral = (data) => {
-  return Http.post(`${ENV.API_URL}/general`, data);
-};
-
-const updateGeneral = (generalId, data) => {
-  return Http.put(`${ENV.API_URL}/general/${generalId}`, {
-    general: data,
-  });
-};
-
-const getGeneral = (generalId) => {
-  return Http.get(`${ENV.API_URL}/general/${generalId}`);
-};
-
-const deleteGeneral = (generalId) => {
-  return Http.delete(`${ENV.API_URL}/general/${generalId}`);
-};
-
-// Translates
-const getTranslates = (limit, skip, lang) => {
-  let data = {};
-  if (limit) {
-    data.limit = limit;
-  }
-  if (skip) {
-    data.skip = skip;
-  }
-  if (lang) {
-    data.lang = lang;
-  }
-  return Http.get(`${ENV.API_URL}/translate`, { ...data });
-};
-const addTranslate = (data) => {
-  return Http.post(`${ENV.API_URL}/translate`, data);
-};
-
-const updateTranslate = (translateId, data) => {
-  return Http.put(`${ENV.API_URL}/translate/${translateId}`, {
-    translate: data,
-  });
-};
-
-const getTranslate = (translateId) => {
-  return Http.get(`${ENV.API_URL}/translate/${translateId}`);
-};
-
-const deleteTranslate = (translateId) => {
-  return Http.delete(`${ENV.API_URL}/translate/${translateId}`);
-};
 
 // Admins
 const getPermissions = () => {
@@ -632,9 +381,7 @@ const getAdmins = (limit, skip, customQuery = {}) => {
   return Http.get(`${ENV.API_URL}/admin`, { ...data });
 };
 
-const getOrganizers = () => {
-  return Http.get(`${ENV.API_URL}/admin/organizers`);
-};
+
 const getAdmin = (adminId) => {
   return Http.get(`${ENV.API_URL}/admin/${adminId}`);
 };
@@ -720,6 +467,7 @@ export default {
   //Products
   getProducts,
   getProduct,
+  getProductById,
   addProduct,
   updateProduct,
   deleteProduct,
@@ -751,7 +499,6 @@ export default {
   updateAdmin,
   updateAdminStatusById,
   getAdmins,
-  getOrganizers,
   getAdmin,
   deleteAdmin,
 
