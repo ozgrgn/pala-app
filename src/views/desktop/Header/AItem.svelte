@@ -8,13 +8,13 @@
   export let active;
   export let customClass = "";
   let activeClass =
-    "after:content-[''] after:bg-light-300 after:absolute after:bottom-0 after:w-8 after:h-[0.1rem] after:rounded-tl after:rounded-tr hover:after:absolute hover:after:w-4/5 hover:after:h-[0.2rem] hover:after:transition-all	";
+    "after:content-[''] after:bg-red-500 after:absolute after:bottom-0 after:w-8 after:h-[0.1rem] after:rounded-tl after:rounded-tr hover:after:absolute hover:after:w-4/5 hover:after:h-[0.2rem] hover:after:transition-all	";
 </script>
 
 {#if path}
   <a
     on:click={click()}
-    class="relative h-12 flex items-center hover:text-gold-200  hover:after:content-[''] hover:after:bg-light-300 after:absolute after:bottom-0 after:w-8 after:h-[0.1rem] after:rounded-tl after:rounded-tr hover:after:absolute hover:after:w-4/5 hover:after:h-[0.2rem] hover:after:transition-all 
+    class="relative h-12 flex items-center hover:text-gold-200  hover:after:content-[''] hover:after:bg-red-500 after:absolute after:bottom-0 after:w-8 after:h-[0.1rem] after:rounded-tl after:rounded-tr hover:after:absolute hover:after:w-4/5 hover:after:h-[0.2rem] hover:after:transition-all 
 {active ? activeClass : ''} {customClass}"
     use:link
     href={path}

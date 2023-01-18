@@ -5,22 +5,21 @@
 
   import { onDestroy } from "svelte";
   import AItem from "./AItem.svelte";
-  console.log($user, "usersrsers");
   let userSub;
   const location = useLocation();
-  let userInfo;
-  $: {
+  $: { 
     if ($location) {
       window.scrollTo(0, 0);
     }
   }
-
+let userInfo
   const getUserInformation = async () => {
+    console.log("dddddd")
     let userInfoResponse = await RestService.getMe($user.userId);
 
     if (userInfoResponse && userInfoResponse.status) {
-      userInfo = userInfoResponse["info"];
-      console.log(userInfoResponse, "userinfo");
+      userInfo = userInfoResponse["_doc"];
+      console.log(userInfo, "userinfo");
     }
   };
 
@@ -72,6 +71,14 @@
             ? 'opacity-100'
             : '  opacity-0 h-0'} transition-opacity ease-in-out delay:75 duration-500 z-1"
         >
+        <AItem
+                bind:hover
+                customClass="justify-start w-fit pl-2  {hover
+                  ? 'opacity-100'
+                  : '  opacity-0 h-0'}"
+                active={$location.pathname == `/cats/all`}
+                path="/store/category/all">Tümü</AItem
+              >
           {#if $cats}
             {#each $cats as cat}
               <AItem
@@ -118,8 +125,4 @@
 </div>
 
 <style>
-  .active {
-    left: 0px;
-    transition: all 1s;
-  }
 </style>

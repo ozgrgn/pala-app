@@ -44,14 +44,29 @@
   export let color = "light";
 
   const selectCustomer = async () => {
+    salesItem.product=null
+    salesItem.unit=null
+    salesItem.unitPrice=0
+    salesItem.quantity=null
+
     customer = customers.find((x) => x._id == transaction.customer.value);
     console.log(customer, "customer");
   };
   const findPrice = async () => {
+    if(salesItems.find((x) => x.product == salesItem.product)) {
+      ToastService.error("Aynı ürüne iki farklı satış girmemelisiniz");
+      salesItem.product=null
+      return
+
+    };
+
+    salesItem.unit=null;
+    salesItem.quantity=null;
     let product = products.find((x) => x._id == salesItem.product);
     let price = product.prices.find((x) => x._id == customer.user.membership);
     console.log(price);
     salesItem.productName = product.name;
+    salesItem.stockCount =product.stockCount
     salesItem.cat = product.cat;
     salesItem.unitPrice = price.price;
     console.log(price, "price");
@@ -64,6 +79,12 @@
     console.log(unit, "unit");
   };
   const addSalesItem = async (index) => {
+    if(salesItem.stockCount<salesItem.totalNumber){
+      ToastService.error(`Ürün stoğu ${salesItem.totalNumber} adet`);
+      return
+
+    }
+    console.log(salesItem,"stock")
     salesItem.total =
       salesItem.unitPrice * (salesItem.totalNumber ? salesItem.totalNumber : 1);
     salesItems = [...salesItems, salesItem];
@@ -95,7 +116,7 @@
   getCustomers();
 
   const getProducts = async () => {
-    let response = await RestService.getProducts(undefined, undefined);
+    let response = await RestService.getProducts(undefined, undefined,true);
     products = response["products"];
     console.log(products, "products");
   };
@@ -114,6 +135,7 @@
     }
   });
   const addTransaction = async () => {
+
     let data = {};
 
     data.customerData = customer;
@@ -175,7 +197,7 @@
                 bind:isValid={transaction.date.isValid}
                 placeholder={"İşlem Tarihi"}
                 required={true}
-                customClass="w-full text-black"
+                customClass="w-full text-black border-0 shadow-lg w-full"
               />
             </div>
           </div>
@@ -313,6 +335,7 @@
                 <td class="px-4 lg:w-24">
                   <NumberInput
                     bind:value={salesItem.quantity}
+                    placeholder="0"
                     required={false}
                   />
                 </td>
@@ -321,6 +344,7 @@
                     bind:value={salesItem.unit}
                     values={units}
                     title={"Birim"}
+                    isUnit={true}
                     valuesKey={"_id"}
                     valuesTitleKey={"name"}
                     customClass={"w-full"}
@@ -332,6 +356,7 @@
                   <NumberInput
                     bind:value={salesItem.unitPrice}
                     required={false}
+                    disabled
                   />
                 </td>
                 <td class="text-center">
@@ -346,32 +371,32 @@
                     on:click={() => addSalesItem()}
                     class="bg-green-600 disabled:bg-green-400 cursor text-white active:bg-bred-400 font-bold text-xs px-2 py-1 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
                     type="button"
-                    disabled={!salesItem.unitPrice &&
-                      !salesItem.totalNumber &&
-                      !salesItem.quantity}
+                    disabled={!salesItem.unitPrice ||
+                      !salesItem.totalNumber ||
+                      !salesItem.quantity || salesItem.quantity==0}
                   >
                     <i class="bi bi-bag-check-fill text-xl" />
                   </button>
                 </td>
               </tr>
 
-              {JSON.stringify(salesItems)}
+              {#if salesItems && salesItems[0]}
               {#each salesItems as item, index}
                 <tr class="h-20">
                   <td class="text-center">
                     {salesItems[index].productName}
                   </td>
                   <td class="text-center">
-                    {salesItems[index].number}
+                    {salesItems[index].quantity}
                   </td>
                   <td class="text-center">
                     {salesItems[index].unitName}
                   </td>
                   <td class="text-center">
-                    {salesItems[index].unitPrice}
+                    {salesItems[index].unitPrice} €
                   </td>
                   <td class="text-center">
-                    {salesItems[index].total}
+                    {salesItems[index].total} €
                   </td>
                   <td class="text-center">
                     <button
@@ -384,6 +409,7 @@
                   </td>
                 </tr>
               {/each}
+              {/if}
             {/if}
           </tbody>
         </table>
@@ -481,7 +507,7 @@
             <button
               on:click={addTransaction}
               disabled={!transaction.customer.isValid ||
-                transaction.customer.value == null}
+                transaction.customer.value == null || !salesItems[0] || !transaction.date.value}
               class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
               type="button"
             >

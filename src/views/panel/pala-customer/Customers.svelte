@@ -7,6 +7,7 @@
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
   import { modal } from "$services/store";
+  import Input from "$components/Form/Input.svelte";
 
   const deleteCustomerApprove = (customerId) => {
     modal.set(
@@ -26,15 +27,16 @@
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
+  let customerSearch;
 
-  const getCustomers = async () => {
-    let response = await RestService.getCustomers(limit, skip);
+  const getCustomers = async (search) => {
+    let response = await RestService.getCustomers(limit, skip,undefined,search);
     customers = response["customers"];
     console.log(customers, "customers");
     totalDataCount = response["count"];
   };
-  getCustomers();
-
+ 
+  $: getCustomers(customerSearch);
   const deleteCustomer = async (customerId) => {
     let response = await RestService.deleteCustomer(customerId);
     if (response["status"]) {
@@ -81,7 +83,19 @@
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-lg text-blueGray-700">Firmalar</h3>
+            <div class="flex justify-between">
+              <h3 class="font-semibold text-lg text-blueGray-700">Firmalar</h3>
+              <div class="relative">
+                <Input
+                  bind:value={customerSearch}
+                  placeholder={"Firma Arama"}
+                  customClass="pl-10 border-2"
+                />
+                <div class="absolute top-2 left-2">
+                  <i class="bi bi-search" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -98,7 +112,7 @@
                 >
                   No
                 </th>
-                
+
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -108,38 +122,38 @@
                   Firma İsmi
                 </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Kullanıcı İsmi
-              </th>
-              <th
-              class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-              'light'
-                ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                : 'bg-red-700 text-red-200 border-red-600'}"
-            >
-              Kullanıcı Tel
-            </th>
-            <th
-            class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-            'light'
-              ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-              : 'bg-red-700 text-red-200 border-red-600'}"
-          >
-            Firma Tel
-          </th>
-      
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Kullanıcı İsmi
+                </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Durum
-              </th>
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Kullanıcı Tel
+                </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Firma Tel
+                </th>
+
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Durum
+                </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -162,29 +176,29 @@
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {customer.no?customer.no:"-"}
+                    {customer.no ? customer.no : "-"}
                   </td>
-             
+
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     {customer.name}
                   </td>
                   <td
-                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                >
-                  {customer.user?.fullName?customer.user?.fullName:"-"}
-                </td>
-                <td
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-              >
-                {customer.user?.phone?customer.user?.phone:"-"}
-              </td>
-              <td
-              class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-            >
-              {customer.phone?customer.phone:"-"}
-            </td>
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {customer.user?.fullName ? customer.user?.fullName : "-"}
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {customer.user?.phone ? customer.user?.phone : "-"}
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {customer.phone ? customer.phone : "-"}
+                  </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >

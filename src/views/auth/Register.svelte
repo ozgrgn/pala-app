@@ -12,7 +12,6 @@
   let phone = {};
   let mobile = {};
   let dialCode;
-  let mobileDialCode;
   let name = {};
   let surname = {};
   let password = {};
@@ -66,7 +65,7 @@
       return;
     }
 
-    editedMobile = mobileDialCode + mobile.value.replace(/\s/g, "");
+    editedMobile = dialCode + mobile.value.replace(/\s/g, "");
 
     let registerResponse = await RestService.signup(
       companyId,

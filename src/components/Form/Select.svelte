@@ -35,6 +35,7 @@
       isValid = _validity.valid;
     }
   });
+  $:console.log(value,"selectteki value")
 
   onDestroy(validityUnsub);
 </script>
@@ -53,7 +54,7 @@
     <option value={_value[valuesKey]}>
       {#if valuesTitleKeySub}
         {_value[valuesTitleKey][valuesTitleKeySub]}
-      {:else if isUnit}
+      {:else if isUnit && _value["number"]}
         {_value[valuesTitleKey] + " (" + _value["number"] + ")"}
       {:else}{_value[valuesTitleKey]}
         {#if secondTitleKey}

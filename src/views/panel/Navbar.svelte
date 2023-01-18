@@ -1,7 +1,7 @@
 <script>
   import { link, useLocation } from "svelte-navigator";
   import { Translate } from "../../services/language";
-  import { lang, user } from "../../services/store";
+  import { lang, admin } from "../../services/store";
   import { desktopDrawer } from "$services/store";
 
   const location = useLocation();
@@ -15,7 +15,7 @@
   let navbarOpen = false;
 
   const logout = () => {
-    user.set(null);
+    admin.set(null);
   };
 </script>
 
@@ -81,7 +81,7 @@
              
              
               <span class="text-white/80 font-medium cursor-pointer">
-                {$user?.fullName}
+                {$admin?.fullName}
               </span> <span class="text-white/80 mx-1 font-thin hidden md:block">|</span
               >
               <span

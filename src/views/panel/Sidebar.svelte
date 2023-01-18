@@ -66,6 +66,11 @@
           title={"Kategoriler"}
           href={"/panel/cats"}
         />
+        <SideMenuButton
+        icon={"bi bi-bag-heart"}
+        title={"Üyelikler"}
+        href={"/panel/memberships"}
+      />
 
         <SideMenuButton
         icon={"bi bi-award"}

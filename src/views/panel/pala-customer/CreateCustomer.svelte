@@ -179,7 +179,7 @@
               title={"Kullanıcılar"}
               valuesKey={"_id"}
               valuesTitleKey={"fullName"}
-              customClass={"w-full focus:ring-0 ring-0 w-24"}
+              customClass={"w-full focus:ring-0 ring-0 "}
             />
             {/if}
             </div>

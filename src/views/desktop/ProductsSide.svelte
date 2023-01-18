@@ -15,6 +15,11 @@
   const params = useParams();
 
   const approveBasket = () => {
+    if (customers.length > 1 && !customerId)
+    {
+      ToastService.error("Hangi firma için sipariş vereceğinizi seçin");
+return
+    }
     console.log("çkmn");
     modal.set(
       bind(Alert, {
@@ -72,6 +77,8 @@
       ToastService.success("Sepetiniz başarıyla gönderildi");
       salesItems.set(null);
       window.location.reload();
+    } else {
+      ToastService.error("Stoklar güncelleniyor. Lütfen tekrar deneyin.");
     }
 
     console.log(approveResponse, "approve response");
@@ -155,7 +162,7 @@
             <Select
               bind:value={customerId}
               values={customers}
-              title={"Firma seç"}
+              title={"Firma seçin"}
               valuesKey={"_id"}
               valuesTitleKey={"name"}
               customClass={"w-full focus:ring-0 ring-0 border-2 border-green-500"}

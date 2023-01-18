@@ -27,6 +27,13 @@
       })
     );
   };
+let users;
+    const getUsers = async () => {
+    let response = await RestService.getUsers(undefined, undefined,true);
+    users = response["users"];
+    console.log(users, "users");
+  };
+  getUsers();
 
   const params = useParams();
 
@@ -35,7 +42,7 @@
     customer.images = customer.images;
   };
   let customer;
-  let processing=false;
+  let processing = false;
 
   let values = [
     { key: "no", customValue: null },
@@ -50,6 +57,7 @@
     { key: "mobile", customValue: null },
     { key: "email", customValue: null },
     { key: "note", customValue: null },
+    { key: "user", customValue: null },
     { key: "status", customValue: null },
     { key: "isActive", customValue: false },
     { key: "images", customValue: null },
@@ -66,7 +74,10 @@
       }
     });
 
-    let response = await RestService.updateCustomer(customer._id, editedCustomer);
+    let response = await RestService.updateCustomer(
+      customer._id,
+      editedCustomer
+    );
     if (response["status"]) {
       ToastService.success($Translate("Successfully-completed"));
       navigate("/panel/customers");
@@ -76,7 +87,7 @@
   };
 
   const getCustomer = async () => {
-    processing=true
+    processing = true;
     let response = await RestService.getCustomer($params.customerId);
 
     if (response["status"]) {
@@ -86,24 +97,20 @@
           response["customer"][v.key] = {
             value: response["customer"][v.key][v.customValue],
           };
-        } else if(v.key!="prices" && v.key!="units"&& v.key!="images"){
+        } else if (v.key != "prices" && v.key != "units" && v.key != "images") {
           response["customer"][v.key] = { value: response["customer"][v.key] };
         }
       });
-    
+
       customer = {
         ...response["customer"],
       };
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
-    
   };
 
   getCustomer();
-
-
-
 
   const deleteCustomer = async (customerId) => {
     let response = await RestService.deleteCustomer(customerId);
@@ -145,7 +152,9 @@
     >
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="text-center flex justify-between">
-          <h3 class="font-semibold text-lg text-blueGray-700">Firma/Kişi Güncelle</h3>
+          <h3 class="font-semibold text-lg text-blueGray-700">
+            Firma/Kişi Güncelle
+          </h3>
           <div class="relative mb-3 px-10">
             <label
               class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -161,248 +170,266 @@
       </div>
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         {#if customer}
-        <div class="flex flex-wrap my-4">
-          <div class="w-full lg:w-4/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Müşteri No
-              </label>
-              <Input
-                bind:value={customer.no.value}
-                bind:isValid={customer.no.isValid}
-                placeholder={"Müşteri No"}
-                required={true}
-              />
+          <div class="flex flex-wrap my-4">
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Müşteri No
+                </label>
+                <Input
+                  bind:value={customer.no.value}
+                  bind:isValid={customer.no.isValid}
+                  placeholder={"Müşteri No"}
+                  required={true}
+                />
+              </div>
             </div>
-          </div>
 
-          <div class="w-full lg:w-4/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Firma/Kişi İsmi
-              </label>
-              <Input
-                bind:value={customer.name.value}
-                bind:isValid={customer.name.isValid}
-                placeholder={"Firma/Kişi İsmi"}
-                required={true}
-              />
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Firma/Kişi İsmi
+                </label>
+                <Input
+                  bind:value={customer.name.value}
+                  bind:isValid={customer.name.isValid}
+                  placeholder={"Firma/Kişi İsmi"}
+                  required={true}
+                />
+              </div>
             </div>
-          </div>
 
-          <div class="w-full lg:w-4/12 px-4">
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Soyadı
+                </label>
+                <Input
+                  bind:value={customer.surname.value}
+                  bind:isValid={customer.surname.isValid}
+                  placeholder={"Soyadı"}
+                  required={false}
+                />
+              </div>
+            </div>
+             <div class="w-full lg:w-3/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-name"
               >
-                Soyadı
+                Kullanıcı Seçin
               </label>
-              <Input
-                bind:value={customer.surname.value}
-                bind:isValid={customer.surname.isValid}
-                placeholder={"Soyadı"}
-                required={false}
-              />
+              {#if users}
+              <Select
+              bind:value={customer.user.value}
+              values={users}
+              title={"Kullanıcılar"}
+              valuesKey={"_id"}
+              valuesTitleKey={"fullName"}
+              customClass={"w-full focus:ring-0 ring-0 "}
+            />
+            {/if}
             </div>
           </div>
-
-      
-   
-        </div>
-        <div class="flex flex-wrap my-4">
-          <div class="w-full lg:w-3/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Yetkili İsmi
-              </label>
-              <Input
-                bind:value={customer.person.value}
-                bind:isValid={customer.person.isValid}
-                placeholder={"Yetkili Kişi"}
-                required={false}
-              />
+          </div>
+          <div class="flex flex-wrap my-4">
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Yetkili İsmi
+                </label>
+                <Input
+                  bind:value={customer.person.value}
+                  bind:isValid={customer.person.isValid}
+                  placeholder={"Yetkili Kişi"}
+                  required={false}
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Mobil Telefon
+                </label>
+                <Input
+                  bind:value={customer.mobile.value}
+                  bind:isValid={customer.mobile.isValid}
+                  placeholder={"Mobil Telefon"}
+                  required={false}
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Firma Telefon
+                </label>
+                <Input
+                  bind:value={customer.phone.value}
+                  bind:isValid={customer.phone.isValid}
+                  placeholder={"Firma Telefon"}
+                  required={false}
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  E-mail
+                </label>
+                <Input
+                  bind:value={customer.email.value}
+                  bind:isValid={customer.email.isValid}
+                  placeholder={"E-mail"}
+                  required={false}
+                />
+              </div>
             </div>
           </div>
-          <div class="w-full lg:w-3/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Mobil Telefon
-              </label>
-              <Input
-                bind:value={customer.mobile.value}
-                bind:isValid={customer.mobile.isValid}
-                placeholder={"Mobil Telefon"}
-                required={false}
-              />
+          <div class="flex flex-wrap my-4">
+            <div class="w-full lg:w-2/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Ülke
+                </label>
+                <Input
+                  bind:value={customer.country.value}
+                  bind:isValid={customer.country.isValid}
+                  placeholder={"Ülke"}
+                  required={false}
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-2/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Şehir
+                </label>
+                <Input
+                  bind:value={customer.city.value}
+                  bind:isValid={customer.city.isValid}
+                  placeholder={"Şehir"}
+                  required={false}
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-2/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Posta Kodu
+                </label>
+                <Input
+                  bind:value={customer.post.value}
+                  bind:isValid={customer.post.isValid}
+                  placeholder={"Posta Kodu"}
+                  required={false}
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Adres
+                </label>
+                <Input
+                  bind:value={customer.street.value}
+                  bind:isValid={customer.street.isValid}
+                  placeholder={"Adres"}
+                  required={false}
+                />
+              </div>
             </div>
           </div>
-          <div class="w-full lg:w-3/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Firma Telefon
-              </label>
-              <Input
-                bind:value={customer.phone.value}
-                bind:isValid={customer.phone.isValid}
-                placeholder={"Firma Telefon"}
-                required={false}
-              />
+          <div class="flex flex-wrap my-4">
+            <div class="w-full lg:w-6/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Not
+                </label>
+                <Textarea
+                  bind:value={customer.note.value}
+                  bind:isValid={customer.note.isValid}
+                  placeholder={"Not"}
+                  required={false}
+                />
+              </div>
             </div>
-          </div>
-          <div class="w-full lg:w-3/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                E-mail
-              </label>
-              <Input
-                bind:value={customer.email.value}
-                bind:isValid={customer.email.isValid}
-                placeholder={"E-mail"}
-                required={false}
-              />
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-wrap my-4">
-          <div class="w-full lg:w-2/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Ülke
-              </label>
-              <Input
-                bind:value={customer.country.value}
-                bind:isValid={customer.country.isValid}
-                placeholder={"Ülke"}
-                required={false}
-              />
-            </div>
-          </div>
-          <div class="w-full lg:w-2/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Şehir
-              </label>
-              <Input
-                bind:value={customer.city.value}
-                bind:isValid={customer.city.isValid}
-                placeholder={"Şehir"}
-                required={false}
-              />
-            </div>
-          </div>
-          <div class="w-full lg:w-2/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Posta Kodu
-              </label>
-              <Input
-                bind:value={customer.post.value}
-                bind:isValid={customer.post.isValid}
-                placeholder={"Posta Kodu"}
-                required={false}
-              />
-            </div>
-          </div>
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Adres
-              </label>
-              <Input
-                bind:value={customer.street.value}
-                bind:isValid={customer.street.isValid}
-                placeholder={"Adres"}
-                required={false}
-              />
-            </div>
-          </div>
-        </div>  
-        <div class="flex flex-wrap my-4">
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-              Not
-              </label>
-              <Textarea
-                bind:value={customer.note.value}
-                bind:isValid={customer.note.isValid}
-                placeholder={"Not"}
-                required={false}
-              />
-            </div>
-          </div>
-          <div class="lg:w-6/12 px-4 ">
-            <div class="">
-              <label
-              class="block  text-blueGray-600 text-xs font-bold"
-              for="grid-name"
-            >
-            Evrak
-            </label>
-              {#each customer.images as Image, index}
-                <div class="border mt-2 p-1 grid grid-flow-col">
-                  <span
-                    class="px-2 flex flex-col justify-center text-blueGray-600 text-xs font-bold"
-                    >{"Resim"}</span
-                  >
-                  <div class="col-span-2">
-                    <ImageArray bind:value={Image.image} />
-                  </div>
-                  <div class="flex justify-end ">               
-                    <button
-                      on:click={() => deleteImage(index)}
-                      class="w-14 bg-red-500 hover:bg-red-600 text-white font-bold text-xs my-2 ml-4 px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
-                      type="button"
+            <div class="lg:w-6/12 px-4 ">
+              <div class="">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold"
+                  for="grid-name"
+                >
+                  Evrak
+                </label>
+                {#each customer.images as Image, index}
+                  <div class="border mt-2 p-1 grid grid-flow-col">
+                    <span
+                      class="px-2 flex flex-col justify-center text-blueGray-600 text-xs font-bold"
+                      >{"Resim"}</span
                     >
-                      SİL
-                    </button>
+                    <div class="col-span-2">
+                      <ImageArray bind:value={Image.image} />
+                    </div>
+                    <div class="flex justify-end ">
+                      <button
+                        on:click={() => deleteImage(index)}
+                        class="w-14 bg-red-500 hover:bg-red-600 text-white font-bold text-xs my-2 ml-4 px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+                        type="button"
+                      >
+                        SİL
+                      </button>
+                    </div>
                   </div>
-                </div>
-              {/each}
+                {/each}
+              </div>
+              <button
+                on:click={() =>
+                  (customer.images = [...customer.images, { image: null }])}
+                class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+                type="button"
+              >
+                Evrak Ekle
+              </button>
             </div>
-            <button
-              on:click={() => (customer.images = [...customer.images, { image: null }])}
-              class=" mt-2 bg-orange-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
-              type="button"
-            >
-              Evrak Ekle
-            </button>
           </div>
-        </div>
           <div class="flex flex-wrap">
             <div class="w-full lg:w-12/12 px-4 text-right mt-5">
               <button

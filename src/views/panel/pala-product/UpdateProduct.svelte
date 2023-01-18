@@ -192,7 +192,7 @@
     >
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="text-center flex justify-between">
-          <h3 class="font-semibold text-lg text-blueGray-700">Ürün ekle</h3>
+          <h3 class="font-semibold text-lg text-blueGray-700">Ürün Güncelle</h3>
           <div class="relative mb-3 px-10">
             <label
               class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -357,7 +357,7 @@
                 >
                   Birimler
                 </label>
-                {#if units}
+                {#if product.units}
                   {#each product.units as unit, index}
                   {#if unit._id != "63bb0c70f638ea468ffd4942"}
 

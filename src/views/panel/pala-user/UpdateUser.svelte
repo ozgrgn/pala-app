@@ -71,7 +71,6 @@
 
   const getUser = async () => {
     let response = await RestService.getUser($params.userId);
-
     if (response["status"]) {
       values.map((v) => {
         if (v.customValue) {
@@ -85,6 +84,8 @@
       user = {
         ...response["user"],
       };
+      console.log(user,"usususu")
+
 
       if(!user.membership.value) {
         user.isActive.value=false
@@ -148,7 +149,7 @@
               >
                 Üyelik
               </label>
-              {#if memberships}
+              {#if memberships&&user}
                 <Select
                   bind:value={user.membership.value}
                   bind:isValid={user.membership.isValid}

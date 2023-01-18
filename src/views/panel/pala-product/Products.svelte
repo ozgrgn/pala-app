@@ -43,7 +43,7 @@
     console.log(products, "products");
     totalDataCount = response["count"];
   };
-  $:getProducts($search);
+  $: getProducts($search);
 
   const deleteProduct = async (productId) => {
     let response = await RestService.deleteProduct(productId);
@@ -92,17 +92,18 @@
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
             <div class="flex justify-between">
-            <h3 class="font-semibold text-lg text-blueGray-700">Ürünler</h3>
-            <div class="relative">
-              <Input
-                bind:value={$search}
-                placeholder={"Ürün Arama"}
-                customClass="pl-10 border-2"
-          
-              />
-              <div class="absolute top-2 left-2"><i class="bi bi-search" /></div>
+              <h3 class="font-semibold text-lg text-blueGray-700">Ürünler</h3>
+              <div class="relative">
+                <Input
+                  bind:value={$search}
+                  placeholder={"Ürün Arama"}
+                  customClass="pl-10 border-2"
+                />
+                <div class="absolute top-2 left-2">
+                  <i class="bi bi-search" />
+                </div>
+              </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -120,13 +121,13 @@
                   No
                 </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Sıra
-              </th>
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Sıra
+                </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -144,13 +145,13 @@
                   İsim
                 </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Marka
-              </th>
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Marka
+                </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -184,10 +185,10 @@
                     {product?.no}
                   </td>
                   <td
-                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                >
-                  {product?.order}
-                </td>
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {product?.order}
+                  </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
@@ -199,10 +200,10 @@
                     {product?.name}
                   </td>
                   <td
-                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                >
-                  {product?.brand?.name?product?.brand?.name:"-"}
-                </td>
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {product?.brand?.name ? product?.brand?.name : "-"}
+                  </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >

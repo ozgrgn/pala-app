@@ -10,7 +10,8 @@ const userVerifyToken = () => {
   return Http.post(`${ENV.API_URL}/user/verifyToken`, {}, "user");
 };
 const getMe = (userId) => {
-  return Http.get(`${ENV.API_URL}/user/me`, { userId },"user");
+  console.log(userId,"fffff")
+  return Http.get(`${ENV.API_URL}/user/me/me`, { userId }, "user");
 };
 
 
@@ -44,15 +45,15 @@ const addCat = (data) => {
 const updateCat = (catId, data) => {
   return Http.put(`${ENV.API_URL}/cat/${catId}`, {
     cat: data,
-  },"admin");
+  }, "admin");
 };
 
 const getCat = (catId) => {
-  return Http.get(`${ENV.API_URL}/cat/${catId}`,{},"admin");
+  return Http.get(`${ENV.API_URL}/cat/${catId}`, {}, "admin");
 };
 
 const deleteCat = (catId) => {
-  return Http.delete(`${ENV.API_URL}/cat/${catId}`,{},"admin");
+  return Http.delete(`${ENV.API_URL}/cat/${catId}`, {}, "admin");
 };
 
 
@@ -72,21 +73,21 @@ const getBrands = (limit, skip, isActive) => {
   return Http.get(`${ENV.API_URL}/brand`, { ...data });
 };
 const addBrand = (data) => {
-  return Http.post(`${ENV.API_URL}/brand`, data,"admin");
+  return Http.post(`${ENV.API_URL}/brand`, data, "admin");
 };
 
 const updateBrand = (brandId, data) => {
   return Http.put(`${ENV.API_URL}/brand/${brandId}`, {
     brand: data,
-  },"admin");
+  }, "admin");
 };
 
 const getBrand = (brandId) => {
-  return Http.get(`${ENV.API_URL}/brand/${brandId}`,{},"admin");
+  return Http.get(`${ENV.API_URL}/brand/${brandId}`, {}, "admin");
 };
 
 const deleteBrand = (brandId) => {
-  return Http.delete(`${ENV.API_URL}/brand/${brandId}`,{},"admin");
+  return Http.delete(`${ENV.API_URL}/brand/${brandId}`, {}, "admin");
 };
 
 // Memberships
@@ -133,26 +134,26 @@ const getUnits = (limit, skip) => {
   return Http.get(`${ENV.API_URL}/unit`, { ...data });
 };
 const addUnit = (data) => {
-  return Http.post(`${ENV.API_URL}/unit`, data,"admin");
+  return Http.post(`${ENV.API_URL}/unit`, data, "admin");
 };
 
 const updateUnit = (unitId, data) => {
   return Http.put(`${ENV.API_URL}/unit/${unitId}`, {
     unit: data,
-  },"admin");
+  }, "admin");
 };
 
 const getUnit = (unitId) => {
-  return Http.get(`${ENV.API_URL}/unit/${unitId}`,{},"admin");
+  return Http.get(`${ENV.API_URL}/unit/${unitId}`, {}, "admin");
 };
 
 const deleteUnit = (unitId) => {
-  return Http.delete(`${ENV.API_URL}/unit/${unitId}`,{},"admin");
+  return Http.delete(`${ENV.API_URL}/unit/${unitId}`, {}, "admin");
 };
 
 
 // Products
-const getProducts = (limit, skip, isActive, cat, brand,search) => {
+const getProducts = (limit, skip, isActive, cat, brand, search) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -198,7 +199,7 @@ const deleteProduct = (productId) => {
 };
 
 // Customers
-const getCustomers = (limit, skip, isActive) => {
+const getCustomers = (limit, skip, isActive,search) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -210,7 +211,9 @@ const getCustomers = (limit, skip, isActive) => {
     data.isActive = isActive;
   }
 
-
+  if (search) {
+    data.search = search;
+  }
   return Http.get(`${ENV.API_URL}/customer`, { ...data }, "admin");
 };
 
@@ -351,21 +354,21 @@ const getSliders = (limit, skip, lang) => {
   return Http.get(`${ENV.API_URL}/slider`, { ...data });
 };
 const addSlider = (data) => {
-  return Http.post(`${ENV.API_URL}/slider`, data,"admin");
+  return Http.post(`${ENV.API_URL}/slider`, data, "admin");
 };
 
 const updateSlider = (sliderId, data) => {
   return Http.put(`${ENV.API_URL}/slider/${sliderId}`, {
     slider: data,
-  },"admin");
+  }, "admin");
 };
 
 const getSlider = (sliderId) => {
-  return Http.get(`${ENV.API_URL}/slider/${sliderId}`,{},"admin");
+  return Http.get(`${ENV.API_URL}/slider/${sliderId}`, {}, "admin");
 };
 
 const deleteSlider = (sliderId) => {
-  return Http.delete(`${ENV.API_URL}/slider/${sliderId}`,{},"admin");
+  return Http.delete(`${ENV.API_URL}/slider/${sliderId}`, {}, "admin");
 };
 
 
