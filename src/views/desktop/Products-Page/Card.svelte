@@ -90,6 +90,7 @@
       }
       if (maxPrice < p.price) {
         maxPrice = p.price;
+        console.log(maxPrice,"maxPrice")
       }
     });
   };
@@ -142,7 +143,7 @@
         <div class="text-black text-sm pt-3 h-16">
           <div class="flex flex-col items-center justify-center">
             <h3
-              class="{maxPrice >= price
+              class="{maxPrice > price
                 ? ''
                 : 'hidden'} line-through	text-red-500 text-md"
             >

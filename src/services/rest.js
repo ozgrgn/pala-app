@@ -153,7 +153,7 @@ const deleteUnit = (unitId) => {
 
 
 // Products
-const getProducts = (limit, skip, isActive, cat, brand, search) => {
+const getProducts = (limit, skip, isActive, cat, brand, search,campaign) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -170,7 +170,9 @@ const getProducts = (limit, skip, isActive, cat, brand, search) => {
   if (brand) {
     data.brand = brand;
   }
-
+  if (campaign) {
+    data.campaign = campaign;
+  }
   if (search) {
     data.search = search;
   }
@@ -197,7 +199,11 @@ const getProduct = (productId) => {
 const deleteProduct = (productId) => {
   return Http.delete(`${ENV.API_URL}/product/${productId}`, {}, "admin");
 };
-
+const setCampaign = (productId, campaign) => {
+  return Http.put(`${ENV.API_URL}/product/setCampaign/${productId}`, {
+    campaign: campaign,
+  }, "admin");
+};
 // Customers
 const getCustomers = (limit, skip, isActive,search) => {
   let data = {};
@@ -478,6 +484,7 @@ export default {
   addProduct,
   updateProduct,
   deleteProduct,
+  setCampaign,
   //Customers
   getCustomers,
   getCustomersByUserId,

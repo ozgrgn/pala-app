@@ -2,7 +2,7 @@
   import { link, useLocation } from "svelte-navigator";
   import { Translate } from "../../services/language";
   import { lang, admin } from "../../services/store";
-  import { desktopDrawer } from "$services/store";
+  import { panelDrawer } from "$services/store";
 
   const location = useLocation();
   const langTrigger = (_lang) => {
@@ -57,11 +57,11 @@
           >
         
             <div
-              class="w-full flex flex-col md:flex-row flex-wrap  items-start justify-start mx-1 transition-all {$desktopDrawer?"lg:pl-[18rem]":""}"
+              class="w-full flex flex-col md:flex-row flex-wrap  items-start justify-start mx-1 transition-all {$panelDrawer?"lg:pl-[18rem]":""}"
             >
             <button
       class="btn btn-sm btn-ghost"
-      on:click={() => desktopDrawer.set(!$desktopDrawer)}
+      on:click={() => panelDrawer.set(!$panelDrawer)}
     >
       <i class="bi bi-list text-3xl text-white" />
     </button>

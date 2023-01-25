@@ -12,7 +12,7 @@
   import Admins from "./admin/Admins.svelte";
   import CreateAdmin from "./admin/CreateAdmin.svelte";
   import UpdateAdmin from "./admin/UpdateAdmin.svelte";
-  import { desktopDrawer } from "$services/store";
+  import { panelDrawer } from "$services/store";
 
 
   import RestService from "$services/rest";
@@ -112,8 +112,8 @@
     <Sidebar />
     <div
       class="
-      {!$desktopDrawer ? 'ml-0' : ''}
-      {$desktopDrawer ? 'ml-[18rem]' : ''}
+      {!$panelDrawer ? 'ml-0' : ''}
+      {$panelDrawer ? 'ml-[18rem]' : ''}
        transition-all flex flex-col"
     >
  

@@ -433,7 +433,7 @@
             <div class="w-full lg:w-12/12 px-4 text-right mt-5">
               <button
                 on:click={() => updateProduct()}
-                disabled={!product.name.isValid}
+                disabled={!product.name}
                 class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
                 type="button"
               >

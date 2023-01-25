@@ -1,7 +1,6 @@
 <script>
   import {
-    desktopDrawer,
-    desktopDrawerMyAccount,
+    panelDrawer,
     user,
   } from "$services/store";
   import SideMenuButton from "./SideMenuButton.svelte";
@@ -10,11 +9,11 @@
   let oldInnerWidth;
   $: {
     if (oldInnerWidth != innerWidth) {
-      if (innerWidth < 800 && $desktopDrawer) {
-        desktopDrawer.set(false);
+      if (innerWidth < 800 && $panelDrawer) {
+        panelDrawer.set(false);
       }
-      if (innerWidth > 800 && !$desktopDrawer) {
-        desktopDrawer.set(true);
+      if (innerWidth > 800 && !$panelDrawer) {
+        panelDrawer.set(true);
       }
     }
     oldInnerWidth = innerWidth;
@@ -26,9 +25,8 @@
 <svelte:window bind:innerWidth />
 <div
   class="fixed transition-all z-[99999] 
-  {!$desktopDrawer ? 'w-0 hidden' : ''}
-  {$desktopDrawer && !$desktopDrawerMyAccount ? 'w-[18rem]' : ''}
-  {$desktopDrawer && $desktopDrawerMyAccount ? 'w-[36rem] ' : ''}
+  {!$panelDrawer ? 'w-0 hidden' : ''}
+  {$panelDrawer  ? 'w-[18rem]' : ''}
   bg-[#f6f8fa] h-screen flex flex-row z-[100]"
 >
   <div class="w-[18rem] shadow-lg">

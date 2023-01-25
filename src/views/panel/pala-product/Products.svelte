@@ -6,9 +6,12 @@
   import Select from "$components/Form/Select.svelte";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
-  import { modal, search } from "$services/store";
+  import { modal, search, panelDrawer,activePage } from "$services/store";
   import Input from "$components/Form/Input.svelte";
+  import { onMount } from "svelte";
 
+
+  console.log($activePage,"activvvee")
   const deleteProductApprove = (productId) => {
     modal.set(
       bind(Alert, {
@@ -22,15 +25,36 @@
       })
     );
   };
-
+  const setCampaign = async (productId,product) => {
+    product.campaign=!product.campaign
+    let response = await RestService.updateProduct(productId,product)
+    if (response && response.status) {
+      getProducts($search)
+      ToastService.success("Kampanya değişikliği başarılı");
+    }
+  console.log(response,"product ve result")
+}
+  onMount(() => {
+    setTimeout(() => {
+      panelDrawer.set(false);
+    }, 50);
+  });
+const navigateAndSkip =async (product) =>{
+activePage.set(skip)
+  navigate(`/panel/update-product/${product._id.toString()}`)
+}
   let products;
   let langs;
   let lang;
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
+  let activePages=0
 
   const getProducts = async (search) => {
+    if($activePage){
+      skip=$activePage
+    }
     let response = await RestService.getProducts(
       limit,
       skip,
@@ -39,11 +63,13 @@
       undefined,
       search
     );
-    products = response["products"];
-    console.log(products, "products");
     totalDataCount = response["count"];
+    products = response["products"];
+    console.log(limit,skip,totalDataCount,"limit-skip")
+activePage.set(null)
   };
   $: getProducts($search);
+  $: pages(totalDataCount);
 
   const deleteProduct = async (productId) => {
     let response = await RestService.deleteProduct(productId);
@@ -63,9 +89,9 @@
 
   const pages = () => {
     if (totalDataCount > limit) {
-      return new Array(Math.ceil(totalDataCount / limit));
+      activePages= new Array(Math.ceil(totalDataCount / limit));
     } else {
-      return [1];
+      activePages= [1];
     }
   };
 
@@ -166,6 +192,14 @@
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
+                  Kampanya
+                </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
                   Durum
                 </th>
                 <th
@@ -212,6 +246,18 @@
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
+                    <button  on:click={() => setCampaign(product._id,product)}
+
+                      class="{product.campaign
+                        ? 'bg-green-500'
+                        : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold"
+                    >
+                      {product.campaign ? "Evet" : "Hayır"}
+                    </button>
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
                     <button
                       class="{product.isActive
                         ? 'bg-green-500'
@@ -226,9 +272,7 @@
                     <button
                       class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
-                      on:click={navigate(
-                        `/panel/update-product/${product._id.toString()}`
-                      )}
+                      on:click={navigateAndSkip(product)}
                     >
                       {$Translate("Edit")}
                     </button>
@@ -279,7 +323,8 @@
           >
             {$Translate("Prev")}
           </button>
-          {#each pages() as page, i}
+          {#if totalDataCount}
+          {#each activePages as page, i}
             <button
               class="border {skip == limit * i
                 ? 'bg-[#6e6e85] text-white'
@@ -294,7 +339,7 @@
               {i + 1}
             </button>
           {/each}
-
+          {/if}
           <button
             onclick={ceilAndCalculate}
             class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "

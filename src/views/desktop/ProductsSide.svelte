@@ -4,15 +4,16 @@
   import Select from "$components/Form/Select.svelte";
   import { salesItems } from "$services/store";
   import { link } from "svelte-navigator";
-  import { modal,search } from "$services/store";
+  import { modal,search,campaign } from "$services/store";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
   import ToastService from "$services/toast";
   import { useParams } from "svelte-navigator";
-
-
   import Input from "$components/Form/Input.svelte";
+  import CheckBox from "$components/Form/CheckBox.svelte";
   const params = useParams();
+
+
 
   const approveBasket = () => {
     if (customers.length > 1 && !customerId)
@@ -34,6 +35,7 @@ return
     );
   };
 
+  console.log($params,"şşşşşşş")
   const getCats = async () => {
     let response = await RestService.getCats(undefined, undefined, true);
     cats = response["cats"];
@@ -99,7 +101,9 @@ return
   </div>
   <div class="border p-4">
     <h3 class="text-lg font-bold pb-2">KATEGORİLER</h3>
+    
     <div class="flex flex-col justify-center">
+
       <a use:link href="/store/category/all">
         <h2
           class="text-[#777] mb-1 {$params.catid == undefined
@@ -109,6 +113,7 @@ return
           Tümü
         </h2></a
       >
+
       {#if cats}
       
         {#each cats as cat}
@@ -122,7 +127,17 @@ return
             </h2></a
           >
         {/each}
+        <div class="flex items-center pt-3">
+          <input
+    type="checkbox"
+          on:click={campaign.set(!$campaign)} />  <h2 
+          class="text-[#777] pl-1"
+        >
+         Kampanyalı Ürünler
+        </h2>
+        </div>
       {/if}
+      
     </div>
   </div>
   <div class="border p-4">

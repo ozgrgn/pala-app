@@ -38,8 +38,9 @@ export const translate = writable(0)
 export const treatments = writable(0)
 export const modal = writable(null);
 export const desktopDrawer = writable(true);
-export const desktopDrawerMyAccount = writable(false);
-
+export const panelDrawer = writable(true);
+export const campaign = writable(false);
+export const activePage = writable(null);
 
 
 let salesItemsInStorage = localStorage.getItem("salesItems")
