@@ -44,31 +44,44 @@ activePage.set(skip)
   navigate(`/panel/update-product/${product._id.toString()}`)
 }
   let products;
-  let langs;
-  let lang;
+let active
+let pasive
   let limit = 10;
   let skip = 0;
   let totalDataCount = 0;
-  let activePages=0
+  let activePages=0;
+  let activeCases=[{name:"Tümü",key:undefined},{name:"Aktif",key:true},{name:"Pasif",key:false}];
+  let isActive=undefined
+  const nextProducts = async (search) => {
+skip=0
+getProducts(search)
+  }
 
   const getProducts = async (search) => {
     if($activePage){
       skip=$activePage
     }
+    console.log(isActive,"isActive")
     let response = await RestService.getProducts(
       limit,
       skip,
-      undefined,
+      isActive,
       undefined,
       undefined,
       search
     );
+    console.log(response,"response")
     totalDataCount = response["count"];
+    activeCases[0].count=totalDataCount;
+
+    activeCases[1].count=response["active"];
+    activeCases[2].count=response["pasive"];
+console.log(activeCases,"activeCases")
+
     products = response["products"];
-    console.log(limit,skip,totalDataCount,"limit-skip")
 activePage.set(null)
   };
-  $: getProducts($search);
+  $: nextProducts($search);
   $: pages(totalDataCount);
 
   const deleteProduct = async (productId) => {
@@ -195,13 +208,24 @@ activePage.set(null)
                   Kampanya
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  Durum
-                </th>
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                {#if activeCases}
+                  <Select
+                    bind:value={isActive}
+                    change={() => nextProducts()}
+                    values={activeCases}
+                    title={"Durum Seç"}
+                    valuesKey={"key"}
+                    valuesTitleKey={"name"}
+                    secondTitleKey={"count"}
+                    customClass={"w-full border-0 max-w-xs"}
+                  />
+                {/if}
+              </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'

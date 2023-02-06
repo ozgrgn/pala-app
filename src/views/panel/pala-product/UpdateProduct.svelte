@@ -64,6 +64,9 @@
   ];
 
   const updateProduct = async () => {
+    if(product.stockCount.value==null){
+        product.stockCount.value=0
+      }
     let editedProduct = {};
     editedProduct.prices = product.prices;
     editedProduct.units = product.units;
@@ -88,6 +91,7 @@
     let response = await RestService.getProduct($params.productId);
 
     if (response["status"]) {
+ 
       console.log(response, "responseresponseresponse");
       values.map((v) => {
         if (v.customValue) {
@@ -102,6 +106,9 @@
       product = {
         ...response["product"],
       };
+      if(product.stockCount.value==0){
+        product.stockCount.value=null
+      }
       getMemberships();
     } else {
       ToastService.error($TranslateApiMessage(response.message));

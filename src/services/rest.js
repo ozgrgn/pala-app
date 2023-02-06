@@ -161,7 +161,7 @@ const getProducts = (limit, skip, isActive, cat, brand, search,campaign) => {
   if (skip) {
     data.skip = skip;
   }
-  if (isActive) {
+  if (isActive!=undefined) {
     data.isActive = isActive;
   }
   if (cat) {

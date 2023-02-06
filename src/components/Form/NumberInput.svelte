@@ -3,7 +3,7 @@
   import { TranslateApiMessage } from "../../services/language";
   import { createFieldValidator } from "../Validators/validation.js";
   import { requiredValidator } from "../Validators/validator.js";
-  export let value = 0;
+  export let value = undefined;
   export let isValid;
   export let required;
   export let disabled;
