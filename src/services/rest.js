@@ -10,7 +10,7 @@ const userVerifyToken = () => {
   return Http.post(`${ENV.API_URL}/user/verifyToken`, {}, "user");
 };
 const getMe = (userId) => {
-  console.log(userId,"fffff")
+  console.log(userId, "fffff")
   return Http.get(`${ENV.API_URL}/user/me/me`, { userId }, "user");
 };
 
@@ -91,8 +91,7 @@ const deleteBrand = (brandId) => {
 };
 
 // Memberships
-const getMemberships = (limit, skip) => {
-
+const getMemberships = (limit, skip, isActive) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -100,25 +99,27 @@ const getMemberships = (limit, skip) => {
   if (skip) {
     data.skip = skip;
   }
-
+  if (isActive) {
+    data.isActive = isActive;
+  }
   return Http.get(`${ENV.API_URL}/membership`, { ...data });
 };
 const addMembership = (data) => {
-  return Http.post(`${ENV.API_URL}/membership`, data);
+  return Http.post(`${ENV.API_URL}/membership`, data, "admin");
 };
 
 const updateMembership = (membershipId, data) => {
   return Http.put(`${ENV.API_URL}/membership/${membershipId}`, {
     membership: data,
-  });
+  }, "admin");
 };
 
 const getMembership = (membershipId) => {
-  return Http.get(`${ENV.API_URL}/membership/${membershipId}`);
+  return Http.get(`${ENV.API_URL}/membership/${membershipId}`, {}, "admin");
 };
 
 const deleteMembership = (membershipId) => {
-  return Http.delete(`${ENV.API_URL}/membership/${membershipId}`);
+  return Http.delete(`${ENV.API_URL}/membership/${membershipId}`, {}, "admin");
 };
 
 // Units
@@ -153,7 +154,7 @@ const deleteUnit = (unitId) => {
 
 
 // Products
-const getProducts = (limit, skip, isActive, cat, brand, search,campaign) => {
+const getProducts = (limit, skip, isActive, cat, brand, search, campaign) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -161,7 +162,7 @@ const getProducts = (limit, skip, isActive, cat, brand, search,campaign) => {
   if (skip) {
     data.skip = skip;
   }
-  if (isActive!=undefined) {
+  if (isActive != undefined) {
     data.isActive = isActive;
   }
   if (cat) {
@@ -205,7 +206,7 @@ const setCampaign = (productId, campaign) => {
   }, "admin");
 };
 // Customers
-const getCustomers = (limit, skip, isActive,search) => {
+const getCustomers = (limit, skip, isActive, search) => {
   let data = {};
   if (limit) {
     data.limit = limit;

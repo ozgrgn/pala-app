@@ -6,6 +6,7 @@
   import { user, salesItems } from "$services/store";
   import Input from "$components/Form/Input.svelte";
   import { onMount } from "svelte";
+  import UnitSelect from "$components/Form/UnitSelect.svelte";
 
   export let detail;
   export let product;
@@ -24,15 +25,17 @@
   salesItem.quantity = 0;
 
   const salesItemAction = async () => {
-    if (salesItem.quantity * selectedUnit?.number > product.stockCount) {
-      ToastService.success("Bu ürünle ilgili stok sorunuz");
-      salesItem.quantity = Math.floor(
-        product.stockCount / selectedUnit?.number
-      );
-      console.log(salesItem.quantity, "calculated quantity");
-    }
+    // if (salesItem.quantity * selectedUnit?.number > product.stockCount) {
+    //   ToastService.success("Bu ürünle ilgili stok sorunuz");
+    //   salesItem.quantity = Math.floor(
+    //     product.stockCount / selectedUnit?.number
+    //   );
+    //   console.log(salesItem.quantity, "calculated quantity");
+    // }
     console.log(salesItem, selectedUnit);
     salesItem.total = salesItem.quantity * selectedUnit?.number * price;
+    salesItem.total = Number(salesItem.total.toFixed(2))
+    console.log(salesItem.total,"totalalalallalla")
     salesItem.totalNumber = salesItem.quantity * selectedUnit?.number;
     salesItem.unit = selectedUnit?._id;
     let index = $salesItems.findIndex((x) => x.product === salesItem.product);
@@ -156,7 +159,7 @@
         </div>
 
         <div class="mb-2">
-          <Select
+          <UnitSelect
             bind:value={unit}
             values={product.units}
             title={"Birim"}

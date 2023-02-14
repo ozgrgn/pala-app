@@ -191,14 +191,14 @@ activePage.set(null)
                 >
                   Marka
                 </th>
-                <th
+                <!-- <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
                   Stok
-                </th>
+                </th> -->
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -262,11 +262,11 @@ activePage.set(null)
                   >
                     {product?.brand?.name ? product?.brand?.name : "-"}
                   </td>
-                  <td
+                  <!-- <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     {product?.stockCount}
-                  </td>
+                  </td> -->
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >

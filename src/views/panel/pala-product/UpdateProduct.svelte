@@ -264,7 +264,7 @@
                 />
               </div>
             </div>
-            <div class="w-full lg:w-2/12 px-4">
+            <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -286,7 +286,7 @@
               </div>
             </div>
 
-            <div class="w-full lg:w-2/12 px-4">
+            <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -307,7 +307,7 @@
                 {/if}
               </div>
             </div>
-            <div class="w-full lg:w-2/12 px-4">
+            <!-- <div class="w-full lg:w-2/12 px-4">
               <div class="relative w-full mb-3 ap">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -323,7 +323,7 @@
                   customClass="appearance-none "
                 />
               </div>
-            </div>
+            </div> -->
           </div>
 
           <div class="flex flex-wrap my-4">

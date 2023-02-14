@@ -141,7 +141,7 @@
         <Route path="brands" component={Brands} />
         <!-- Membership -->
         <Route
-          path="update-membership/:mambershipId"
+          path="update-membership/:membershipId"
           component={UpdateMembership}
         />
 

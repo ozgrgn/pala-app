@@ -80,7 +80,7 @@
       ToastService.success("İşlem başarılı");
       navigate("/panel/memberships");
     } else {
-      ToastService.success("İşlem başarılı");
+      ToastService.error("Bir Hata Oluştu");
     }
   };
 </script>

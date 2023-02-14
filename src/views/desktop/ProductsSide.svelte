@@ -2,9 +2,8 @@
   import RestService from "$services/rest.js";
 
   import Select from "$components/Form/Select.svelte";
-  import { salesItems } from "$services/store";
   import { link } from "svelte-navigator";
-  import { modal,search,campaign } from "$services/store";
+  import { modal,search,campaign,salesItems } from "$services/store";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
   import ToastService from "$services/toast";
@@ -13,8 +12,13 @@
   import CheckBox from "$components/Form/CheckBox.svelte";
   const params = useParams();
 
+console.log($salesItems,"salesItems")
 
-
+const deleteItemApprove = (index) => {
+  $salesItems.splice(index, 1);
+  console.log($salesItems,"kalan")
+  salesItems.set($salesItems)
+}
   const approveBasket = () => {
     if (customers.length > 1 && !customerId)
     {
@@ -66,7 +70,7 @@ return
   let customerId;
   $: total =
     $salesItems && $salesItems.length > 0
-      ? $salesItems.reduce((a, b) => a + b?.total, 0)
+      ? Number($salesItems.reduce((a, b) => a + b?.total, 0).toFixed(2))
       : 0;
 
   const approve = async () => {
@@ -80,7 +84,7 @@ return
       salesItems.set(null);
       window.location.reload();
     } else {
-      ToastService.error("Stoklar güncelleniyor. Lütfen tekrar deneyin.");
+      ToastService.error("Bir hata oluştu. Lütfen yetkililer ile iletişime geçin");
     }
 
     console.log(approveResponse, "approve response");
@@ -144,7 +148,7 @@ return
     <h3 class="text-lg font-bold pb-2">SEPETİM</h3>
     {#if $salesItems && $salesItems.length > 0}
       <div class="flex flex-col gap-y-2">
-        {#each $salesItems as salesItem}
+        {#each $salesItems as salesItem,i}
           <div class="flex">
             <span class="text-sm text-[#777] truncate overflow-hidden w-3/4 ">
               {salesItem.productName}
@@ -152,15 +156,15 @@ return
             <span class="text-sm text-[#777] w-1/4"
               >x {salesItem.totalNumber}</span
             >
-            <!-- <button
+            <button
               on:click={() => {
-                deleteItemApprove();
+                deleteItemApprove(i);
               }}
               type="button"
             >
             <i class=" flex justify-start  hover:text-red-600 text-red-500 bi bi-bag-x-fill ease-linear transition-all duration-150"
 />
-            </button> -->
+            </button>
           </div>
         {/each}
         <div class="flex justify-end pt-3">
