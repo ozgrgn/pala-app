@@ -67,7 +67,7 @@ let userInfo
       >
         <div class="w-full  px-6 ">Kategoriler</div>
         <div
-          class="flex flex-col absolute pr-8 min-w-full whitespace-nowrap left-0 top-6 bg-white rounded-b-lg p-2 box-shadow shadow-lg {hover
+          class="flex flex-col absolute  min-w-full whitespace-nowrap left-0 top-6 bg-white rounded-b-lg p-2 box-shadow shadow-lg {hover
             ? 'opacity-100'
             : '  opacity-0 h-0'} transition-opacity ease-in-out delay:75 duration-500 z-1"
         >

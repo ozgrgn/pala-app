@@ -3,7 +3,7 @@
 
   import Select from "$components/Form/Select.svelte";
   import { link } from "svelte-navigator";
-  import { modal,search,campaign,salesItems } from "$services/store";
+  import { modal, search, campaign, salesItems } from "$services/store";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
   import ToastService from "$services/toast";
@@ -12,18 +12,17 @@
   import CheckBox from "$components/Form/CheckBox.svelte";
   const params = useParams();
 
-console.log($salesItems,"salesItems")
+  console.log($salesItems, "salesItems");
 
-const deleteItemApprove = (index) => {
-  $salesItems.splice(index, 1);
-  console.log($salesItems,"kalan")
-  salesItems.set($salesItems)
-}
+  const deleteItemApprove = (index) => {
+    $salesItems.splice(index, 1);
+    console.log($salesItems, "kalan");
+    salesItems.set($salesItems);
+  };
   const approveBasket = () => {
-    if (customers.length > 1 && !customerId)
-    {
+    if (customers.length > 1 && !customerId) {
       ToastService.error("Hangi firma için sipariş vereceğinizi seçin");
-return
+      return;
     }
     console.log("çkmn");
     modal.set(
@@ -39,7 +38,7 @@ return
     );
   };
 
-  console.log($params,"şşşşşşş")
+  console.log($params, "şşşşşşş");
   const getCats = async () => {
     let response = await RestService.getCats(undefined, undefined, true);
     cats = response["cats"];
@@ -84,30 +83,30 @@ return
       salesItems.set(null);
       window.location.reload();
     } else {
-      ToastService.error("Bir hata oluştu. Lütfen yetkililer ile iletişime geçin");
+      ToastService.error(
+        "Bir hata oluştu. Lütfen yetkililer ile iletişime geçin"
+      );
     }
 
     console.log(approveResponse, "approve response");
   };
 </script>
 
-<div class="flex flex-col gap-4">
+<div class=" flex flex-col gap-4">
   <div class="border p-4">
     <div class="relative">
       <Input
         bind:value={$search}
         placeholder={"Ürün Arama"}
         customClass="pl-10"
-  
       />
       <div class="absolute top-2 left-2"><i class="bi bi-search" /></div>
     </div>
   </div>
   <div class="border p-4">
     <h3 class="text-lg font-bold pb-2">KATEGORİLER</h3>
-    
-    <div class="flex flex-col justify-center">
 
+    <div class="flex flex-col justify-center">
       <a use:link href="/store/category/all">
         <h2
           class="text-[#777] mb-1 {$params.catid == undefined
@@ -119,7 +118,6 @@ return
       >
 
       {#if cats}
-      
         {#each cats as cat}
           <a use:link href="/store/category/{cat._id}">
             <h2
@@ -132,23 +130,19 @@ return
           >
         {/each}
         <div class="flex items-center pt-3">
-          <input
-    type="checkbox"
-          on:click={campaign.set(!$campaign)} />  <h2 
-          class="text-[#777] pl-1"
-        >
-         Kampanyalı Ürünler
-        </h2>
+          <input type="checkbox" on:click={campaign.set(!$campaign)} />
+          <h2 class="text-[#777] pl-1">Kampanyalı Ürünler</h2>
         </div>
       {/if}
-      
     </div>
   </div>
-  <div class="border p-4">
+
+<div class="h-full top-0">
+  <div class="sticky top-5 border p-4 my-4  ">
     <h3 class="text-lg font-bold pb-2">SEPETİM</h3>
     {#if $salesItems && $salesItems.length > 0}
       <div class="flex flex-col gap-y-2">
-        {#each $salesItems as salesItem,i}
+        {#each $salesItems as salesItem, i}
           <div class="flex">
             <span class="text-sm text-[#777] truncate overflow-hidden w-3/4 ">
               {salesItem.productName}
@@ -162,8 +156,9 @@ return
               }}
               type="button"
             >
-            <i class=" flex justify-start  hover:text-red-600 text-red-500 bi bi-bag-x-fill ease-linear transition-all duration-150"
-/>
+              <i
+                class=" flex justify-start  hover:text-red-600 text-red-500 bi bi-bag-x-fill ease-linear transition-all duration-150"
+              />
             </button>
           </div>
         {/each}
@@ -203,4 +198,5 @@ return
       </div>
     {/if}
   </div>
+</div>
 </div>

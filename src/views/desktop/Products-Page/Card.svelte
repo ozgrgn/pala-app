@@ -58,6 +58,7 @@
   if (product.unit) {
     findUnit(product.unit);
   }
+  $:findPrices(product);
 
   const findUnit = async (unit) => {
     selectedUnit = product.units.find(({ _id }) => _id == unit);
@@ -86,6 +87,8 @@
   };
 
   const findPrices = async () => {
+    price=undefined
+    maxPrice=undefined
     product.prices.map((p, index) => {
       if (p._id == $user.membership) {
         price = p.price;
@@ -97,11 +100,10 @@
       }
     });
   };
-  findPrices();
+ 
 
   onMount(async () => {
     let unitsMap = {};
-
     product?.units.map((_unit) => {
       unitsMap[_unit?._id] = _unit;
     });
@@ -205,7 +207,7 @@
     </div>
   {:else}
     <div class="w-full h-full flex justify-center items-center">
-      <div class="h-52 text-center xl:px-7 px-2 rounded-b-md">
+      <div class="h-72 text-center xl:px-7 px-2 py-2 rounded-b-md">
         <div class="h-24">
           <h2 class="text-xl text-[#1c1e40] leading-5 ">
             {product.no}

@@ -25,7 +25,7 @@
 </script>
 
 
-<div class="grid grid-cols-4 mt-5 gap-4 container mx-auto">
+<div class="md:grid grid-cols-4 mt-5 gap-4 container mx-auto">
 <ProductsSide />
   <div class="col-span-3 ">
     {#if product}

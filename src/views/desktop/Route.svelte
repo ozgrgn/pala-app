@@ -41,7 +41,7 @@
 <div class="min-h-screen">
   <Header />
 
-  <div class=" mx-auto w-full relative ">
+  <div class=" mx-auto w-screen px-2 md-px-0 relative ">
     <Router>
       <Route path="/">
         <Home />

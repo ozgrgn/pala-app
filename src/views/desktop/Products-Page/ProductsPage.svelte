@@ -1,43 +1,52 @@
 <script>
   import { link } from "svelte-navigator";
-  import { salesItems,search,campaign } from "$services/store";
+  import { salesItems, search, campaign } from "$services/store";
   import RestService from "$services/rest";
+  import { Translate } from "$services/language";
+
   let cats;
 
   import { useParams } from "svelte-navigator";
-  import Select from "$components/Form/Select.svelte";
 
   import Card from "./Card.svelte";
   import ProductsSide from "../ProductsSide.svelte";
+  import Select from "$components/Form/Select.svelte";
   const params = useParams();
   let products;
   let customerId;
   let customers;
-  
-  const getProducts = async (prm,search,campaign) => {
+  let limit = 12;
+  let skip = 0;
+  let totalDataCount = 0;
 
-    console.log(prm,"prprprprprp")
-    if(prm.catid=="all"){
-      prm.catid=undefined
+  const getProducts = async (prm, search, campaign) => {
+    products = undefined;
+    totalDataCount = undefined;
+    console.log(prm, search, campaign, "prprprprprp");
+
+    if (prm.catid == "all") {
+      prm.catid = undefined;
     }
 
     let response = await RestService.getProducts(
-      undefined,
-      undefined,
+      limit,
+      skip,
       true,
       prm.catid,
       undefined,
       search,
       campaign
-    ); 
+    );
     products = response["products"];
+    totalDataCount = response["count"];
+    console.log(totalDataCount, "totalDataCount");
+
     console.log(products, "pro ducts");
   };
- $: getProducts($params,$search,$campaign);
-
+  $: getProducts($params, $search, $campaign);
 
   const getCats = async () => {
-    let response = await RestService.getCats(undefined, undefined,true);
+    let response = await RestService.getCats(undefined, undefined, true);
     cats = response["cats"];
     console.log(cats, "cats");
   };
@@ -60,18 +69,76 @@
   };
 
   getCustomersByUserId();
-
-
+  const ceilAndCalculate = () => {
+    if (Math.ceil(skip / limit) != Math.ceil(totalDataCount / limit) - 1) {
+      skip = skip + limit;
+      getProducts($params, $search, $campaign);
+    }
+  };
+  const pages = () => {
+    if (totalDataCount > limit) {
+      return new Array(Math.ceil(totalDataCount / limit));
+    } else {
+      return [1];
+    }
+  };
 </script>
 
-
-<div class="grid grid-cols-4 mt-5 gap-4 container mx-auto">
-<ProductsSide bind:cats={cats} bind:customers={customers} bind:customerId />
-  <div class="col-span-3 grid grid-cols-4 gap-4">
-    {#if products}
-      {#each products as product}
-        <Card {product} />
-      {/each}
+<div
+  class="md:grid  md:grid-cols-5 lg:grid-cols-4 mt-5 gap-4 container mx-auto"
+>
+  <div class="col-span-1 md:col-span-2 lg:col-span-1">
+    <ProductsSide bind:cats bind:customers bind:customerId />
+  </div>
+  <div class="col-span-3">
+    <div class=" grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      {#if products}
+        {#each products as product}
+          <div class="px-4 md:px-0">
+            <Card {product} />
+          </div>
+        {/each}
+      {/if}
+    </div>
+    {#if products && totalDataCount}
+      <div class="w-full ">
+        <div
+          class=" flex flex-row flex-wrap lg:flex-nowrap  gap-1 justify-center  items-center p-3"
+        >
+          <button
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+            type="button"
+            on:click={() => {
+              skip != 0 ? (skip = skip - limit) : (skip = skip);
+              getProducts($params, $search, $campaign);
+            }}
+          >
+            {$Translate("Prev")}
+          </button>
+          {#each pages() as page, i}
+            <button
+              class="border {skip == limit * i
+                ? 'bg-[#6e6e85] text-white'
+                : 'bg-white text-blue-600 border-blue-600'} font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+              class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
+              type="button"
+              on:click={() => {
+                skip = limit * i;
+                getProducts($params, $search, $campaign);
+              }}
+            >
+              {i + 1}
+            </button>
+          {/each}
+          <button
+            onclick={ceilAndCalculate}
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
+            type="button"
+          >
+            {$Translate("Next")}
+          </button>
+        </div>
+      </div>
     {/if}
   </div>
 </div>
