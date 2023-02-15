@@ -124,14 +124,14 @@
 {#if product && product.units}
   {#if !detail}
     <div
-      class="flex flex-col hover:scale-105 transition-all h-[28rem] relative rounded-md shadow py-4"
+      class="flex flex-col hover:scale-105 transition-all h-[28rem] relative rounded-md shadow"
     >
       <a
         href="/store/product/{product._id}"
-        class="bg-white border-1 border-b border-gray-300  my-4 flex justify-center items-center "
+        class=" bg-white border-1 border-b border-gray-300 my-4 flex justify-center items-center "
       >
         <img
-          class="object-fit h-40 w-fit rounded-t-md "
+          class=" h-36 w-fit object-cover rounded-t-md "
           src={product?.images[0]?.image?product?.images[0]?.image:"/assets/img/gorsel.jpeg"}
           alt=""
         />
