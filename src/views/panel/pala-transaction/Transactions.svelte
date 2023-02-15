@@ -188,12 +188,21 @@
                   <td
                   class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                 >
-                  {transaction.total} €
+                
+                  {Number(transaction?.total?.toFixed(2))} €
                 </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-          
+                  <button
+                  class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                  type="button"
+                  on:click={navigate(
+                    `/panel/update-transaction/${transaction._id.toString()}`
+                  )}
+                >
+                  {$Translate("Edit")}
+                </button>
                     <button
                       on:click={() =>
                         deleteTransactionApprove(transaction._id.toString())}

@@ -84,7 +84,7 @@
       window.location.reload();
     } else {
       ToastService.error(
-        "Bir hata oluştu. Lütfen yetkililer ile iletişime geçin"
+        "Seçtiğiniz Ürünlerde Fiyat Değişikliği Olmuştur. Lütfen Sepetinizi Boşaltıp Ürünleri Yeniden Ekleyin "
       );
     }
 

@@ -11,6 +11,7 @@
   import ToastService from "$services/toast";
   import { navigate, useParams } from "svelte-navigator";
   import { bind } from "svelte-simple-modal";
+  import moment from "moment";
 
   let color = "light";
   const deleteTransactionApprove = (transactionId) => {
@@ -64,14 +65,18 @@
     { key: "products", customValue: null },
     { key: "phase", customValue: null },
     { key: "note", customValue: null },
+    { key: "oldPhase", customValue: null },
+
   ];
 
   const updateTransaction = async () => {
     let editedTransaction = {};
     editedTransaction.prices = transaction.prices;
     editedTransaction.units = transaction.units;
+    editedTransaction.oldPhase = transaction.oldPhase.value;
+
     values.map((v) => {
-      if (v.key != "prices" && v.key != "units" && v.key != "images") {
+      if (v.key != "oldPhase" && v.key != "prices" && v.key != "units" && v.key != "images") {
         editedTransaction[v.key] = transaction[v.key].value;
       }
     });
@@ -104,6 +109,7 @@
             value: response["transaction"][v.key],
           };
         }
+       
       });
 
       salesItems = [...response["transaction"]["salesItems"]];
@@ -115,6 +121,8 @@
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
+    transaction.oldPhase.value=transaction.phase.value
+    console.log(transaction, "transaction");
   };
 
   getTransaction();
@@ -135,23 +143,23 @@
     }
   };
 
-  const findUnit = async () => {
-    let product = products.find((x) => x._id == salesItem.product);
-    let unit = product.units.find((x) => x._id == salesItem.unit);
-    salesItem.unitNumber = unit.number;
-    salesItem.unitName = unit.name;
-    console.log(unit, "unit");
-  };
+  // const findUnit = async () => {
+  //   let product = products.find((x) => x._id == salesItem.product);
+  //   let unit = product.units.find((x) => x._id == salesItem.unit);
+  //   salesItem.unitNumber = unit.number;
+  //   salesItem.unitName = unit.name;
+  //   console.log(unit, "unit");
+  // };
 
-  const findPrice = async () => {
-    let product = products.find((x) => x._id == salesItem.product);
-    let price = product.prices.find((x) => x._id == customer.user.membership);
-    console.log(price);
-    salesItem.productName = product.name;
-    salesItem.cat = product.cat;
-    salesItem.unitPrice = price.price;
-    console.log(price, "price");
-  };
+  // const findPrice = async () => {
+  //   let product = products.find((x) => x._id == salesItem.product);
+  //   let price = product.prices.find((x) => x._id == customer.user.membership);
+  //   console.log(price);
+  //   salesItem.productName = product.name;
+  //   salesItem.cat = product.cat;
+  //   salesItem.unitPrice = price.price;
+  //   console.log(price, "price");
+  // };
 
   const getProducts = async () => {
     let response = await RestService.getProducts(undefined, undefined);
@@ -167,39 +175,38 @@
   };
   getCustomers();
 
-  const selectCustomer = async () => {
-    customer = customers.find((x) => x._id == transaction.customer.value);
-    console.log(customer, "customer");
-  };
+  // const selectCustomer = async () => {
+  //   customer = customers.find((x) => x._id == transaction.customer.value);
+  //   console.log(customer, "customer");
+  // };
 
-  const deleteSalesItem = async (index) => {
-    console.log(index, salesItems);
-    total = total - salesItems[index].total;
-    salesItems.splice(index, 1);
-    salesItems = salesItems;
+  // const deleteSalesItem = async (index) => {
+  //   console.log(index, salesItems);
+  //   total = total - salesItems[index].total;
+  //   salesItems.splice(index, 1);
+  //   salesItems = salesItems;
 
-    console.log(salesItems);
-  };
+  //   console.log(salesItems);
+  // };
 
-  const addSalesItem = async (index) => {
-    salesItem.total =
-      salesItem.unitPrice *
-      (salesItem.unitNumber ? salesItem.unitNumber : 1) *
-      salesItem.number;
-    salesItems = [...salesItems, salesItem];
-    total = total + salesItem.total;
+  // const addSalesItem = async (index) => {
+  //   salesItem.total =
+  //     salesItem.unitPrice *
+  //     (salesItem.unitNumber ? salesItem.unitNumber : 1) *
+  //     salesItem.number;
+  //   salesItems = [...salesItems, salesItem];
+  //   total = total + salesItem.total;
 
-    salesItem = {
-      product: null,
-      number: 0,
-      unit: null,
-      unitPrice: 0,
-      total: 0,
-    };
+  //   salesItem = {
+  //     product: null,
+  //     number: 0,
+  //     unit: null,
+  //     unitPrice: 0,
+  //     total: 0,
+  //   };
 
-    console.log(total, "total");
-  };
-
+  //   console.log(total, "total");
+  // };
 
   const getUnits = async () => {
     let response = await RestService.getUnits(undefined, undefined);
@@ -238,20 +245,7 @@
     >
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="text-center flex justify-between">
-          <h3 class="font-semibold text-lg text-blueGray-700">
-            Firma/Kişi Güncelle
-          </h3>
-          <div class="relative mb-3 px-10">
-            <label
-              class="block  text-blueGray-600 text-xs font-bold mb-2"
-              for="rectangleBanner"
-            >
-              Aktif mi ?
-            </label>
-            {#if transaction}
-              <Switch bind:value={transaction.isActive.value} />
-            {/if}
-          </div>
+          <h3 class="font-semibold text-lg text-blueGray-700">Satış Detayı</h3>
         </div>
       </div>
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
@@ -266,13 +260,18 @@
                   İşlem Tarihi
                 </label>
 
-                <Date
-                  bind:value={transaction.date.value}
-                  bind:isValid={transaction.date.isValid}
-                  placeholder={"İşlem Tarihi"}
-                  required={true}
-                  customClass="w-full text-black"
-                />
+                {moment(transaction.date.value).format("DD/MM/YYYY")}
+              </div>
+            </div>
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Firma
+                </label>
+                {transaction.customer.value.name}
               </div>
             </div>
             <div class="w-full lg:w-3/12 px-4">
@@ -292,28 +291,7 @@
               </div>
             </div>
 
-            <div class="w-full lg:w-3/12 px-4">
-              <div class="relative w-full mb-3">
-                <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
-                  for="grid-name"
-                >
-                  Firma
-                </label>
-                {#if customers}
-                  <Select
-                    bind:value={transaction.customer.value}
-                    bind:isValid={transaction.customer.isValid}
-                    values={customers}
-                    title={"Firma Seçin"}
-                    valuesKey={"_id"}
-                    valuesTitleKey={"name"}
-                    customClass={"w-full"}
-                    change={() => selectCustomer()}
-                  />
-                {/if}
-              </div>
-            </div>
+          
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
@@ -357,14 +335,7 @@
                 >
                   ADET
                 </th>
-                <th
-                  class="align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  BİRİM
-                </th>
+
                 <th
                   class="align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -381,19 +352,12 @@
                 >
                   TOTAL FİYATI
                 </th>
-                <th
-                  class="align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  İŞLEM
-                </th>
+           
               </tr>
             </thead>
             <tbody>
               {#if products && units}
-                <tr class="h-20">
+                <!-- <tr class="h-20">
                   <td class="px-4">
                     <Select
                       bind:value={salesItem.product}
@@ -449,7 +413,7 @@
                       <i class="bi bi-bag-check-fill text-xl" />
                     </button>
                   </td>
-                </tr>
+                </tr> -->
 
                 {#each salesItems as item, index}
                   <tr class="h-20">
@@ -459,23 +423,23 @@
                     <td class="text-center">
                       {salesItems[index].totalNumber}
                     </td>
-                    <td class="text-center">
+                    <!-- <td class="text-center">
                       {salesItems[index].unit}
-                    </td>
+                    </td> -->
                     <td class="text-center">
                       {salesItems[index].price}
                     </td>
                     <td class="text-center">
-                      {salesItems[index].total}
+                      {Number(salesItems[index].total.toFixed(2))}
                     </td>
                     <td class="text-center">
-                      <button
+                      <!-- <button
                         on:click={() => deleteSalesItem(index)}
                         class="bg-red-600 cursor text-white active:bg-bred-400 font-bold text-xs px-2 py-1 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
                         type="button"
                       >
                         <i class="bi bi-bag-dash-fill text-xl" />
-                      </button>
+                      </button> -->
                     </td>
                   </tr>
                 {/each}

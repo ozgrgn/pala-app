@@ -12,7 +12,6 @@
   export let product;
   console.log(product, "ssssssssss");
   export let membershipName;
-  let price;
   export let unit;
   export let selectedUnit;
   console.log($salesItems, "salesıtem");
@@ -33,7 +32,8 @@
     //   console.log(salesItem.quantity, "calculated quantity");
     // }
     console.log(salesItem, selectedUnit);
-    salesItem.total = salesItem.quantity * selectedUnit?.number * price;
+    salesItem.total = salesItem.quantity * selectedUnit?.number * product.price;
+    salesItem.price = product.price;
     salesItem.total = Number(salesItem.total.toFixed(2))
     console.log(salesItem.total,"totalalalallalla")
     salesItem.totalNumber = salesItem.quantity * selectedUnit?.number;
@@ -87,16 +87,16 @@
   };
 
   const findPrices = async () => {
-    price=undefined
-    maxPrice=undefined
+    product.price=undefined
+    product.maxPrice=undefined
     product.prices.map((p, index) => {
       if (p._id == $user.membership) {
-        price = p.price;
+        product.price = p.price;
         membershipName = p.name;
       }
-      if (maxPrice < p.price) {
-        maxPrice = p.price;
-        console.log(maxPrice,"maxPrice")
+      if (product.maxPrice < p.price) {
+        product.maxPrice = p.price;
+        console.log(product.maxPrice,"maxPrice")
       }
     });
   };
@@ -148,14 +148,14 @@
         <div class="text-black text-sm pt-3 h-16">
           <div class="flex flex-col items-center justify-center">
             <h3
-              class="{maxPrice > price
+              class="{product.maxPrice > product.price
                 ? ''
                 : 'hidden'} line-through	text-red-500 text-md"
             >
-              {maxPrice} €
+              {product.maxPrice} €
             </h3>
             <h3 class="text-lg">
-              {maxPrice < price ? maxPrice : price} €
+              {product.maxPrice < product.price ? product.maxPrice : product.price} €
             </h3>
           </div>
         </div>
@@ -219,14 +219,14 @@
         <div class="text-black text-md pt-3 h-16">
           <div class="flex flex-col items-center justify-center">
             <h3
-              class="{maxPrice >= price
+              class="{product.maxPrice >= product.price
                 ? ''
                 : 'hidden'} line-through	text-red-500 text-md"
             >
-              {maxPrice} €
+              {product.maxPrice} €
             </h3>
             <h3 class="text-xl">
-              {maxPrice < price ? maxPrice : price} €
+              {product.maxPrice < product.price ?product.maxPrice : product.price} €
             </h3>
           </div>
         </div>
