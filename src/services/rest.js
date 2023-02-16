@@ -279,6 +279,9 @@ const deleteTransaction = (transactionId) => {
   return Http.delete(`${ENV.API_URL}/transaction/${transactionId}`, {}, "admin");
 };
 
+const getTransactionsByUserId = () => {
+  return Http.get(`${ENV.API_URL}/transaction/user/byUserId`, {}, "user");
+};
 //USER
 const signup = (customer, name, surname, email, phone, password,) => {
   let fullName = name + " " + surname;
@@ -500,6 +503,7 @@ export default {
   addTransactionByUser,
   updateTransaction,
   deleteTransaction,
+  getTransactionsByUserId,
 
 
 

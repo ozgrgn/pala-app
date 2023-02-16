@@ -12,6 +12,7 @@
   import ProductDetailPage from "./ProductDetail-Page/ProductDetailPage.svelte";
   import ProductsPage from "./Products-Page/ProductsPage.svelte";
   import MemberInfo from "./MemberInfo-Page/MemberInfo.svelte";
+  import History from "./History/History.svelte";
 
   const location = useLocation();
 
@@ -57,6 +58,9 @@
       </Route>
       <Route path="/member-info">
         <MemberInfo />
+      </Route>
+      <Route path="/history">
+        <History />
       </Route>
     </Router>
   </div>

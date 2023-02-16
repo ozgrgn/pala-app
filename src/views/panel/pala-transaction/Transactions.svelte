@@ -201,7 +201,7 @@
                     `/panel/update-transaction/${transaction._id.toString()}`
                   )}
                 >
-                  {$Translate("Edit")}
+                  {"Detay"}
                 </button>
                     <button
                       on:click={() =>

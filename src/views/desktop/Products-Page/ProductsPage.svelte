@@ -20,6 +20,7 @@
   let totalDataCount = 0;
 
   const getProducts = async (prm, search, campaign) => {
+    window.scrollTo(0, 0);
     products = undefined;
     totalDataCount = undefined;
     console.log(prm, search, campaign, "prprprprprp");
@@ -39,12 +40,14 @@
     );
     products = response["products"];
     totalDataCount = response["count"];
-    console.log(totalDataCount, "totalDataCount");
-
-    console.log(products, "pro ducts");
   };
   $: getProducts($params, $search, $campaign);
-
+  $: {
+    if ($params) 
+    
+  {limit = 12;
+    skip = 0;}
+  }
   const getCats = async () => {
     let response = await RestService.getCats(undefined, undefined, true);
     cats = response["cats"];

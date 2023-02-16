@@ -10,12 +10,10 @@
 
   export let detail;
   export let product;
-  console.log(product, "ssssssssss");
   export let membershipName;
   export let unit;
   export let selectedUnit;
-  console.log($salesItems, "salesıtem");
-  console.log(unit, "ununununnu");
+
   let salesItem = {};
   salesItem.product = product._id;
   salesItem.productName = product.name;
@@ -31,11 +29,9 @@
     //   );
     //   console.log(salesItem.quantity, "calculated quantity");
     // }
-    console.log(salesItem, selectedUnit);
     salesItem.total = salesItem.quantity * selectedUnit?.number * product.price;
     salesItem.price = product.price;
     salesItem.total = Number(salesItem.total.toFixed(2))
-    console.log(salesItem.total,"totalalalallalla")
     salesItem.totalNumber = salesItem.quantity * selectedUnit?.number;
     salesItem.unit = selectedUnit?._id;
     let index = $salesItems.findIndex((x) => x.product === salesItem.product);
@@ -128,10 +124,10 @@
     >
       <a
         href="/store/product/{product._id}"
-        class=" bg-white border-1 border-b border-gray-300 my-4 flex justify-center items-center "
+        class="bg-white border-1 border-b border-gray-300 my-4 flex justify-center items-center "
       >
         <img
-          class=" h-36 w-fit object-cover rounded-t-md "
+          class=" h-48 w-auto object-cover rounded-t-md "
           src={product?.images[0]?.image?product?.images[0]?.image:"/assets/img/gorsel.jpeg"}
           alt=""
         />

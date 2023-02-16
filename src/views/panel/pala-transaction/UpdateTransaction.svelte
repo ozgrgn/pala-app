@@ -275,19 +275,15 @@
               </div>
             </div>
             <div class="w-full lg:w-3/12 px-4">
-              <div class="relative w-full mb-3">
+              <div class="relative  w-full mb-3">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   İşlem No
                 </label>
-                <Input
-                  bind:value={transaction.no.value}
-                  bind:isValid={transaction.no.isValid}
-                  placeholder={"İşlem No"}
-                  required={false}
-                />
+                <div class="pl-5">
+                {transaction.no.value}</div>
               </div>
             </div>
 

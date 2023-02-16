@@ -35,7 +35,6 @@
       isValid = _validity.valid;
     }
   });
-  $:console.log(value,"selectteki value")
 
   onDestroy(validityUnsub);
 </script>
