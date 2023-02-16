@@ -76,11 +76,10 @@
       <img class="" src="/assets/img/logos/logo-light.png" alt="" />
     </a>
     <div class="flex justify-center self-center w-full">
-      <div class="flex justify-center items-center">
-        <a use:link href={`/store/home`} class="">Home</a>
-      </div>
+   
+ 
       <div
-        class="relative flex flex-col justify-center z-10 cursor-pointer"
+        class="relative  hidden md:block  flex flex-col justify-center z-10 cursor-pointer"
         on:mouseover={() => (hover = true)}
         on:mouseout={() => (hover = false)}
         on:focus
@@ -92,6 +91,7 @@
             ? 'opacity-100'
             : '  opacity-0 h-0'} transition-opacity ease-in-out delay:75 duration-500 z-1"
         >
+        
           <AItem
             bind:hover
             customClass="justify-start w-fit pl-2  {hover
@@ -114,15 +114,19 @@
           {/if}
         </div>
       </div>
-
+      <div class="flex justify-center items-center ">
+        <a use:link href={`/store/history`} class="px-2 ">Siparişlerim</a>
+      </div>
       <div class="">
         <a use:link href={`/store/member-info`} class=""
-          ><span class="hidden md:flex">Üyelik Bilgilerim</span><span
+          ><span class="hidden md:block px-6">Üyelik Bilgilerim</span><span
             class="flex md:hidden">Bilgilerim</span
           ></a
         >
       </div>
+    
     </div>
+    
     <div class="w-1/4 flex flex-col justify-center px-2 md:px-0 ">
       {#if $user}
         <div
@@ -132,8 +136,8 @@
           class="flex cursor-pointer"
         >
           <i class="hidden md:block text-black bi bi-person-fill px-2" />
-          <span class="hidden md:flex">Çıkış Yap</span><span
-            class="flex md:hidden">Çıkış</span
+          <span class="hidden md:block">Çıkış Yap</span><span
+            class="block md:hidden">Çıkış</span
           >
         </div>
       {:else}
