@@ -66,12 +66,14 @@
   let cats;
   let customers;
   let customerId;
+  let loading=false
   $: total =
     $salesItems && $salesItems.length > 0
       ? Number($salesItems.reduce((a, b) => a + b?.total, 0).toFixed(2))
       : 0;
 
   const approve = async () => {
+    loading=true
     let kdv=customers && customers[0].country=="de"?Number(total*0.19).toFixed(2):0
     let approveResponse = await RestService.addTransactionByUser({
       salesItems: $salesItems,
@@ -83,9 +85,11 @@
     if (approveResponse["status"]) {
       ToastService.success("Sepetiniz başarıyla gönderildi");
       salesItems.set(null);
+      loading=true
       window.location.reload();
     } else {
       ToastService.error($TranslateApiMessage(approveResponse.message));
+      loading=true
     }
 
     console.log(approveResponse, "approve response");
@@ -164,9 +168,9 @@
         {/each}
         <div class="w-full flex justify-end pt-3">
           <span class="text-sm font-medium text-right text-[#777] w-2/3"
-            >Ürün Toplamı:
+            >Net Toplam:
           </span>
-          <span class="text-sm font-medium text-[#777] w-1/3 pl-1"
+          <span class="text-sm font-medium text-[#777] w-1/3 pl-1 flex justify-end"
             >{Number(total).toFixed(2)} €</span
           >
         </div>
@@ -174,11 +178,18 @@
           <span class="text-sm font-medium text-right text-[#777] w-2/3"
             >{customers && customers[0].country=="de"?"%19":""} MwSt.:
           </span>
-          <span class="text-sm font-medium text-[#777] w-1/3 pl-1"
+          <span class="text-sm font-medium text-[#777] w-1/3 pl-1 flex justify-end"
             >{customers && customers[0].country=="de"?Number(total*0.19).toFixed(2):0} €</span
           >
         </div>
-
+        <div class="w-full flex justify-end pt-1">
+          <span class="text-sm font-medium text-right text-[#777] w-2/3"
+            >Toplam Tutar:
+          </span>
+          <span class="text-sm font-medium text-[#777] w-1/3 pl-1 flex justify-end"
+            >{Number(Number(total)+ Number((customers && customers[0].country=="de"?Number(total*0.19).toFixed(2):0))).toFixed(2)}€</span
+          >
+        </div>
         {#if customers && customers.length > 1}
           <div class="flex">
             <Select
@@ -199,6 +210,7 @@
             }}
             class="w-full bottom-2 mb-4 border-2 border-green-500 hover:bg-green-500 px-4 py-2 text-black hover:text-white active:bg-dark-300 text-sm font-bold uppercase rounded outline-none focus:outline-none  ease-linear transition-all duration-150"
             type="button"
+            disabled={loading}
           >
             ONAYLA
           </button>
