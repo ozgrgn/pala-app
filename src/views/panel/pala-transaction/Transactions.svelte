@@ -100,13 +100,13 @@
                   No
                 </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Tarih
-              </th>
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Tarih
+                </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -124,21 +124,37 @@
                   Üyelik
                 </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Durum
-              </th>
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Durum
+                </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Tutar
-              </th>
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Tutar
+                </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  KDV
+                </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Toplam
+                </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -161,19 +177,19 @@
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {transaction.no?transaction.no:"-"}
+                    {transaction.no ? transaction.no : "-"}
                   </td>
-                  <td
-                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                >
-               
-                {moment(transaction.date).format("DD/MM/YYYY")}
-               
-                </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {transaction?.customer?.name}
+                    {moment(transaction.date).format("DD/MM/YYYY")}
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {transaction?.customer?.name
+                      ? transaction?.customer?.name
+                      : "-"}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
@@ -181,28 +197,39 @@
                     {transaction.membership?.name}
                   </td>
                   <td
-                  class="uppercase border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                >
-                  {transaction.phase}
-                </td>
-                  <td
-                  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                >
-                
-                  {Number(transaction?.total?.toFixed(2))} €
-                </td>
+                    class="uppercase border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {transaction.phase}
+                  </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                  <button
-                  class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
-                  type="button"
-                  on:click={navigate(
-                    `/panel/update-transaction/${transaction._id.toString()}`
-                  )}
-                >
-                  {"Detay"}
-                </button>
+                    {Number(transaction?.total?.toFixed(2))} €
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {Number(transaction?.kdv?.toFixed(2))} €
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {Number(
+                      Number(transaction?.total) + Number(transaction?.kdv)
+                    ).toFixed(2)} €
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    <button
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      type="button"
+                      on:click={navigate(
+                        `/panel/update-transaction/${transaction._id.toString()}`
+                      )}
+                    >
+                      {"Detay"}
+                    </button>
                     <button
                       on:click={() =>
                         deleteTransactionApprove(transaction._id.toString())}

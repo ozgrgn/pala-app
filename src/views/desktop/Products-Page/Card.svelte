@@ -151,7 +151,7 @@
               {product.maxPrice} €
             </h3>
             <h3 class="text-lg">
-              {product.maxPrice < product.price ? product.maxPrice : product.price} €
+             {product.maxPrice < product.price ? Number(product.maxPrice).toFixed(2) :  Number(product.price).toFixed(2)} €
             </h3>
           </div>
         </div>
@@ -173,7 +173,7 @@
 
         <div class="flex justify-center items-center ">
           <button
-            class=" h-7 w-7 pr-2"
+            class=" h-7 w-7 mr-2"
             type="button"
             on:click={() => minusItem()}
             ><i
@@ -191,7 +191,7 @@
             />
           </div>
           <button
-            class=" h-7 w-7 pl-2"
+            class=" h-7 w-7 ml-2"
             type="button"
             on:click={() => plusItem()}
             ><i
@@ -245,7 +245,7 @@
 
         <div class="flex justify-center items-center ">
           <button
-            class=" h-7 w-7 pr-2"
+            class=" h-7 w-7 mr-2"
             type="button"
             on:click={() => minusItem()}
             ><i
@@ -263,7 +263,7 @@
             />
           </div>
           <button
-            class=" h-7 w-7 pl-2"
+            class=" h-7 w-7 ml-2"
             type="button"
             on:click={() => plusItem()}
             ><i

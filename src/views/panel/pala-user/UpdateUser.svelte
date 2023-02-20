@@ -37,7 +37,6 @@
   getMemberships();
   let user;
   let langs = [];
-  let dialCode;
 
   let values = [
     { key: "fullName", customValue: null },
@@ -90,7 +89,6 @@
       if(!user.membership.value) {
         user.isActive.value=false
       }
-      console.log(dialCode);
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }

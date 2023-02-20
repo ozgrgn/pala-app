@@ -13,6 +13,7 @@
   import { navigate, useParams } from "svelte-navigator";
   import { bind } from "svelte-simple-modal";
   import { modal } from "$services/store";
+  import CountrySelect from "$components/Form/CountrySelect.svelte";
 
   const deleteCustomerApprove = (customerId) => {
     modal.set(
@@ -27,9 +28,9 @@
       })
     );
   };
-let users;
-    const getUsers = async () => {
-    let response = await RestService.getUsers(undefined, undefined,true);
+  let users;
+  const getUsers = async () => {
+    let response = await RestService.getUsers(undefined, undefined, true);
     users = response["users"];
     console.log(users, "users");
   };
@@ -64,6 +65,10 @@ let users;
   ];
 
   const updateCustomer = async () => {
+    if (!customer.country.value) {
+      ToastService.error("Lütfen Ülke Girin");
+      return;
+    }
     let editedCustomer = {};
     editedCustomer.prices = customer.prices;
     editedCustomer.units = customer.units;
@@ -221,26 +226,26 @@ let users;
                 />
               </div>
             </div>
-             <div class="w-full lg:w-3/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block  text-blueGray-600 text-xs font-bold mb-2"
-                for="grid-name"
-              >
-                Kullanıcı Seçin
-              </label>
-              {#if users}
-              <Select
-              bind:value={customer.user.value}
-              values={users}
-              title={"Kullanıcılar"}
-              valuesKey={"_id"}
-              valuesTitleKey={"fullName"}
-              customClass={"w-full focus:ring-0 ring-0 "}
-            />
-            {/if}
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Kullanıcı Seçin
+                </label>
+                {#if users}
+                  <Select
+                    bind:value={customer.user.value}
+                    values={users}
+                    title={"Kullanıcılar"}
+                    valuesKey={"_id"}
+                    valuesTitleKey={"fullName"}
+                    customClass={"w-full focus:ring-0 ring-0 "}
+                  />
+                {/if}
+              </div>
             </div>
-          </div>
           </div>
           <div class="flex flex-wrap my-4">
             <div class="w-full lg:w-3/12 px-4">
@@ -309,7 +314,7 @@ let users;
             </div>
           </div>
           <div class="flex flex-wrap my-4">
-            <div class="w-full lg:w-2/12 px-4">
+            <div class="w-full lg:w-2/12 country-select px-4">
               <div class="relative w-full mb-3">
                 <label
                   class="block text-blueGray-600 text-xs font-bold mb-2"
@@ -317,12 +322,15 @@ let users;
                 >
                   Ülke
                 </label>
-                <Input
-                  bind:value={customer.country.value}
-                  bind:isValid={customer.country.isValid}
-                  placeholder={"Ülke"}
-                  required={false}
-                />
+                <CountrySelect
+                bind:value={customer.country.value}
+                bind:isValid={customer.country.isValid}
+                bind:isDirty={customer.country.isDirty}
+                customClass={"text-primary placeholder:text-primary placeholder:opacity-50 "}
+                placeholder="Ülke"
+                required={true}
+              />
+               
               </div>
             </div>
             <div class="w-full lg:w-2/12 px-4">

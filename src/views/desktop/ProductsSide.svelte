@@ -1,6 +1,6 @@
 <script>
   import RestService from "$services/rest.js";
-
+  import {TranslateApiMessage } from "../../services/language";
   import Select from "$components/Form/Select.svelte";
   import { link } from "svelte-navigator";
   import { modal, search, campaign, salesItems } from "$services/store";
@@ -9,7 +9,6 @@
   import ToastService from "$services/toast";
   import { useParams } from "svelte-navigator";
   import Input from "$components/Form/Input.svelte";
-  import CheckBox from "$components/Form/CheckBox.svelte";
   const params = useParams();
 
   console.log($salesItems, "salesItems");
@@ -73,19 +72,20 @@
       : 0;
 
   const approve = async () => {
+    let kdv=customers && customers[0].country=="de"?Number(total*0.19).toFixed(2):0
     let approveResponse = await RestService.addTransactionByUser({
       salesItems: $salesItems,
       customerId,
       total,
+      kdv
+      
     });
     if (approveResponse["status"]) {
       ToastService.success("Sepetiniz başarıyla gönderildi");
       salesItems.set(null);
       window.location.reload();
     } else {
-      ToastService.error(
-        "Seçtiğiniz Ürünlerde Fiyat Değişikliği Olmuştur. Lütfen Sepetinizi Boşaltıp Ürünleri Yeniden Ekleyin "
-      );
+      ToastService.error($TranslateApiMessage(approveResponse.message));
     }
 
     console.log(approveResponse, "approve response");
@@ -162,12 +162,20 @@
             </button>
           </div>
         {/each}
-        <div class="flex justify-end pt-3">
+        <div class="w-full flex justify-end pt-3">
           <span class="text-sm font-medium text-right text-[#777] w-2/3"
-            >Total:
+            >Ürün Toplamı:
           </span>
           <span class="text-sm font-medium text-[#777] w-1/3 pl-1"
-            >{total} €</span
+            >{Number(total).toFixed(2)} €</span
+          >
+        </div>
+        <div class="w-full flex justify-end pt-1">
+          <span class="text-sm font-medium text-right text-[#777] w-2/3"
+            >{customers && customers[0].country=="de"?"%19":""} MwSt.:
+          </span>
+          <span class="text-sm font-medium text-[#777] w-1/3 pl-1"
+            >{customers && customers[0].country=="de"?Number(total*0.19).toFixed(2):0} €</span
           >
         </div>
 

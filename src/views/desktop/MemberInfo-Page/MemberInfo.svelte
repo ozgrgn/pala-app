@@ -9,7 +9,6 @@
 
 
 let userInfo
-let dialCode
   const getUserInformation = async () => {
     let userInfoResponse = await RestService.getMe($user.userId);
 
@@ -80,7 +79,6 @@ let dialCode
                     </label>
                     <Input
                       bind:value={userInfo.phone}
-                      bind:dialCode
                       customClass={"text-primary placeholder:text-primary placeholder:opacity-50 w-full"}
                       placeholder="Yetkili Mobil Telefon"
                       required={true}

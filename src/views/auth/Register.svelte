@@ -11,7 +11,6 @@
   let email = {};
   let phone = {};
   let mobile = {};
-  let dialCode;
   let name = {};
   let surname = {};
   let password = {};
@@ -32,8 +31,12 @@
 
   
   const companyRegister = async () => {
-    editedPhone = dialCode + phone.value.replace(/\s/g, "");
-
+if(!country.value) {
+  ToastService.error(
+        "Lütfen Ülke Girin"
+      );
+      return
+}
       let data = {};
       (data.user = userId),
       (data.name = companyName.value),
@@ -41,7 +44,7 @@
         (data.street = street.value),
         (data.post = post.value),
         (data.city = city.value),
-        (data.phone = editedPhone);
+        (data.phone = phone.value);
       let customerResponse = await RestService.addCustomer(data);
       if (customerResponse && customerResponse.status) {
         console.log(customerResponse);
@@ -60,19 +63,14 @@
   const register = async () => {
     processing = true;
 
-    if (phone.value.replace(/\s/g, "").length < 10) {
-      ToastService.error("Telefon numaranızı kontrol ediniz.");
-      return;
-    }
-
-    editedMobile = dialCode + mobile.value.replace(/\s/g, "");
+    
 
     let registerResponse = await RestService.signup(
       companyId,
       name.value,
       surname.value,
       email.value,
-      editedMobile,
+      mobile.value,
       password.value
     );
     if (registerResponse && registerResponse.status) {
@@ -157,9 +155,8 @@
                   >
                     Mobil Telefon
                   </label>
-                  <PhoneInput
+                  <Input
                     bind:value={mobile.value}
-                    bind:dialCode
                     bind:isValid={mobile.isValid}
                     bind:isDirty={mobile.isDirty}
                     customClass={"text-primary placeholder:text-primary placeholder:opacity-50 w-full"}
@@ -241,9 +238,8 @@
                   >
                     Firma Telefon
                   </label>
-                  <PhoneInput
+                  <Input
                     bind:value={phone.value}
-                    bind:dialCode
                     bind:isValid={phone.isValid}
                     bind:isDirty={phone.isDirty}
                     customClass={"text-primary placeholder:text-primary placeholder:opacity-50 w-full"}

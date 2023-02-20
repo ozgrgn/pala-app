@@ -70,7 +70,9 @@
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-            <h3 class="font-semibold text-lg text-blueGray-700">Kullanıcılar</h3>
+            <h3 class="font-semibold text-lg text-blueGray-700">
+              Kullanıcılar
+            </h3>
           </div>
         </div>
       </div>
@@ -85,8 +87,24 @@
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Kullanıcı İsmi
+                  Ad Soyad
                 </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Email
+                </th>
+                <th
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                Telefon
+              </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -114,52 +132,62 @@
             </thead>
             <tbody>
               {#if users}
-              {#each users as user}
-                <tr>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {user.fullName}
-                  </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {user.membership?.name ? user.membership?.name : "-"}
-                  </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    <button
-                      class="{user.isActive
-                        ? 'bg-green-500'
-                        : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold cursor-default"
+                {#each users as user}
+                  <tr>
+                    <td
+                      class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                     >
-                      {user.isActive ? "Aktif" : "Pasif"}
-                    </button>
+                      {user.fullName}
+                    </td>
+                    <td
+                      class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                    >
+                      {user.email}
+                    </td>
+                    <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    {user.phone}
                   </td>
+                    <td
+                      class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                    >
+                      {user.membership?.name ? user.membership?.name : "-"}
+                    </td>
+                    <td
+                      class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                    >
+                      <button
+                        class="{user.isActive
+                          ? 'bg-green-500'
+                          : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold cursor-default"
+                      >
+                        {user.isActive ? "Aktif" : "Pasif"}
+                      </button>
+                    </td>
 
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    <button
-                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
-                      type="button"
-                      on:click={navigate(
-                        `/panel/update-user/${user._id.toString()}`
-                      )}
+                    <td
+                      class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                     >
-                      {$Translate("Edit")}
-                    </button>
-                    <button
-                      on:click={() => deleteUserApprove(user._id.toString())}
-                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
-                      type="button"
-                    >
-                      {$Translate("Delete")}
-                    </button>
-                  </td>
-                </tr>
-              {/each}
+                      <button
+                        class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                        type="button"
+                        on:click={navigate(
+                          `/panel/update-user/${user._id.toString()}`
+                        )}
+                      >
+                        {$Translate("Edit")}
+                      </button>
+                      <button
+                        on:click={() => deleteUserApprove(user._id.toString())}
+                        class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                        type="button"
+                      >
+                        {$Translate("Delete")}
+                      </button>
+                    </td>
+                  </tr>
+                {/each}
               {/if}
             </tbody>
           </table>

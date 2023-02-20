@@ -9,6 +9,7 @@
   import Textarea from "$components/Form/Textarea.svelte";
   import NumberInput from "$components/Form/NumberInput.svelte";
   import Switch from "$components/Switch.svelte";
+  import CountrySelect from "$components/Form/CountrySelect.svelte";
 
   let values = [
     { key: "no", customValue: null },
@@ -53,6 +54,12 @@
   getUsers();
 
   const addCustomer = async () => {
+    if(!customer.country.value) {
+  ToastService.error(
+        "Lütfen Ülke Girin"
+      );
+      return
+}
     let data = {};
     data.images = images;
     data.units = units;
@@ -253,7 +260,7 @@
           </div>
         </div>
         <div class="flex flex-wrap my-4">
-          <div class="w-full lg:w-2/12 px-4">
+          <div class="w-full lg:w-2/12 country-select px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block text-blueGray-600 text-xs font-bold mb-2"
@@ -261,12 +268,15 @@
               >
                 Ülke
               </label>
-              <Input
-                bind:value={customer.country.value}
-                bind:isValid={customer.country.isValid}
-                placeholder={"Ülke"}
-                required={false}
-              />
+              <CountrySelect
+              bind:value={customer.country.value}
+              bind:isValid={customer.country.isValid}
+              bind:isDirty={customer.country.isDirty}
+              customClass={"text-primary placeholder:text-primary placeholder:opacity-50 "}
+              placeholder="Ülke"
+              required={true}
+            />
+             
             </div>
           </div>
           <div class="w-full lg:w-2/12 px-4">

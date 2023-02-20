@@ -271,7 +271,7 @@
                 >
                   Firma
                 </label>
-                {transaction.customer.value.name}
+                {transaction?.customer?.value?.name?transaction?.customer?.value?.name:"(Silinmiş)"}
               </div>
             </div>
             <div class="w-full lg:w-3/12 px-4">
