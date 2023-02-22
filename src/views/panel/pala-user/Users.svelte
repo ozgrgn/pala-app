@@ -23,12 +23,15 @@
   };
 
   let users;
-  let limit = 10;
+  let limit = 20;
   let skip = 0;
   let totalDataCount = 0;
+  let isActive;
 
-  const getUsers = async () => {
-    let response = await RestService.getUsers(limit, skip);
+  const getUsers = async (isActive) => {
+    console.log(isActive, "getusers active");
+    let response = await RestService.getUsers(limit, skip, isActive);
+    
     users = response["users"];
     console.log(users, "users");
     totalDataCount = response["count"];
@@ -98,13 +101,13 @@
                   Email
                 </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                Telefon
-              </th>
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  Telefon
+                </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -119,7 +122,21 @@
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Durum
+                  <Select
+                    bind:value={isActive}
+                    change={() => {
+                      getUsers(isActive);
+                    }}
+                    values={[
+                      { key: undefined, name: "Tümü" },
+                      { key: true, name: "Active" },
+                      { key: false, name: "Pasive" },
+                    ]}
+                    title={"Durum"}
+                    valuesKey={"key"}
+                    valuesTitleKey={"name"}
+                    customClass={"border border-blue-600  py-1 w-full mx-16 lg:mx-0 lg:w-auto"}
+                  />
                 </th>
 
                 <th
@@ -145,10 +162,10 @@
                       {user.email}
                     </td>
                     <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {user.phone}
-                  </td>
+                      class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                    >
+                      {user.phone}
+                    </td>
                     <td
                       class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                     >
@@ -203,12 +220,7 @@
             change={() => {
               getUsers();
             }}
-            values={[
-              { limit: 10 },
-              { limit: 20 },
-              { limit: 50 },
-              { limit: 100 },
-            ]}
+            values={[{ limit: 20 }]}
             title={"Select page"}
             valuesKey={"limit"}
             valuesTitleKey={"limit"}

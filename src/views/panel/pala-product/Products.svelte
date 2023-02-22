@@ -46,7 +46,7 @@ activePage.set(skip)
   let products;
 let active
 let pasive
-  let limit = 10;
+  let limit = 20;
   let skip = 0;
   let totalDataCount = 0;
   let activePages=0;
@@ -326,10 +326,7 @@ activePage.set(null)
               getProducts();
             }}
             values={[
-              { limit: 10 },
-              { limit: 20 },
-              { limit: 50 },
-              { limit: 100 },
+              { limit: 20 }
             ]}
             title={"Select page"}
             valuesKey={"limit"}

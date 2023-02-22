@@ -7,7 +7,7 @@
   import Switch from "$components/Switch.svelte";
   import { Translate, TranslateApiMessage } from "$services/language";
   import RestService from "$services/rest.js";
-  import { modal } from "$services/store";
+  import { modal,panelDrawer } from "$services/store";
   import ToastService from "$services/toast";
   import { navigate, useParams } from "svelte-navigator";
   import { bind } from "svelte-simple-modal";
@@ -66,7 +66,6 @@
     { key: "phase", customValue: null },
     { key: "note", customValue: null },
     { key: "oldPhase", customValue: null },
-
   ];
 
   const updateTransaction = async () => {
@@ -76,7 +75,12 @@
     editedTransaction.oldPhase = transaction.oldPhase.value;
 
     values.map((v) => {
-      if (v.key != "oldPhase" && v.key != "prices" && v.key != "units" && v.key != "images") {
+      if (
+        v.key != "oldPhase" &&
+        v.key != "prices" &&
+        v.key != "units" &&
+        v.key != "images"
+      ) {
         editedTransaction[v.key] = transaction[v.key].value;
       }
     });
@@ -109,7 +113,6 @@
             value: response["transaction"][v.key],
           };
         }
-       
       });
 
       salesItems = [...response["transaction"]["salesItems"]];
@@ -121,7 +124,7 @@
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
-    transaction.oldPhase.value=transaction.phase.value
+    transaction.oldPhase.value = transaction.phase.value;
     console.log(transaction, "transaction");
   };
 
@@ -142,6 +145,12 @@
       ToastService.success("İşlem başarılı");
     }
   };
+  const print = async () => {
+  panelDrawer.set(false)
+  setTimeout(() => {
+    window.print() },
+     100);}
+
 
   // const findUnit = async () => {
   //   let product = products.find((x) => x._id == salesItem.product);
@@ -216,9 +225,9 @@
   getUnits();
 </script>
 
-<div class="flex flex-wrap mt-4 h-screen relative">
+<div class="flex flex-wrap mt-4 h-full relative">
   <div class="w-full mb-12 px-2 lg:px-4 ">
-    <div class="flex justify-between">
+    <div class="flex justify-between not-printable">
       <button
         class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
         type="button"
@@ -251,7 +260,7 @@
       <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
         {#if transaction}
           <div class="flex flex-wrap my-4">
-            <div class="w-full lg:w-3/12 px-4">
+            <div class=" lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -263,7 +272,7 @@
                 {moment(transaction.date.value).format("DD/MM/YYYY")}
               </div>
             </div>
-            <div class="w-full lg:w-3/12 px-4">
+            <div class=" lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -271,24 +280,26 @@
                 >
                   Firma
                 </label>
-                {transaction?.customer?.value?.name?transaction?.customer?.value?.name:"(Silinmiş)"}
+                {transaction?.customer?.value?.name
+                  ? transaction?.customer?.value?.name
+                  : "(Silinmiş)"}
               </div>
             </div>
-            <div class="w-full lg:w-3/12 px-4">
+            <div class="lg:w-3/12 px-4">
               <div class="relative  w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   İşlem No
                 </label>
                 <div class="pl-5">
-                {transaction.no.value}</div>
+                  {transaction.no.value}
+                </div>
               </div>
             </div>
 
-          
-            <div class="w-full lg:w-3/12 px-4">
+            <div class="lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
                   class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -348,7 +359,6 @@
                 >
                   TOTAL FİYATI
                 </th>
-           
               </tr>
             </thead>
             <tbody>
@@ -443,7 +453,7 @@
             </tbody>
           </table>
 
-          <div class="flex flex-wrap">
+          <div class="flex flex-wrap not-printable">
             <div class="w-full lg:w-12/12 px-4 text-right mt-5">
               <button
                 on:click={() => updateTransaction()}
@@ -452,6 +462,13 @@
               >
                 {$Translate("Update")}
               </button>
+              <button
+              on:click={() => print()}
+              class="bg-blue-500 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+              type="button"
+            >
+              Print
+            </button>
             </div>
           </div>
         {/if}

@@ -25,7 +25,7 @@
   let sliders;
   let langs;
   let lang;
-  let limit = 10;
+  let limit = 20;
   let skip = 0;
   let totalDataCount = 0;
 
@@ -197,10 +197,7 @@
               getSliders();
             }}
             values={[
-              { limit: 10 },
-              { limit: 20 },
-              { limit: 50 },
-              { limit: 100 },
+              { limit: 20 }
             ]}
             title={"Select page"}
             valuesKey={"limit"}

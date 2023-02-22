@@ -309,6 +309,7 @@ const resetPasswordRequestWithEmail = (email) => {
 
 // Users
 const getUsers = (limit, skip, isActive) => {
+   console.log(isActive,"rest")
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -316,7 +317,7 @@ const getUsers = (limit, skip, isActive) => {
   if (skip) {
     data.skip = skip;
   }
-  if (isActive) {
+  if (isActive!=undefined) {
     data.isActive = isActive;
   }
 
