@@ -1,13 +1,13 @@
 import { writable } from "svelte/store";
 
 
-const _user = localStorage.getItem("user") && localStorage.getItem("user") != "null"
-  ? JSON.parse(localStorage.getItem("user"))
-  : null
-export const user = writable(_user);
-user.subscribe((value) => {
-  localStorage.setItem("user", JSON.stringify(value));
-});
+// const _user = localStorage.getItem("user") && localStorage.getItem("user") != "null"
+//   ? JSON.parse(localStorage.getItem("user"))
+//   : null
+// export const user = writable(_user);
+// user.subscribe((value) => {
+//   localStorage.setItem("user", JSON.stringify(value));
+// });
 
 const _admin = localStorage.getItem("admin") && localStorage.getItem("admin") != "null"
   ? JSON.parse(localStorage.getItem("admin"))
@@ -41,6 +41,7 @@ export const desktopDrawer = writable(true);
 export const panelDrawer = writable(true);
 export const campaign = writable(false);
 export const activePage = writable(null);
+export const user = writable(null);
 
 
 let salesItemsInStorage = localStorage.getItem("salesItems")

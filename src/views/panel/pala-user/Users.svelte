@@ -130,7 +130,7 @@
                     values={[
                       { key: undefined, name: "Tümü" },
                       { key: true, name: "Active" },
-                      { key: false, name: "Pasive" },
+                      { key: false, name: "Passive" },
                     ]}
                     title={"Durum"}
                     valuesKey={"key"}

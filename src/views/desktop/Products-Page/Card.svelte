@@ -83,9 +83,13 @@
   };
 
   const findPrices = async () => {
-    product.price=undefined
-    product.maxPrice=undefined
+    product.price=0
+    product.maxPrice=0
+
+
     product.prices.map((p, index) => {
+      
+
       if (p._id == $user.membership) {
         product.price = p.price;
         membershipName = p.name;
