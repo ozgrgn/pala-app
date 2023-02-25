@@ -23,7 +23,6 @@
     window.scrollTo(0, 0);
     products = undefined;
     totalDataCount = undefined;
-    console.log(prm, search, campaign, "prprprprprp");
 
     if (prm.catid == "all") {
       prm.catid = undefined;
@@ -51,7 +50,6 @@
   const getCats = async () => {
     let response = await RestService.getCats(undefined, undefined, true);
     cats = response["cats"];
-    console.log(cats, "cats");
   };
   getCats();
 
@@ -68,7 +66,6 @@
       }
     }
 
-    console.log(getCustomersByUserIdResponse, "getCustomersByUserIdResponse");
   };
 
   getCustomersByUserId();

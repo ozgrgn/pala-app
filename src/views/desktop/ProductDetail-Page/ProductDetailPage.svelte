@@ -18,7 +18,6 @@
   const getProductById = async () => {
     let response = await RestService.getProductById($params.productid);
     product = response["product"];
-    console.log(product, "product");
   }
   getProductById()
 

@@ -14,7 +14,6 @@ let userInfo
 
     if (userInfoResponse && userInfoResponse.status) {
       userInfo = userInfoResponse["_doc"];
-      console.log(userInfo, "userinfo");
     }
   };
 

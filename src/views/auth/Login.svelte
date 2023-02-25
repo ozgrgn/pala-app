@@ -14,7 +14,6 @@
   const login = async () => {
     let response = await RestService.userLogin(emailFromInput, password);
     if (response && response.status) {
-      console.log(response, "response");
       user.set({
         email: response.username,
         fullName: response.fullName,
@@ -37,7 +36,6 @@
         "Giriş yaptığınız kullanıcı aktif değil. Lütfen iletişime geçin"
       ) {
         ToastService.warning($TranslateApiMessage(response.message));
-        console.log("no active");
       } else ToastService.error($TranslateApiMessage(response.message));
     }
   };

@@ -49,7 +49,6 @@
   const getUsers = async () => {
     let response = await RestService.getUsers(undefined, undefined,true);
     users = response["users"];
-    console.log(users, "users");
   };
   getUsers();
 
@@ -63,8 +62,6 @@
     let data = {};
     data.images = images;
     data.units = units;
-    console.log(customer, "customersss");
-    console.log(images, "images");
     if (!customer.isActive.value) {
       customer.isActive.value = false;
     }

@@ -60,7 +60,6 @@
 
   const getCat = async () => {
     let response = await RestService.getCat($params.catId);
-    console.log(response, "response");
     if (response["status"]) {
       values.map((v) => {
         if (v.customValue) {

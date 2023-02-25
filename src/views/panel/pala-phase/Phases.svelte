@@ -30,7 +30,6 @@
   const getPhases = async () => {
     let response = await RestService.getPhases(limit, skip);
     phases = response["phases"];
-    console.log(phases, "phases");
     totalDataCount = response["count"];
   };
   getPhases();

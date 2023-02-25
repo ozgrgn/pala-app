@@ -32,7 +32,6 @@
   const getUsers = async () => {
     let response = await RestService.getUsers(undefined, undefined, true);
     users = response["users"];
-    console.log(users, "users");
   };
   getUsers();
 
@@ -96,7 +95,6 @@
     let response = await RestService.getCustomer($params.customerId);
 
     if (response["status"]) {
-      console.log(response, "responseresponseresponse");
       values.map((v) => {
         if (v.customValue) {
           response["customer"][v.key] = {

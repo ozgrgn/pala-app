@@ -96,7 +96,6 @@
       }
       if (product.maxPrice < p.price) {
         product.maxPrice = p.price;
-        console.log(product.maxPrice,"maxPrice")
       }
     });
   };

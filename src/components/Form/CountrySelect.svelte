@@ -39,7 +39,6 @@
     iti = intlTelInput(countrySelect);
 
     countryData = iti.countries;
-    console.log(countryData);
   });
 </script>
 

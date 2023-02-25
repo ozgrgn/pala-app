@@ -47,7 +47,6 @@ if(!country.value) {
         (data.phone = phone.value);
       let customerResponse = await RestService.addCustomer(data);
       if (customerResponse && customerResponse.status) {
-        console.log(customerResponse);
  
         ToastService.success(
         "Kayıt Başarılı. Onay işleminden sonra bilgilendirileceksiniz"
@@ -75,7 +74,6 @@ if(!country.value) {
     );
     if (registerResponse && registerResponse.status) {
       userId=registerResponse.userId
-      console.log(userId,"userId");
       if (userId) {
         companyRegister()
       }

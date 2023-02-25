@@ -32,12 +32,10 @@
   }
   let userInfo;
   const getUserInformation = async () => {
-    console.log("dddddd");
     let userInfoResponse = await RestService.getMe($user.userId);
 
     if (userInfoResponse && userInfoResponse.status) {
       userInfo = userInfoResponse["_doc"];
-      console.log(userInfo, "userinfo");
     }
   };
 
@@ -57,12 +55,10 @@
   const logout = () => {
     user.set(null);
   };
-  console.log($user, "user");
 
   const getCats = async () => {
     let response = await RestService.getCats(undefined, undefined, true);
     $cats = response["cats"];
-    console.log($cats, "cats");
   };
   getCats();
   let hover;

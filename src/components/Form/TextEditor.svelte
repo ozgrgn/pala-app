@@ -6,7 +6,6 @@
   export let value;
   export let placeholder;
   let editor;
-  $: console.log(incomingValue)
   let toolbarOptions = [
     [{ header: 1 }, { header: 2 }, "blockquote", "link", "image", "video"],
     ["bold", "italic", "underline", "strike"],

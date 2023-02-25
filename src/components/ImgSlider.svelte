@@ -2,7 +2,6 @@
     import { Splide, SplideSlide } from "@splidejs/svelte-splide";
     import "@splidejs/svelte-splide/css";
   export let images;
-  console.log(images,"iamrgewr")
   export let customClass;
   export let perPage
   </script>

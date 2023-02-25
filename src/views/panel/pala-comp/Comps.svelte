@@ -30,7 +30,6 @@
   const getComps = async () => {
     let response = await RestService.getComps(limit, skip);
     comps = response["comps"];
-    console.log(comps, "comps");
     totalDataCount = response["count"];
   };
   getComps();

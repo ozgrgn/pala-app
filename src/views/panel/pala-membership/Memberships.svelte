@@ -29,9 +29,7 @@
 
   const getMemberships = async () => {
     let response = await RestService.getMemberships(limit, skip);
-    console.log(response,"membership")
     memberships = response["memberships"];
-    console.log(memberships, "memberships");
     totalDataCount = response["count"];
   };
   getMemberships();

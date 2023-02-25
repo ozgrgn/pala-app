@@ -14,13 +14,11 @@
       getTransactionsByUserIdResponse["status"]
     ) {
       transactions = getTransactionsByUserIdResponse["transactions"];
-      console.log(transactions, "users transactions");
     }
   };
   getTransactionsByUserId();
   const transactionFilter = async (a) => {
     filteredTransaction = transactions.find(({ _id }) => _id == a);
-    console.log(filteredTransaction, "filteredTransaction");
   };
 </script>
 

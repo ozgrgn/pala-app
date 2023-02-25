@@ -30,7 +30,6 @@
   const getBrands = async () => {
     let response = await RestService.getBrands(limit, skip);
     brands = response["brands"];
-    console.log(brands, "brands");
     totalDataCount = response["count"];
   };
   getBrands();

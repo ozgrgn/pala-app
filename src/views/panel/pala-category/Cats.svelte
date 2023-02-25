@@ -30,7 +30,6 @@
   const getCats = async () => {
     let response = await RestService.getCats(limit, skip);
     cats = response["cats"];
-    console.log(cats, "cats");
     totalDataCount = response["count"];
   };
   getCats();
