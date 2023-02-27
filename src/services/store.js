@@ -41,7 +41,7 @@ export const desktopDrawer = writable(true);
 export const panelDrawer = writable(true);
 export const campaign = writable(false);
 export const activePage = writable(null);
-export const user = writable(null);
+export const membership = writable(null);
 
 
 let salesItemsInStorage = localStorage.getItem("salesItems")

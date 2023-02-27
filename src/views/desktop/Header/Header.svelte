@@ -1,6 +1,6 @@
 <script>
   import RestService from "$services/rest";
-  import { user, cats } from "$services/store";
+  import { user, cats,membership } from "$services/store";
   import { link, navigate, useLocation } from "svelte-navigator";
   import { modal } from "$services/store";
   import { bind } from "svelte-simple-modal";
@@ -32,10 +32,13 @@
   }
   let userInfo;
   const getUserInformation = async () => {
-    let userInfoResponse = await RestService.getMe($user.userId);
+    let userInfoResponse = await RestService.getMe();
 
     if (userInfoResponse && userInfoResponse.status) {
       userInfo = userInfoResponse["_doc"];
+      membership.set(userInfo.membership)
+      console.log($membership,"$membership")
+      
     }
   };
 
@@ -46,6 +49,7 @@
   });
 
   onDestroy(userSub);
+
 
   const changeNavStatus = () => {
     setTimeout(() => {

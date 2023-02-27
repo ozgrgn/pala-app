@@ -327,6 +327,14 @@
             <thead>
               <tr class="bg-gray-100">
                 <th
+                class="align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                ÜRÜN NO
+              </th>
+                <th
                   class="align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
@@ -423,6 +431,9 @@
 
                 {#each salesItems as item, index}
                   <tr class="h-20">
+                    <td class="text-center">
+                      {salesItems[index].productNo?salesItems[index].productNo:"-"}
+                    </td>
                     <td class="text-center">
                       {salesItems[index].productName}
                     </td>

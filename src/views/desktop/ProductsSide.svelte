@@ -37,7 +37,6 @@
     );
   };
 
-  console.log($params, "şşşşşşş");
   const getCats = async () => {
     let response = await RestService.getCats(undefined, undefined, true);
     cats = response["cats"];

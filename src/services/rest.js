@@ -9,9 +9,8 @@ const userLogin = (email, password) => {
 const userVerifyToken = () => {
   return Http.post(`${ENV.API_URL}/user/verifyToken`, {}, "user");
 };
-const getMe = (userId) => {
-  console.log(userId, "fffff")
-  return Http.get(`${ENV.API_URL}/user/me/me`, { userId }, "user");
+const getMe = () => {
+  return Http.get(`${ENV.API_URL}/user/me/me`, {  }, "user");
 };
 
 

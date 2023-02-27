@@ -3,7 +3,7 @@
   import ToastService from "$services/toast";
 
   import Select from "$components/Form/Select.svelte";
-  import { user, salesItems } from "$services/store";
+  import { membership, salesItems } from "$services/store";
   import Input from "$components/Form/Input.svelte";
   import { onMount } from "svelte";
   import UnitSelect from "$components/Form/UnitSelect.svelte";
@@ -13,9 +13,10 @@
   export let membershipName;
   export let unit;
   export let selectedUnit;
-
+$: console.log(salesItem)
   let salesItem = {};
   salesItem.product = product._id;
+  salesItem.productNo = product.no;
   salesItem.productName = product.name;
   salesItem.cat = product?.cat?._id;
 
@@ -90,7 +91,7 @@
     product.prices.map((p, index) => {
       
 
-      if (p._id == $user.membership) {
+      if (p._id == $membership) {
         product.price = p.price;
         membershipName = p.name;
       }
