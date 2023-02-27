@@ -21,7 +21,6 @@
         userId: response.userId,
         membership: response.membership,
       });
-      console.log($user);
       if ($user.super) {
         navigate("/panel/dashboard");
       } else {

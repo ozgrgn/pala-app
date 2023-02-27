@@ -27,6 +27,7 @@
   let skip = 0;
   let totalDataCount = 0;
   let isActive;
+  let customers;
 
   const getUsers = async (isActive) => {
     console.log(isActive, "getusers active");
@@ -37,7 +38,12 @@
     totalDataCount = response["count"];
   };
   getUsers();
-
+  const getCustomers = async (search) => {
+    let response = await RestService.getCustomers(limit, skip,undefined,search);
+    customers = response["customers"];
+    console.log(customers, "customers");
+  };
+  getCustomers()
   const deleteUser = async (userId) => {
     let response = await RestService.deleteUser(userId);
     if (response["status"]) {
@@ -61,7 +67,14 @@
       return [1];
     }
   };
+  const getCustomersCountry = (user) => {
+    let customer = customers.find((x) => x.user._id == user);
 
+if(customer && customer.country)
+return customer.country
+else return false
+  }
+  
   export let color = "light";
 </script>
 
@@ -80,7 +93,7 @@
         </div>
       </div>
       <div class="block w-full overflow-x-auto">
-        {#if users}
+        {#if users && customers}
           <table class="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
@@ -92,6 +105,14 @@
                 >
                   Ad Soyad
                 </th>
+                <th
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                Ülke
+              </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
@@ -156,6 +177,11 @@
                     >
                       {user.fullName}
                     </td>
+                    <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs uppercase whitespace-nowrap p-4 text-center"
+                  >
+                    {getCustomersCountry(user._id)?getCustomersCountry(user._id):"-"}
+                  </td>
                     <td
                       class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                     >

@@ -225,8 +225,8 @@
   getUnits();
 </script>
 
-<div class="flex flex-wrap mt-4 h-full relative">
-  <div class="w-full mb-12 px-2 lg:px-4 ">
+<div class="flex flex-wrap h-full relative">
+  <div class="w-full mb-12 px-2  text-sm ">
     <div class="flex justify-between not-printable">
       <button
         class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
@@ -430,11 +430,11 @@
                 </tr> -->
 
                 {#each salesItems as item, index}
-                  <tr class="h-20">
+                  <tr class="h-6 border-b">
                     <td class="text-center">
                       {salesItems[index].productNo?salesItems[index].productNo:"-"}
                     </td>
-                    <td class="text-center">
+                    <td class="text-left">
                       {salesItems[index].productName}
                     </td>
                     <td class="text-center">
@@ -444,10 +444,10 @@
                       {salesItems[index].unit}
                     </td> -->
                     <td class="text-center">
-                      {salesItems[index].price}
+                      {salesItems[index].price} €
                     </td>
                     <td class="text-center">
-                      {Number(salesItems[index].total.toFixed(2))}
+                      {Number(salesItems[index].total.toFixed(2))} €
                     </td>
                     <td class="text-center">
                       <!-- <button

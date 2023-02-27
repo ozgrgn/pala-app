@@ -2,7 +2,7 @@
   import RestService from "$services/rest.js";
   import {TranslateApiMessage } from "../../services/language";
   import Select from "$components/Form/Select.svelte";
-  import { link } from "svelte-navigator";
+  import { link, navigate } from "svelte-navigator";
   import { modal, search, campaign, salesItems } from "$services/store";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
@@ -15,15 +15,10 @@
 
   const deleteItemApprove = (index) => {
     $salesItems.splice(index, 1);
-    console.log($salesItems, "kalan");
     salesItems.set($salesItems);
   };
   const approveBasket = () => {
-    if (customers.length > 1 && !customerId) {
-      ToastService.error("Hangi firma için sipariş vereceğinizi seçin");
-      return;
-    }
-    console.log("çkmn");
+  
     modal.set(
       bind(Alert, {
         message: "Sepeti Onaylamak İstiyor musunuz?",
@@ -51,9 +46,11 @@
       getCustomersByUserIdResponse["status"]
     ) {
       customers = getCustomersByUserIdResponse["customers"];
-
-      if (customers && customers.length == 1) {
+      if (customers && customers[0] && customers[0]._id) {
         customerId = customers[0]._id;
+      }
+      else {
+        ToastService.error("Kullanıcıya Firma Tanımı Yapılmamış")
       }
     }
 
