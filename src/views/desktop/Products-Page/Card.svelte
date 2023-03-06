@@ -1,8 +1,5 @@
 <script>
-  import RestService from "$services/rest.js";
   import ToastService from "$services/toast";
-
-  import Select from "$components/Form/Select.svelte";
   import { membership, salesItems } from "$services/store";
   import Input from "$components/Form/Input.svelte";
   import { onMount } from "svelte";
@@ -13,6 +10,7 @@
   export let membershipName;
   export let unit;
   export let selectedUnit;
+  let productImage;
 $: console.log(salesItem)
   let salesItem = {};
   salesItem.product = product._id;
@@ -23,6 +21,11 @@ $: console.log(salesItem)
   salesItem.quantity = 0;
 
   const salesItemAction = async () => {
+    if(product.price<0.00000000001) {
+     ToastService.error("Bu ürünün fiyatı ile ilgili lütfen iletişim kurunuz");
+return
+    }
+    
     // if (salesItem.quantity * selectedUnit?.number > product.stockCount) {
     //   ToastService.success("Bu ürünle ilgili stok sorunuz");
     //   salesItem.quantity = Math.floor(
@@ -103,6 +106,13 @@ $: console.log(salesItem)
  
 
   onMount(async () => {
+    
+productImage=product.images.find(x=>x.order==1)
+if(!productImage) {
+  productImage=product.images[0]
+}
+console.log(productImage,"1")
+
     let unitsMap = {};
     product?.units.map((_unit) => {
       unitsMap[_unit?._id] = _unit;
@@ -132,7 +142,7 @@ $: console.log(salesItem)
       >
         <img
           class=" h-48 w-auto object-cover rounded-t-md "
-          src={product?.images[0]?.image?product?.images[0]?.image:"/assets/img/gorsel.jpeg"}
+          src={productImage?.image?productImage?.image:"/assets/img/gorsel.jpeg"}
           alt=""
         />
       </a>
@@ -232,7 +242,7 @@ $: console.log(salesItem)
         </div>
 
         <div class="mb-2">
-          <Select
+          <UnitSelect
             bind:value={unit}
             values={product.units}
             title={"Birim"}

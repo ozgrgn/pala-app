@@ -1,8 +1,8 @@
 <script>
-
   import { Splide, SplideSlide } from "@splidejs/svelte-splide";
   import "@splidejs/svelte-splide/css";
-    export let images
+  export let images;
+  console.log(images)
 </script>
 
 <Splide
@@ -22,10 +22,15 @@
   }}
 >
   {#if images}
-    {#each images as image}
-      <SplideSlide>
-        <div class="w-full flex items-center justify-center">
-        <img class="max-h-96 " src={image.image} alt="1" /></div>
-      </SplideSlide>
-    {/each}{/if}
+    {#each Array(4) as image, i}
+      {#each images as image}
+      {#if image.order==i+1}
+        <SplideSlide>
+          <div class="w-full flex items-center justify-center">
+            <img class="max-h-96 " src={image.image} alt="1" />
+          </div>
+        </SplideSlide>
+      {/if}
+    {/each}{/each}
+    {/if}
 </Splide>

@@ -138,6 +138,13 @@
         product.prices.push({ _id: membership._id, name: membership.name });
       }
 
+      product.prices.map((price,index)=>{
+        const result1 = memberships.find(({ _id }) => _id == price._id);
+        if (!result1) {
+        product.prices.splice(index,1);
+      }
+      })
+
       console.log(product.prices, "agaga");
     });
     processing = false;
@@ -346,7 +353,7 @@
                         <div class=" flex flex-col justify-center">
                           <NumberInput
                             bind:value={product.prices[index].price}
-                            placeholder={"Adet Sayısı"}
+                            placeholder={"Fiyatı"}
                             required={false}
                           />
                         </div>
