@@ -199,7 +199,7 @@
                   <td
                     class="uppercase border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {transaction.phase}
+                    {transaction.phase=="order"?"SİPARİŞ":transaction.phase=="prepared"?"HAZIRLANIYOR":transaction.phase=="cargo"?"YOLA ÇIKTI":transaction.phase=="delivered"?"TESLİM EDİLDİ":transaction.phase=="cancel"?"İPTAL":"-"}
                   </td>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"

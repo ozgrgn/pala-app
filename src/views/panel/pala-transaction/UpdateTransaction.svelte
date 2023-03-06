@@ -50,11 +50,11 @@
   let customer;
 
   let phases = [
-    { name: "ORDER", step: "order" },
-    { name: "PREPARED", step: "prepared" },
-    { name: "CARGO", step: "cargo" },
-    { name: "DELIVERED", step: "delivered" },
-    { name: "CANCEL", step: "cancel" },
+    { name: "SİPARİŞ", step: "order" },
+    { name: "HAZIRLANIYOR", step: "prepared" },
+    { name: "YOLA ÇIKTI", step: "cargo" },
+    { name: "TESLİM EDİLDİ", step: "delivered" },
+    { name: "İPTAL", step: "cancel" },
   ];
 
   let values = [
@@ -444,10 +444,11 @@
                       {salesItems[index].unit}
                     </td> -->
                     <td class="text-center">
-                      {salesItems[index].price} €
+                      {salesItems[index].price.toFixed(2)} €
+
                     </td>
                     <td class="text-center">
-                      {Number(salesItems[index].total.toFixed(2))} €
+                      {salesItems[index].total.toFixed(2)} €
                     </td>
                     <td class="text-center">
                       <!-- <button

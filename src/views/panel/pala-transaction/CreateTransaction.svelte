@@ -35,11 +35,11 @@
   let customers;
   let customer;
   let phases = [
-    { name: "ORDER", step: "order" },
-    { name: "PREPARED", step: "prepared" },
-    { name: "CARGO", step: "cargo" },
-    { name: "DELIVERED", step: "delivered" },
-    { name: "CANCEL", step: "cancel" },
+    { name: "SİPARİŞ", step: "order" },
+    { name: "HAZIRLANIYOR", step: "prepared" },
+    { name: "YOLA ÇIKTI", step: "cargo" },
+    { name: "TESLİM EDİLDİ", step: "delivered" },
+    { name: "İPTAL", step: "cancel" },
   ];
   export let color = "light";
 

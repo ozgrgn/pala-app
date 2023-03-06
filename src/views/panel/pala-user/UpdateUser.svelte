@@ -26,7 +26,18 @@
       })
     );
   };
-
+  let customers;
+  const getCustomers = async () => {
+    let response = await RestService.getCustomers(
+      undefined,
+      undefined,
+      undefined,
+      undefined
+    );
+    customers = response["customers"];
+    console.log(customers, "customers");
+  };
+  getCustomers();
   const params = useParams();
   let memberships;
   const getMemberships = async () => {
@@ -53,7 +64,6 @@
       ToastService.error("Telefon numaranızı kontrol ediniz.");
       return;
     }
-
 
     values.map((v) => {
       editedUser[v.key] = user[v.key].value;
@@ -83,11 +93,9 @@
       user = {
         ...response["user"],
       };
-      console.log(user,"usususu")
 
-
-      if(!user.membership.value) {
-        user.isActive.value=false
+      if (!user.membership.value) {
+        user.isActive.value = false;
       }
     } else {
       ToastService.error($TranslateApiMessage(response.message));
@@ -95,7 +103,12 @@
   };
 
   getUser();
+  const getCustomersCountry = (user) => {
+    let customer = customers.find((x) => x.user._id == user);
 
+    if (customer && customer.country) return customer.country;
+    else return false;
+  };
   const deleteUser = async (userId) => {
     let response = await RestService.deleteUser(userId);
     if (response["status"]) {
@@ -140,6 +153,21 @@
             Kullanıcı güncelle
           </h3>
           <div class="flex flex-end">
+            <div class="relative w-full mb-3 mr-4">
+              <label
+                class="block  text-blueGray-600 text-xs font-bold mb-2"
+                for="grid-name"
+              >
+                Ülke
+              </label>
+              <div class="uppercase pt-2 text-sm">
+                {#if customers && user}
+                  {getCustomersCountry(user._id)
+                    ? getCustomersCountry(user._id)
+                    : "-"}
+                {/if}
+              </div>
+            </div>
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -147,7 +175,7 @@
               >
                 Üyelik
               </label>
-              {#if memberships&&user}
+              {#if memberships && user}
                 <Select
                   bind:value={user.membership.value}
                   bind:isValid={user.membership.isValid}
@@ -168,7 +196,10 @@
                 Aktif mi ?
               </label>
               {#if user}
-                <Switch bind:value={user.isActive.value} disabled={!user.membership.value} />
+                <Switch
+                  bind:value={user.isActive.value}
+                  disabled={!user.membership.value}
+                />
               {/if}
             </div>
           </div>
@@ -218,11 +249,11 @@
                   Telefon
                 </label>
                 <Input
-                bind:value={user.phone.value}
-                bind:isValid={user.phone.isValid}
-                placeholder={"Telefon"}
-                required={true}
-              />
+                  bind:value={user.phone.value}
+                  bind:isValid={user.phone.isValid}
+                  placeholder={"Telefon"}
+                  required={true}
+                />
               </div>
             </div>
             <div class="w-full lg:w-3/12 px-4">
@@ -241,7 +272,6 @@
                 />
               </div>
             </div>
-    
           </div>
 
           <div class="flex flex-wrap">
