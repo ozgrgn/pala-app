@@ -1,9 +1,11 @@
 <script>
+  import { link } from "svelte-navigator";
   import ToastService from "$services/toast";
   import { membership, salesItems } from "$services/store";
   import Input from "$components/Form/Input.svelte";
   import { onMount } from "svelte";
   import UnitSelect from "$components/Form/UnitSelect.svelte";
+  import NumberInput from "$components/Form/NumberInput.svelte";
 
   export let detail;
   export let product;
@@ -11,7 +13,7 @@
   export let unit;
   export let selectedUnit;
   let productImage;
-$: console.log(salesItem)
+  $: console.log(salesItem);
   let salesItem = {};
   salesItem.product = product._id;
   salesItem.productNo = product.no;
@@ -21,11 +23,11 @@ $: console.log(salesItem)
   salesItem.quantity = 0;
 
   const salesItemAction = async () => {
-    if(product.price<0.00000000001) {
-     ToastService.error("Bu ürünün fiyatı ile ilgili lütfen iletişim kurunuz");
-return
+    if (product.price < 0.00000000001) {
+      ToastService.error("Bu ürünün fiyatı ile ilgili lütfen iletişim kurunuz");
+      return;
     }
-    
+
     // if (salesItem.quantity * selectedUnit?.number > product.stockCount) {
     //   ToastService.success("Bu ürünle ilgili stok sorunuz");
     //   salesItem.quantity = Math.floor(
@@ -35,7 +37,7 @@ return
     // }
     salesItem.total = salesItem.quantity * selectedUnit?.number * product.price;
     salesItem.price = product.price;
-    salesItem.total = Number(salesItem.total.toFixed(2))
+    salesItem.total = Number(salesItem.total.toFixed(2));
     salesItem.totalNumber = salesItem.quantity * selectedUnit?.number;
     salesItem.unit = selectedUnit?._id;
     let index = $salesItems.findIndex((x) => x.product === salesItem.product);
@@ -58,7 +60,7 @@ return
   if (product.unit) {
     findUnit(product.unit);
   }
-  $:findPrices(product);
+  $: findPrices(product);
 
   const findUnit = async (unit) => {
     selectedUnit = product.units.find(({ _id }) => _id == unit);
@@ -87,13 +89,10 @@ return
   };
 
   const findPrices = async () => {
-    product.price=0
-    product.maxPrice=0
-
+    product.price = 0;
+    product.maxPrice = 0;
 
     product.prices.map((p, index) => {
-      
-
       if (p._id == $membership) {
         product.price = p.price;
         membershipName = p.name;
@@ -103,15 +102,13 @@ return
       }
     });
   };
- 
 
   onMount(async () => {
-    
-productImage=product.images.find(x=>x.order==1)
-if(!productImage) {
-  productImage=product.images[0]
-}
-console.log(productImage,"1")
+    productImage = product.images.find((x) => x.order == 1);
+    if (!productImage) {
+      productImage = product.images[0];
+    }
+    console.log(productImage, "1");
 
     let unitsMap = {};
     product?.units.map((_unit) => {
@@ -137,12 +134,15 @@ console.log(productImage,"1")
       class="flex flex-col hover:scale-105 transition-all h-[28rem] relative rounded-md shadow"
     >
       <a
+        use:link
         href="/store/product/{product._id}"
         class="bg-white border-1 border-b border-gray-300 my-4 flex justify-center items-center "
       >
         <img
           class=" h-48 w-auto object-cover rounded-t-md "
-          src={productImage?.image?productImage?.image:"/assets/img/gorsel.jpeg"}
+          src={productImage?.image
+            ? productImage?.image
+            : "/assets/img/gorsel.jpeg"}
           alt=""
         />
       </a>
@@ -165,7 +165,9 @@ console.log(productImage,"1")
               {product.maxPrice} €
             </h3>
             <h3 class="text-lg">
-             {product.maxPrice < product.price ? Number(product.maxPrice).toFixed(2) :  Number(product.price).toFixed(2)} €
+              {product.maxPrice < product.price
+                ? Number(product.maxPrice).toFixed(2)
+                : Number(product.price).toFixed(2)} €
             </h3>
           </div>
         </div>
@@ -195,10 +197,11 @@ console.log(productImage,"1")
             />
           </button>
           <div class="relative  ">
-            <Input
+            <NumberInput
               bind:value={salesItem.quantity}
               customClass="appearance-none w-12 text-center"
               required={false}
+              disabled={!unit}
               input={() => {
                 salesItemAction();
               }}
@@ -229,14 +232,16 @@ console.log(productImage,"1")
         <div class="text-black text-md pt-3 h-16">
           <div class="flex flex-col items-center justify-center">
             <h3
-              class="{product.maxPrice >= product.price
+              class="{product.maxPrice > product.price
                 ? ''
                 : 'hidden'} line-through	text-red-500 text-md"
             >
               {product.maxPrice} €
             </h3>
             <h3 class="text-xl">
-              {product.maxPrice < product.price ?product.maxPrice : product.price} €
+              {product.maxPrice < product.price
+                ? product.maxPrice
+                : product.price} €
             </h3>
           </div>
         </div>

@@ -111,6 +111,7 @@
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
+    console.log(customer,"xyssdf")
   };
 
   getCustomer();

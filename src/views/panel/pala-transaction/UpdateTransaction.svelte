@@ -444,11 +444,11 @@
                       {salesItems[index].unit}
                     </td> -->
                     <td class="text-center">
-                      {salesItems[index].price.toFixed(2)} €
+                      {(Number(salesItems[index].price)).toFixed(2)}
 
                     </td>
                     <td class="text-center">
-                      {salesItems[index].total.toFixed(2)} €
+                      {(Number(salesItems[index].total)).toFixed(2)} €
                     </td>
                     <td class="text-center">
                       <!-- <button

@@ -46,9 +46,9 @@ export const membership = writable(null);
 
 let salesItemsInStorage = localStorage.getItem("salesItems")
 const _sales = salesItemsInStorage && salesItemsInStorage != "null"
-  ? JSON.parse(salesItemsInStorage)
+  ? []
   : []
 export const salesItems = writable(_sales);
-salesItems.subscribe((value) => {
-  localStorage.setItem("salesItems", JSON.stringify(value));
-});
+// salesItems.subscribe((value) => {
+//   localStorage.setItem("salesItems", null);
+// });

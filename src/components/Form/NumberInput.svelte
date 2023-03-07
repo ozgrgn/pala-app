@@ -7,12 +7,14 @@
   export let isValid;
   export let required;
   export let disabled;
-  export let placeholder = "Please type something";
+  export let placeholder = "";
   export let customClass = "";
   export let change = () => {};
   export let input = () => {};
   let validate, validity;
-
+if (value<0) {
+  value=0
+}
   let validations = [];
 
   if (required) {
@@ -41,6 +43,7 @@
   min="0"
   {disabled}
   {customClass}
+  onkeydown="return (event.keyCode !== 69 && event.keyCode !== 188 && event.keyCode !== 190 && event.keyCode !== 189 && event.keyCode !== 52)"
 />
 
 {#if $validity.dirty && !$validity.valid}
@@ -50,8 +53,8 @@
 {/if}
 <style>
  
- :global(.ap input[type="number"])::-webkit-inner-spin-button,
- :global(.ap input[type="number"])::-webkit-outer-spin-button {
+ :global(input[type="number"])::-webkit-inner-spin-button,
+ :global(input[type="number"])::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }

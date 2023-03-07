@@ -106,6 +106,7 @@
           class=" flex flex-row flex-wrap lg:flex-nowrap  gap-1 justify-center  items-center p-3"
         >
           <button
+          onclick={ceilAndCalculate}
             class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
             type="button"
             on:click={() => {
@@ -134,6 +135,7 @@
             onclick={ceilAndCalculate}
             class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
             type="button"
+            
           >
             {$Translate("Next")}
           </button>

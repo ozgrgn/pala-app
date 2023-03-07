@@ -40,10 +40,10 @@
   getUsers();
   const getCustomers = async (search) => {
     let response = await RestService.getCustomers(
-      limit,
-      skip,
       undefined,
-      search
+      undefined,
+      undefined,
+      undefined
     );
     customers = response["customers"];
     console.log(customers, "customers");
@@ -73,10 +73,20 @@
     }
   };
   const getCustomersCountry = (user) => {
-    let customer = customers.find((x) => x.user._id == user);
+    let a
+    customers.map((customer,index)=>{
+      if(customer && customer.user && customer.user._id==user) {
+        console.log(customer.user._id)
+        a= customer.country
+      }
+   
+    })
+    return a
+    // let customer
+    // customer = customers?.find(x => x.user._id == user);
 
-    if (customer && customer.country) return customer.country;
-    else return false;
+    // if (customer && customer.country) return customer.country;
+    // else return false;
   };
 
   export let color = "light";
