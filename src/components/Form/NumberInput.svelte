@@ -12,9 +12,9 @@
   export let change = () => {};
   export let input = () => {};
   let validate, validity;
-if (value<0) {
-  value=0
-}
+  if (value < 0) {
+    value = 0;
+  }
   let validations = [];
 
   if (required) {
@@ -31,7 +31,7 @@ if (value<0) {
 </script>
 
 <input
-  class="appearance-none	 border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full  {customClass}"
+  class="appearance-none border-0 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full {customClass}"
   type="number"
   bind:value
   {placeholder}
@@ -51,13 +51,13 @@ if (value<0) {
     {$TranslateApiMessage($validity.message)}
   </span>
 {/if}
+
 <style>
- 
- :global(input[type="number"])::-webkit-inner-spin-button,
- :global(input[type="number"])::-webkit-outer-spin-button {
-    -webkit-appearance: none;
+  :global(input[type="number"])::-webkit-inner-spin-button,
+  :global(input[type="number"])::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
     margin: 0;
   }
-
 </style>
-
