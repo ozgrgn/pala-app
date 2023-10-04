@@ -10,8 +10,7 @@
   import { useParams } from "svelte-navigator";
   import Input from "$components/Form/Input.svelte";
   const params = useParams();
-
-  console.log($salesItems, "salesItems");
+let tempSearch
 
   const deleteItemApprove = (index) => {
     $salesItems.splice(index, 1);
@@ -54,7 +53,6 @@
       }
     }
 
-    console.log(getCustomersByUserIdResponse, "getCustomersByUserIdResponse");
   };
 
   getCustomersByUserId();
@@ -88,19 +86,28 @@
       loading=true
     }
 
-    console.log(approveResponse, "approve response");
+  };
+$: if(tempSearch) {
+  search.set(null)
+}
+const onKeyPress = e => {
+    if (e.charCode === 13) {
+    console.log("enter")
+    search.set(tempSearch);}
   };
 </script>
-
+<svelte:window  on:keypress={onKeyPress}/>
 <div class=" flex flex-col gap-4">
   <div class="border p-4">
     <div class="relative">
       <Input
-        bind:value={$search}
+        bind:value={tempSearch}
         placeholder={"Ürün Arama"}
         customClass="pl-10"
       />
       <div class="absolute top-2 left-2"><i class="bi bi-search" /></div>
+      <div class="absolute top-0 right-2 flex items-center justify-center"><button  on:click={()=>{search.set(tempSearch)}}  class="bg-[#17a34a] text-white text-sm px-2 mt-[0.4rem] h-6 rounded">Ara</button></div>
+
     </div>
   </div>
   <div class="border p-4">

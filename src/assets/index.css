@@ -1,9 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
-
 
 @tailwind base;
 @tailwind components;
@@ -13,10 +11,10 @@
   --primary: #064663;
   --secondary: #08597f;
 
-  --font-family: 'Open Sans', sans-serif;
-  --font-family2: 'Source Sans Pro', sans-serif;
-  --font-family3: 'Roboto', sans-serif;
-
+  --font-family: "Open Sans", sans-serif;
+  --font-family2: "Source Sans Pro", sans-serif;
+  --font-family3: "Roboto", sans-serif;
+  --font-family4: "Roboto+Condensed", sans-serif;
 }
 
 blockquote,
@@ -40,7 +38,6 @@ body {
 }
 p {
   font-family: var(--font-familsy);
-
 }
 a {
   cursor: pointer;
@@ -49,9 +46,18 @@ a {
 hr {
   border-top-width: 0px;
 }
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h6 {
   font-family: var(--font-family3);
 }
+
+h5 {
+  font-family: var(--font-family4);
+}
+
 /* swiper */
 .swiper-slide-visible {
   margin-right: unset !important;
@@ -68,7 +74,11 @@ h1,h2,h3,h4,h5,h6 {
   justify-content: center;
 }
 
-    @media print {
-        .not-printable { display: none; }
+@media print {
+  .not-printable {
+    display: none;
+  }
+  @media print {
+    body {-webkit-print-color-adjust: exact;}
     }
-
+}

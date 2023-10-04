@@ -21,7 +21,7 @@
   let street = {};
   let companyId;
   let sent;
-  let userId
+  let userId;
   let editedPhone;
   let editedMobile;
   let processing;
@@ -29,40 +29,39 @@
   let emailFromInputIsValid;
   let passwordIsValid;
 
-  
   const companyRegister = async () => {
-if(!country.value) {
-  ToastService.error(
-        "Lütfen Ülke Girin"
-      );
-      return
-}
-      let data = {};
-      (data.user = userId),
+
+    let data = {};
+    (data.user = userId),
       (data.name = companyName.value),
-        (data.country = country.value),
-        (data.street = street.value),
-        (data.post = post.value),
-        (data.city = city.value),
-        (data.phone = phone.value);
-      let customerResponse = await RestService.addCustomer(data);
-      if (customerResponse && customerResponse.status) {
- 
-        ToastService.success(
+      (data.country = country.value),
+      (data.street = street.value),
+      (data.post = post.value),
+      (data.city = city.value),
+      (data.phone = phone.value);
+    let customerResponse = await RestService.addCustomer(data);
+    if (customerResponse && customerResponse.status) {
+      ToastService.success(
         "Kayıt Başarılı. Onay işleminden sonra bilgilendirileceksiniz"
       );
       sent = true;
       processing = false;
-      } else {
-        processing = false;
-        ToastService.error($TranslateApiMessage(customerResponse.message));
-      }
-    };
+    } else {
+      processing = false;
+      ToastService.error($TranslateApiMessage(customerResponse.message));
+    }
+  };
 
   const register = async () => {
+    if (!country.value) {
+      ToastService.error("Lütfen Ülke Girin");
+      return;
+    }
+    if (!companyName.value) {
+      ToastService.error("Lütfen Firma İsmi Girin");
+      return;
+    }
     processing = true;
-
-    
 
     let registerResponse = await RestService.signup(
       companyId,
@@ -73,16 +72,14 @@ if(!country.value) {
       password.value
     );
     if (registerResponse && registerResponse.status) {
-      userId=registerResponse.userId
+      userId = registerResponse.userId;
       if (userId) {
-        companyRegister()
+        companyRegister();
       }
-
     } else {
       processing = false;
       ToastService.error($TranslateApiMessage(registerResponse.message));
     }
-
   };
 
   // function handleKeydown(event) {
@@ -93,27 +90,27 @@ if(!country.value) {
   // }
 </script>
 
-<div class="container mx-auto ">
+<div class="container mx-auto">
   <div class="lg:flex gap-6">
     {#if !sent}
       <div class="w-full">
         <h1 class="text-2xl font-bold py-4">YENİ BAYİ KAYDI</h1>
         <div
-          class="grid lg:grid-cols-2 content-center items-start justify-center h-full  border"
+          class="grid lg:grid-cols-2 content-center items-start justify-center h-full border"
         >
           <div class="w-full px-4">
             <div
-              class="relative flex flex-col min-w-0 break-words w-full  rounded-lg bg-blueGray-200 border-0"
+              class="relative flex flex-col min-w-0 break-words w-full rounded-lg bg-blueGray-200 border-0"
             >
               <div class="flex-auto px-4 lg:px-10 pt-0">
                 <h3 class="font-bold text-black/80 text-md">
                   KULLANICI BİLGİLERİ
                 </h3>
               </div>
-              <div class="flex-auto px-4 lg:px-10 pt-10 ">
+              <div class="flex-auto px-4 lg:px-10 pt-10">
                 <div class="relative w-full mb-3">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-email"
                   >
                     İsim
@@ -131,7 +128,7 @@ if(!country.value) {
 
                 <div class="relative w-full mb-3">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-password"
                   >
                     Soyisim
@@ -148,7 +145,7 @@ if(!country.value) {
                 </div>
                 <div class="relative w-full mb-3">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-password"
                   >
                     Mobil Telefon
@@ -165,7 +162,7 @@ if(!country.value) {
                 </div>
                 <div class="relative w-full mb-3">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-password"
                   >
                     E-posta
@@ -185,7 +182,7 @@ if(!country.value) {
 
                 <div class="relative w-full mb-3">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-password"
                   >
                     Şifre
@@ -206,15 +203,15 @@ if(!country.value) {
           </div>
           <div class="w-full px-4">
             <div
-              class="relative flex flex-col min-w-0 break-words w-full  rounded-lg bg-blueGray-200 border-0"
+              class="relative flex flex-col min-w-0 break-words w-full rounded-lg bg-blueGray-200 border-0"
             >
               <div class="flex-auto px-4 lg:px-10 pt-0">
                 <h3 class="font-bold text-black/80 text-md">FİRMA BİLGİLERİ</h3>
               </div>
-              <div class="flex-auto px-4 lg:px-10 pt-10 ">
+              <div class="flex-auto px-4 lg:px-10 pt-10">
                 <div class="relative w-full mb-3">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-email"
                   >
                     Firma İsmi
@@ -231,7 +228,7 @@ if(!country.value) {
                 </div>
                 <div class="relative w-full mb-3">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-password"
                   >
                     Firma Telefon
@@ -249,7 +246,7 @@ if(!country.value) {
                 <div class="flex gap-4 relative w-full mb-3">
                   <div class="w-1/2 country-select">
                     <label
-                      class="block  text-blueGray-600 text-xs font-bold mb-2"
+                      class="block text-blueGray-600 text-xs font-bold mb-2"
                       for="grid-password"
                     >
                       Ülke
@@ -266,7 +263,7 @@ if(!country.value) {
                   </div>
                   <div class="w-1/2">
                     <label
-                      class="block  text-blueGray-600 text-xs font-bold mb-2"
+                      class="block text-blueGray-600 text-xs font-bold mb-2"
                       for="grid-password"
                     >
                       Şehir
@@ -284,7 +281,7 @@ if(!country.value) {
                 </div>
                 <div class="relative w-full mb-3">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-password"
                   >
                     Posta Kodu
@@ -322,7 +319,7 @@ if(!country.value) {
                 <div class="flex justify-start w-full mt-6">
                   <button
                     on:click|preventDefault={register}
-                    class="disabled:bg-blueGray-400 bg-red-500 text-white active:bg-blueGray-600 text-sm font-bold  px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none  mb-1 w-fit "
+                    class="disabled:bg-blueGray-400 bg-red-500 text-white active:bg-blueGray-600 text-sm font-bold px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mb-1 w-fit"
                     type="button"
                   >
                     KAYIT OL
@@ -335,10 +332,10 @@ if(!country.value) {
       </div>
     {:else}
       <div
-        class="container text-center items-center  h-screen mx-auto flex flex-col justify-center"
+        class="container text-center items-center h-screen mx-auto flex flex-col justify-center"
       >
         <img
-          class="h-28 w-fit py-4 "
+          class="h-28 w-fit py-4"
           src="/assets/img/logos/logo-light.png"
           alt=""
         />

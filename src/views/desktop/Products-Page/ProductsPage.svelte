@@ -12,7 +12,7 @@
   import ProductsSide from "../ProductsSide.svelte";
   import Select from "$components/Form/Select.svelte";
   const params = useParams();
-  let products;
+  let products=[];
   let customerId;
   let customers;
   let limit = 12;
@@ -37,6 +37,7 @@
       search,
       campaign
     );
+    products=[]
     products = response["products"];
     totalDataCount = response["count"];
   };
@@ -92,10 +93,10 @@
   </div>
   <div class="col-span-3">
     <div class=" grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {#if products}
+      {#if products && products[0]}
         {#each products as product}
           <div class="px-4 md:px-0">
-            <Card {product} />
+            <Card bind:product />
           </div>
         {/each}
       {/if}

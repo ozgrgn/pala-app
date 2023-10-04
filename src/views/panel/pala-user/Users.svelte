@@ -7,6 +7,7 @@
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
   import { modal } from "$services/store";
+  import Input from "$components/Form/Input.svelte";
 
   const deleteUserApprove = (userId) => {
     modal.set(
@@ -28,17 +29,17 @@
   let totalDataCount = 0;
   let isActive;
   let customers;
-
-  const getUsers = async (isActive) => {
+let search;
+  const getUsers = async (search) => {
     console.log(isActive, "getusers active");
-    let response = await RestService.getUsers(limit, skip, isActive);
+    let response = await RestService.getUsers(limit, skip, isActive,search);
 
     users = response["users"];
     console.log(users, "users");
     totalDataCount = response["count"];
   };
-  getUsers();
-  const getCustomers = async (search) => {
+ $: getUsers(search);
+  const getCustomers = async () => {
     let response = await RestService.getCustomers(
       undefined,
       undefined,
@@ -100,9 +101,22 @@
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="flex flex-wrap items-center">
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
+            <div class="flex justify-between">
+
             <h3 class="font-semibold text-lg text-blueGray-700">
               Kullanıcılar
             </h3>
+            <div class="relative">
+              <Input
+                bind:value={search}
+                placeholder={"Kullanıcı/Email Arama"}
+                customClass="pl-10 border-2"
+              />
+              <div class="absolute top-2 left-2">
+                <i class="bi bi-search" />
+              </div>
+            </div>
+            </div>
           </div>
         </div>
       </div>

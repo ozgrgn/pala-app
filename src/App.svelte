@@ -9,6 +9,9 @@
   import Register from "./views/auth/Register.svelte";
   import DesktopRoutes from "./views/desktop/Route.svelte";
   import AdminRoute from "./views/panel/Route.svelte";
+  import CatalogIndex from "./views/pala-catalog/CatalogIndex.svelte";
+  import Test from "./views/pala-catalog/test.svelte";
+  import CatalogPdf from "./views/pala-catalog/CatalogPdf.svelte";
 
   lang.set("tr");
 
@@ -28,4 +31,9 @@
   <Route path="register" component={Register} />
   <Route path="panel/*" component={AdminRoute} />
   <Route path="store/*" component={DesktopRoutes} />
+  <Route path="catalog" component={CatalogIndex} />
+  <Route path="catalog/pdf" component={CatalogPdf} />
+
+  <Route path="test/*" component={Test} />
+
 </Router>

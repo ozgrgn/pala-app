@@ -2,6 +2,7 @@
   import Alert from "$components/Alert.svelte";
   import ImageArray from "$components/Form/ImageArray.svelte";
   import Input from "$components/Form/Input.svelte";
+  import NumberInput from "$components/Form/NumberInput.svelte";
   import Select from "$components/Form/Select.svelte";
   import Textarea from "$components/Form/Textarea.svelte";
   import TextEditor from "$components/Form/TextEditor.svelte";
@@ -37,6 +38,7 @@
     { key: "note", customValue: null },
     { key: "isActive", customValue: null },
     { key: "images", customValue: null },
+    { key: "order", customValue: null },
   ];
 
   const updateCat = async () => {
@@ -66,7 +68,7 @@
           response["cat"][v.key] = {
             value: response["cat"][v.key][v.customValue],
           };
-        } else if (v.key!="images") {
+        } else if (v.key != "images") {
           response["cat"][v.key] = { value: response["cat"][v.key] };
         }
       });
@@ -92,10 +94,10 @@
 </script>
 
 <div class="flex flex-wrap mt-4 h-screen relative">
-  <div class="w-full mb-12 px-2 lg:px-4 ">
+  <div class="w-full mb-12 px-2 lg:px-4">
     <div class="flex justify-between">
       <button
-        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
+        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
         type="button"
         on:click={() => {
           navigate("/panel/cats");
@@ -106,7 +108,7 @@
       </button>
 
       <button
-        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
+        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
         type="button"
         on:click={() => deleteCatApprove($params.catId)}
       >
@@ -131,7 +133,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Kategori İsmi
@@ -144,10 +146,10 @@
                 />
               </div>
             </div>
-            <div class="w-full lg:w-7/12 px-4">
+            <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Kısa Açıklama
@@ -164,7 +166,25 @@
             <div class="w-full lg:w-2/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
+                  for="rectangleBanner"
+                >
+                 Katalog Sırası
+                </label>
+
+                <NumberInput
+                  bind:value={cat.order.value}
+                  bind:isValid={cat.order.isValid}
+                  placeholder={"Sıra"}
+                  required={true}
+                />
+              </div>
+            </div>
+
+            <div class="w-full lg:w-1/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="rectangleBanner"
                 >
                   Aktif mi ?
@@ -173,14 +193,14 @@
                 <Switch bind:value={cat.isActive.value} />
               </div>
             </div>
-            <div class="lg:w-6/12 px-4 ">
+            <div class="lg:w-6/12 px-4">
               <div class="">
                 <label
-                class="block  text-blueGray-600 text-xs font-bold"
-                for="grid-name"
-              >
-              Resim
-              </label>
+                  class="block text-blueGray-600 text-xs font-bold"
+                  for="grid-name"
+                >
+                  Resim
+                </label>
                 {#each cat.images as Image, index}
                   <div class="border mt-2 p-1 grid grid-flow-col">
                     <span
@@ -190,7 +210,7 @@
                     <div class="col-span-2">
                       <ImageArray bind:value={Image.image} />
                     </div>
-                    <div class="flex justify-end ">               
+                    <div class="flex justify-end">
                       <button
                         on:click={() => deleteImage(index)}
                         class="w-14 bg-red-500 hover:bg-red-600 text-white font-bold text-xs my-2 ml-4 px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
@@ -216,8 +236,8 @@
             <div class="w-full lg:w-12/12 px-4 text-right mt-5">
               <button
                 on:click={() => updateCat()}
-                disabled={!cat.name.isValid}
-                class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+                disabled={!cat.name.isValid || !cat.order.isValid}
+                class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1"
                 type="button"
               >
                 {$Translate("Update")}

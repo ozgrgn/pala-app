@@ -126,7 +126,6 @@
     }
   };
 </script>
-
 <div class="flex flex-wrap mt-4 h-screen relative">
   <div class="w-full mb-12 px-2 lg:px-4 ">
     <div class="flex justify-between">
@@ -233,11 +232,11 @@
                 >
                   Kullanıcı Seçin
                 </label>
-                {#if users}
+                {#if users && customer}
                   <Select
                     bind:value={customer.user.value}
                     values={users}
-                    title={"Kullanıcılar"}
+                    title={"Kullanıcı"}
                     valuesKey={"_id"}
                     valuesTitleKey={"fullName"}
                     customClass={"w-full focus:ring-0 ring-0 "}

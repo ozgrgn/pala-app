@@ -14,7 +14,6 @@
   import UpdateAdmin from "./admin/UpdateAdmin.svelte";
   import { panelDrawer } from "$services/store";
 
-
   import RestService from "$services/rest";
   import { onDestroy, onMount } from "svelte";
   import Modal from "svelte-simple-modal";
@@ -45,10 +44,13 @@
   import UpdateUser from "./pala-user/UpdateUser.svelte";
   import Users from "./pala-user/Users.svelte";
 
-
   import { admin } from "$services/store";
   import { navigate, useLocation } from "svelte-navigator";
   import Sidebar from "./Sidebar.svelte";
+  import Catalog from "../pala-catalog/Catalog.svelte";
+  import CatalogImages from "./pala-catalogImage/CatalogImages.svelte";
+  import CreateCatalogImage from "./pala-catalogImage/CreateCatalogImage.svelte";
+  import UpdateCatalogImage from "./pala-catalogImage/UpdateCatalogImage.svelte";
 
   const location = useLocation();
   let adminAuthSubscription;
@@ -108,7 +110,6 @@
   <!-- <Sidebar /> -->
 
   <div class="relative bg-blueGray-100">
- 
     <Sidebar />
     <div
       class="
@@ -116,94 +117,103 @@
       {$panelDrawer ? 'ml-[18rem]' : ''}
        transition-all flex flex-col"
     >
+      <div class="relative bg-[#6e6e85] md:pt-32 pb-32 pt-12" />
+
+      <div class="px-2 mx-auto w-full -m-24">
+        <AdminNavbar />
+        <Router>
+          <!-- Dashboard -->
+          <Route path="dashboard" component={Dashboard} />
+          <Route path="" component={Dashboard} />
+
+          <!-- Category -->
+          <Route path="update-cat/:catId" component={UpdateCat} />
+
+          <Route path="create-cat" component={CreateCat} />
+
+          <Route path="cats" component={Cats} />
+
+          <!-- Brand -->
+          <Route path="update-brand/:brandId" component={UpdateBrand} />
+
+          <Route path="create-brand" component={CreateBrand} />
+
+          <Route path="brands" component={Brands} />
+          <!-- Membership -->
+          <Route
+            path="update-membership/:membershipId"
+            component={UpdateMembership}
+          />
+
+          <Route path="create-membership" component={CreateMembership} />
+
+          <Route path="memberships" component={Memberships} />
+          <!-- products -->
+          <Route path="update-product/:productId" component={UpdateProduct} />
+
+          <Route path="create-product" component={CreateProduct} />
+
+          <Route path="products" component={Products} />
+
+          <!-- Unit -->
+          <Route path="update-unit/:unitId" component={UpdateUnit} />
+
+          <Route path="create-unit" component={CreateUnit} />
+
+          <Route path="units" component={Units} />
+
+          <!-- Customer -->
+          <Route
+            path="update-customer/:customerId"
+            component={UpdateCustomer}
+          />
+
+          <Route path="create-customer" component={CreateCustomer} />
+
+          <Route path="customers" component={Customers} />
+          <!-- Transaction -->
+          <Route
+            path="update-transaction/:transactionId"
+            component={UpdateTransaction}
+          />
+
+          <Route path="create-transaction" component={CreateTransaction} />
+
+          <Route path="transactions" component={Transactions} />
+
+          <!-- Admin -->
+          <Route path="update-admin/:adminId" component={UpdateAdmin} />
+
+          <Route path="create-admin" component={CreateAdmin} />
+
+          <Route path="admins" component={Admins} />
+
+          <!-- Admin -->
+          <Route path="update-user/:userId" component={UpdateUser} />
+
+          <Route path="create-user" component={CreateUser} />
+
+          <Route path="users" component={Users} />
+
+          <!-- Slider -->
+          <Route path="update-slider/:sliderId" component={UpdateSlider} />
+
+          <Route path="create-slider" component={CreateSlider} />
+
+          <Route path="sliders" component={Sliders} />
+
+          <!-- Catalog Image -->
+           <!-- Slider -->
+           <Route path="update-catalogImage/:catalogImageId" component={UpdateCatalogImage} />
+
+           <Route path="create-catalogImage" component={CreateCatalogImage} />
  
-    <div class="relative bg-[#6e6e85] md:pt-32 pb-32 pt-12" />
+           <Route path="catalogImages" component={CatalogImages} />
+ 
+        </Router>
 
-    <div class="px-2 mx-auto w-full -m-24">
-      <AdminNavbar />
-      <Router>
-        <!-- Dashboard -->
-        <Route path="dashboard" component={Dashboard} />
-        <Route path="" component={Dashboard} />
-
-        <!-- Category -->
-        <Route path="update-cat/:catId" component={UpdateCat} />
-
-        <Route path="create-cat" component={CreateCat} />
-
-        <Route path="cats" component={Cats} />
-
-        <!-- Brand -->
-        <Route path="update-brand/:brandId" component={UpdateBrand} />
-
-        <Route path="create-brand" component={CreateBrand} />
-
-        <Route path="brands" component={Brands} />
-        <!-- Membership -->
-        <Route
-          path="update-membership/:membershipId"
-          component={UpdateMembership}
-        />
-
-        <Route path="create-membership" component={CreateMembership} />
-
-        <Route path="memberships" component={Memberships} />
-        <!-- products -->
-        <Route path="update-product/:productId" component={UpdateProduct} />
-
-        <Route path="create-product" component={CreateProduct} />
-
-        <Route path="products" component={Products} />
-
-        <!-- Unit -->
-        <Route path="update-unit/:unitId" component={UpdateUnit} />
-
-        <Route path="create-unit" component={CreateUnit} />
-
-        <Route path="units" component={Units} />
-
-        <!-- Customer -->
-        <Route path="update-customer/:customerId" component={UpdateCustomer} />
-
-        <Route path="create-customer" component={CreateCustomer} />
-
-        <Route path="customers" component={Customers} />
-        <!-- Transaction -->
-        <Route
-          path="update-transaction/:transactionId"
-          component={UpdateTransaction}
-        />
-
-        <Route path="create-transaction" component={CreateTransaction} />
-
-        <Route path="transactions" component={Transactions} />
-
-        <!-- Admin -->
-        <Route path="update-admin/:adminId" component={UpdateAdmin} />
-
-        <Route path="create-admin" component={CreateAdmin} />
-
-        <Route path="admins" component={Admins} />
-
-        <!-- Admin -->
-        <Route path="update-user/:userId" component={UpdateUser} />
-
-        <Route path="create-user" component={CreateUser} />
-
-        <Route path="users" component={Users} />
-
-        <!-- Slider -->
-        <Route path="update-slider/:sliderId" component={UpdateSlider} />
-
-        <Route path="create-slider" component={CreateSlider} />
-
-        <Route path="sliders" component={Sliders} />
-
-
-      </Router>
-
-      <FooterAdmin />
+        <FooterAdmin />
+      </div>
     </div>
-  </div>
   </div>
 </div>

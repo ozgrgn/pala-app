@@ -8,12 +8,14 @@
   import ImageArray from "$components/Form/ImageArray.svelte";
   import Textarea from "$components/Form/Textarea.svelte";
   import Switch from "$components/Switch.svelte";
+  import NumberInput from "$components/Form/NumberInput.svelte";
 
   let values = [
     { key: "name", customValue: null },
     { key: "note", customValue: null },
     { key: "isActive", customValue: null },
     { key: "images", customValue: null },
+    { key: "order", customValue: null },
 
   ];
 
@@ -90,7 +92,7 @@
               />
             </div>
           </div>
-          <div class="w-full lg:w-7/12 px-4">
+          <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"
@@ -107,7 +109,24 @@
             </div>
           </div>
       
-          <div class="w-full lg:w-2/12 px-4">
+            <div class="w-full lg:w-2/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
+                  for="rectangleBanner"
+                >
+                 Katalog Sırası
+                </label>
+
+                <NumberInput
+                  bind:value={cat.order.value}
+                  bind:isValid={cat.order.isValid}
+                  placeholder={"Sıra"}
+                  required={true}
+                />
+              </div>
+            </div>
+          <div class="w-full lg:w-1/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block  text-blueGray-600 text-xs font-bold mb-2"

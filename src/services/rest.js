@@ -10,17 +10,19 @@ const userVerifyToken = () => {
   return Http.post(`${ENV.API_URL}/user/verifyToken`, {}, "user");
 };
 const getMe = () => {
-  return Http.get(`${ENV.API_URL}/user/me/me`, {  }, "user");
+  return Http.get(`${ENV.API_URL}/user/me/me`, {}, "user");
 };
-
-
 
 const uploadImage = (file) => {
   const formData = new FormData();
 
   formData.append("file", file);
 
-  return Http.postFormData(`${ENV.API_URL}/services/file-upload`, formData, "admin");
+  return Http.postFormData(
+    `${ENV.API_URL}/services/file-upload`,
+    formData,
+    "admin"
+  );
 };
 
 // Cats
@@ -42,9 +44,13 @@ const addCat = (data) => {
 };
 
 const updateCat = (catId, data) => {
-  return Http.put(`${ENV.API_URL}/cat/${catId}`, {
-    cat: data,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/cat/${catId}`,
+    {
+      cat: data,
+    },
+    "admin"
+  );
 };
 
 const getCat = (catId) => {
@@ -54,8 +60,6 @@ const getCat = (catId) => {
 const deleteCat = (catId) => {
   return Http.delete(`${ENV.API_URL}/cat/${catId}`, {}, "admin");
 };
-
-
 
 // Brands
 const getBrands = (limit, skip, isActive) => {
@@ -76,9 +80,13 @@ const addBrand = (data) => {
 };
 
 const updateBrand = (brandId, data) => {
-  return Http.put(`${ENV.API_URL}/brand/${brandId}`, {
-    brand: data,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/brand/${brandId}`,
+    {
+      brand: data,
+    },
+    "admin"
+  );
 };
 
 const getBrand = (brandId) => {
@@ -87,6 +95,84 @@ const getBrand = (brandId) => {
 
 const deleteBrand = (brandId) => {
   return Http.delete(`${ENV.API_URL}/brand/${brandId}`, {}, "admin");
+};
+// CatalogPages
+const getCatalogPages = (limit, skip, isActive, category) => {
+  let data = {};
+  if (limit) {
+    data.limit = limit;
+  }
+  if (skip) {
+    data.skip = skip;
+  }
+  if (isActive) {
+    data.isActive = isActive;
+  }
+  if (category) {
+    data.category = category;
+  }
+  return Http.get(`${ENV.API_URL}/catalogPage`, { ...data });
+};
+const addCatalogPage = (data) => {
+  return Http.post(`${ENV.API_URL}/catalogPage`, data, "admin");
+};
+
+const updateCatalogPage = (catalogPageId, data) => {
+  console.log(catalogPageId, data);
+  return Http.put(
+    `${ENV.API_URL}/catalogPage/${catalogPageId}`,
+    {
+      catalogPage: data,
+    },
+    "admin"
+  );
+};
+
+const getCatalogPage = (catalogPageId) => {
+  return Http.get(`${ENV.API_URL}/catalogPage/${catalogPageId}`, {}, "admin");
+};
+
+const deleteCatalogPage = (catalogPageId) => {
+  return Http.delete(
+    `${ENV.API_URL}/catalogPage/${catalogPageId}`,
+    {},
+    "admin"
+  );
+};
+// CatalogImages
+const getCatalogImages = (limit, skip, isActive) => {
+  let data = {};
+  if (limit) {
+    data.limit = limit;
+  }
+  if (skip) {
+    data.skip = skip;
+  }
+  if (isActive) {
+    data.isActive = isActive;
+  }
+  return Http.get(`${ENV.API_URL}/catalogImage`, { ...data });
+};
+const addCatalogImage = (data) => {
+  return Http.post(`${ENV.API_URL}/catalogImage`, data, "admin");
+};
+
+const updateCatalogImage = (catalogImageId, data) => {
+  return Http.put(
+    `${ENV.API_URL}/catalogImage/${catalogImageId}`,
+    {
+      catalogImage: data,
+    },
+    "admin"
+  );
+};
+
+const getCatalogImage = (catalogImageId) => {
+  return Http.get(`${ENV.API_URL}/catalogImage/${catalogImageId}`, {}, "admin");
+};
+
+const deleteCatalogImage = (catalogImageId) => {
+  return Http.delete(`${ENV.API_URL}/catalogImage/${catalogImageId}`, {}, "admin");
 };
 
 // Memberships
@@ -108,9 +194,13 @@ const addMembership = (data) => {
 };
 
 const updateMembership = (membershipId, data) => {
-  return Http.put(`${ENV.API_URL}/membership/${membershipId}`, {
-    membership: data,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/membership/${membershipId}`,
+    {
+      membership: data,
+    },
+    "admin"
+  );
 };
 
 const getMembership = (membershipId) => {
@@ -138,9 +228,13 @@ const addUnit = (data) => {
 };
 
 const updateUnit = (unitId, data) => {
-  return Http.put(`${ENV.API_URL}/unit/${unitId}`, {
-    unit: data,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/unit/${unitId}`,
+    {
+      unit: data,
+    },
+    "admin"
+  );
 };
 
 const getUnit = (unitId) => {
@@ -150,7 +244,6 @@ const getUnit = (unitId) => {
 const deleteUnit = (unitId) => {
   return Http.delete(`${ENV.API_URL}/unit/${unitId}`, {}, "admin");
 };
-
 
 // Products
 const getProducts = (limit, skip, isActive, cat, brand, search, campaign) => {
@@ -184,9 +277,13 @@ const addProduct = (data) => {
 };
 
 const updateProduct = (productId, data) => {
-  return Http.put(`${ENV.API_URL}/product/${productId}`, {
-    product: data,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/product/${productId}`,
+    {
+      product: data,
+    },
+    "admin"
+  );
 };
 
 const getProductById = (productId) => {
@@ -200,9 +297,13 @@ const deleteProduct = (productId) => {
   return Http.delete(`${ENV.API_URL}/product/${productId}`, {}, "admin");
 };
 const setCampaign = (productId, campaign) => {
-  return Http.put(`${ENV.API_URL}/product/setCampaign/${productId}`, {
-    campaign: campaign,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/product/setCampaign/${productId}`,
+    {
+      campaign: campaign,
+    },
+    "admin"
+  );
 };
 // Customers
 const getCustomers = (limit, skip, isActive, search) => {
@@ -231,9 +332,13 @@ const addCustomer = (data) => {
 };
 
 const updateCustomer = (customerId, data) => {
-  return Http.put(`${ENV.API_URL}/customer/${customerId}`, {
-    customer: data,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/customer/${customerId}`,
+    {
+      customer: data,
+    },
+    "admin"
+  );
 };
 
 const getCustomer = (customerId) => {
@@ -265,9 +370,13 @@ const addTransactionByUser = (data) => {
 };
 
 const updateTransaction = (transactionId, data) => {
-  return Http.put(`${ENV.API_URL}/transaction/${transactionId}`, {
-    transaction: data,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/transaction/${transactionId}`,
+    {
+      transaction: data,
+    },
+    "admin"
+  );
 };
 
 const getTransaction = (transactionId) => {
@@ -275,14 +384,18 @@ const getTransaction = (transactionId) => {
 };
 
 const deleteTransaction = (transactionId) => {
-  return Http.delete(`${ENV.API_URL}/transaction/${transactionId}`, {}, "admin");
+  return Http.delete(
+    `${ENV.API_URL}/transaction/${transactionId}`,
+    {},
+    "admin"
+  );
 };
 
 const getTransactionsByUserId = () => {
   return Http.get(`${ENV.API_URL}/transaction/user/byUserId`, {}, "user");
 };
 //USER
-const signup = (customer, name, surname, email, phone, password,) => {
+const signup = (customer, name, surname, email, phone, password) => {
   let fullName = name + " " + surname;
   return Http.post(`${ENV.API_URL}/user/signup`, {
     customer,
@@ -292,7 +405,6 @@ const signup = (customer, name, surname, email, phone, password,) => {
     password,
   });
 };
-
 
 const changePassword = (oldPassword, newPassword) => {
   return Http.post(`${ENV.API_URL}/user/change-password`, {
@@ -307,8 +419,8 @@ const resetPasswordRequestWithEmail = (email) => {
 };
 
 // Users
-const getUsers = (limit, skip, isActive) => {
-   console.log(isActive,"rest")
+const getUsers = (limit, skip, isActive,search) => {
+  console.log(isActive, "rest");
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -316,10 +428,12 @@ const getUsers = (limit, skip, isActive) => {
   if (skip) {
     data.skip = skip;
   }
-  if (isActive!=undefined) {
+  if (isActive != undefined) {
     data.isActive = isActive;
   }
-
+  if (search) {
+    data.search = search;
+  }
   return Http.get(`${ENV.API_URL}/user`, { ...data }, "admin");
 };
 const addUser = (data) => {
@@ -327,9 +441,13 @@ const addUser = (data) => {
 };
 
 const updateUser = (userId, data) => {
-  return Http.patch(`${ENV.API_URL}/user/${userId}`, {
-    user: data,
-  }, "admin");
+  return Http.patch(
+    `${ENV.API_URL}/user/${userId}`,
+    {
+      user: data,
+    },
+    "admin"
+  );
 };
 
 const getUser = (userId) => {
@@ -339,15 +457,6 @@ const getUser = (userId) => {
 const deleteUser = (userId) => {
   return Http.delete(`${ENV.API_URL}/user/${userId}`, {}, "admin");
 };
-
-
-
-
-
-
-
-
-
 
 // Sliders
 const getSliders = (limit, skip, lang) => {
@@ -368,9 +477,13 @@ const addSlider = (data) => {
 };
 
 const updateSlider = (sliderId, data) => {
-  return Http.put(`${ENV.API_URL}/slider/${sliderId}`, {
-    slider: data,
-  }, "admin");
+  return Http.put(
+    `${ENV.API_URL}/slider/${sliderId}`,
+    {
+      slider: data,
+    },
+    "admin"
+  );
 };
 
 const getSlider = (sliderId) => {
@@ -380,7 +493,6 @@ const getSlider = (sliderId) => {
 const deleteSlider = (sliderId) => {
   return Http.delete(`${ENV.API_URL}/slider/${sliderId}`, {}, "admin");
 };
-
 
 // Admins
 const getPermissions = () => {
@@ -397,7 +509,6 @@ const getAdmins = (limit, skip, customQuery = {}) => {
   }
   return Http.get(`${ENV.API_URL}/admin`, { ...data });
 };
-
 
 const getAdmin = (adminId) => {
   return Http.get(`${ENV.API_URL}/admin/${adminId}`);
@@ -437,7 +548,6 @@ const verifyToken = () => {
 };
 
 export default {
-
   uploadImage,
   //User
   login,
@@ -462,6 +572,19 @@ export default {
   updateBrand,
   deleteBrand,
 
+  //CatalogPages
+  getCatalogPages,
+  getCatalogPage,
+  addCatalogPage,
+  updateCatalogPage,
+  deleteCatalogPage,
+
+    //CatalogImages
+    getCatalogImages,
+    getCatalogImage,
+    addCatalogImage,
+    updateCatalogImage,
+    deleteCatalogImage,
   //Memberships
   getMemberships,
   getMembership,
@@ -505,10 +628,6 @@ export default {
   deleteTransaction,
   getTransactionsByUserId,
 
-
-
-
-
   //admin
   verifyToken,
   getPermissions,
@@ -527,6 +646,4 @@ export default {
   addSlider,
   updateSlider,
   deleteSlider,
-
-
 };

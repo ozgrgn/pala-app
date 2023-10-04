@@ -72,9 +72,9 @@
   class="container px-2 md:px-0 mx-auto h-20 border-b flex flex-col justify-center"
 >
   <div class="flex justify-between">
-    <a href="/" class="z-10">
+    <div class="z-10">
       <img class="" src="/assets/img/logos/logo-light.png" alt="" />
-    </a>
+    </div>
     <div class="flex justify-center self-center w-full">
    
  

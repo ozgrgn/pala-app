@@ -8,13 +8,13 @@
   import Alert from "$components/Alert.svelte";
   import { modal } from "$services/store";
 
-  const deleteCatApprove = (catId) => {
+  const deleteCatalogImageApprove = (catalogImageId) => {
     modal.set(
       bind(Alert, {
         message: "Bu işlemi onaylıyor musunuz ?",
         answer: (message) => {
           if (message) {
-            deleteCat(catId);
+            deleteCatalogImage(catalogImageId);
           }
           modal.set(null);
         },
@@ -22,23 +22,24 @@
     );
   };
 
-  let cats;
+  let catalogImages;
   let limit = 20;
   let skip = 0;
   let totalDataCount = 0;
 
-  const getCats = async () => {
-    let response = await RestService.getCats(limit, skip);
-    cats = response["cats"];
+  const getCatalogImages = async () => {
+    let response = await RestService.getCatalogImages(limit, skip);
+    catalogImages = response["catalogImages"];
     totalDataCount = response["count"];
+    console.log(catalogImages,"catalogImages")
   };
-  getCats();
+  getCatalogImages();
 
-  const deleteCat = async (catId) => {
-    let response = await RestService.deleteCat(catId);
+  const deleteCatalogImage = async (catalogImageId) => {
+    let response = await RestService.deleteCatalogImage(catalogImageId);
     if (response["status"]) {
       ToastService.success($Translate("Successfully-deleted"));
-      getCats();
+      getCatalogImages();
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -46,7 +47,7 @@
   const ceilAndCalculate = () => {
     if (Math.ceil(skip / limit) != Math.ceil(totalDataCount / limit) - 1) {
       skip = skip + limit;
-      getCats();
+      getCatalogImages();
     }
   };
 
@@ -62,12 +63,12 @@
 </script>
 
 <div class="flex flex-wrap mt-4 h-screen relative">
-  <div class="w-full mb-12 px-2 lg:px-4">
+  <div class="w-full mb-12 px-2 lg:px-4 ">
     <button
-      class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
+      class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
       type="button"
       on:click={() => {
-        navigate("/panel/create-cat");
+        navigate("/panel/create-catalogImage");
       }}
     >
       <i class="fa fa-plus" />
@@ -85,45 +86,37 @@
         </div>
       </div>
       <div class="block w-full overflow-x-auto">
-        {#if cats}
+        {#if catalogImages}
           <table class="items-center w-full bg-transparent border-collapse">
             <thead>
               <tr>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Kategori İsmi
+                 Yer
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  Açıklama
-                </th>
-                <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  Katalog Sıra
-                </th>
-                <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
-                  'light'
-                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    : 'bg-red-700 text-red-200 border-red-600'}"
-                >
-                  Durum
-                </th>
+                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                'light'
+                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                  : 'bg-red-700 text-red-200 border-red-600'}"
+              >
+                Sıra
+              </th>
+              <th
+              class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+              'light'
+                ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                : 'bg-red-700 text-red-200 border-red-600'}"
+            >
+              Resim
+            </th>
 
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -131,50 +124,39 @@
               </tr>
             </thead>
             <tbody>
-              {#each cats as cat}
+              {#each catalogImages as catalogImage}
                 <tr>
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    {cat.name}
-                  </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    {cat.note ? cat.note : "-"}
+                    {catalogImage.place}
                   </td>
                   <td
                   class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                 >
-                  {cat.order ? cat.order : "-"}
+                {catalogImage.order?catalogImage.order:"-"}
                 </td>
-                  <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
-                  >
-                    <button
-                      class="{cat.isActive
-                        ? 'bg-green-500'
-                        : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold cursor-default"
-                    >
-                      {cat.isActive ? "Aktif" : "Pasif"}
-                    </button>
-                  </td>
+                <td
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center flex justify-center"
+              >
+              <img class="w-20" src={catalogImage.image} alt="">
+              </td>
 
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     <button
-                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                       on:click={navigate(
-                        `/panel/update-cat/${cat._id.toString()}`
+                        `/panel/update-catalogImage/${catalogImage._id.toString()}`
                       )}
                     >
                       {$Translate("Edit")}
                     </button>
                     <button
-                      on:click={() => deleteCatApprove(cat._id.toString())}
-                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+                      on:click={() => deleteCatalogImageApprove(catalogImage._id.toString())}
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
                       type="button"
                     >
                       {$Translate("Delete")}
@@ -187,16 +169,18 @@
         {/if}
       </div>
       <hr class="my-4 md:min-w-full" />
-      {#if cats}
+      {#if catalogImages}
         <div
           class="flex flex-row flex-wrap lg:flex-nowrap w-full gap-1 justify-center lg:justify-end items-center p-3"
         >
           <Select
             bind:value={limit}
             change={() => {
-              getCats();
+              getCatalogImages();
             }}
-            values={[{ limit: 20 }]}
+            values={[
+              { limit: 20 }
+            ]}
             title={"Select page"}
             valuesKey={"limit"}
             valuesTitleKey={"limit"}
@@ -204,12 +188,11 @@
           />
 
           <button
-            onclick={ceilAndCalculate}
-            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
-              getCats();
+              getCatalogImages();
             }}
           >
             {$Translate("Prev")}
@@ -218,12 +201,12 @@
             <button
               class="border {skip == limit * i
                 ? 'bg-[#6e6e85] text-white'
-                : 'bg-white text-blue-600 border-blue-600'} font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+                : 'bg-white text-blue-600 border-blue-600'} font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
               class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
               type="button"
               on:click={() => {
                 skip = limit * i;
-                getCats();
+                getCatalogImages();
               }}
             >
               {i + 1}
@@ -232,7 +215,7 @@
 
           <button
             onclick={ceilAndCalculate}
-            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
             type="button"
           >
             {$Translate("Next")}

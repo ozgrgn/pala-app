@@ -42,6 +42,8 @@ export const panelDrawer = writable(true);
 export const campaign = writable(false);
 export const activePage = writable(null);
 export const membership = writable(null);
+export const activeCatalogPage = writable(null);
+export const refreshCatalogSide= writable(false);
 
 
 let salesItemsInStorage = localStorage.getItem("salesItems")

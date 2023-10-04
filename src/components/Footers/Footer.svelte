@@ -4,7 +4,6 @@
   import { cats } from "$services/store";
   import Svg from "../../assets/svg.json";
 
-console.log($cats,"footerdaki cats")
 </script>
 
 <footer class="relative bg-dark-300" aria-labelledby="footer-heading">

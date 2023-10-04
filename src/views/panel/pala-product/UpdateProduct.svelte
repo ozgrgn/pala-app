@@ -61,8 +61,12 @@
     { key: "isActive", customValue: null },
     { key: "images", customValue: null },
     { key: "stockCount", customValue: null },
+    { key: "catalogName", customValue: null },
+    { key: "catalogDesc1", customValue: null },
+    { key: "catalogDesc2", customValue: null },
   ];
 
+ 
   const updateProduct = async () => {
     if(product.stockCount.value==null){
         product.stockCount.value=0
@@ -314,6 +318,55 @@
                 {/if}
               </div>
             </div>
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Katalog Başlık
+                </label>
+                <Input
+                  bind:value={product.catalogName.value}
+                  bind:isValid={product.catalogName.isValid}
+                  placeholder={"Ürün No"}
+                  required={true}
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Katalog Sol Açıklama Max: 20-{product.no.value.length?product.no.value.length:0}
+                </label>
+                <Input
+                  bind:value={product.catalogDesc1.value}
+                  bind:isValid={product.catalogDesc1.isValid}
+                  placeholder={"Açıklama Sol"}
+                  required={true}
+                />
+              </div>
+            </div>
+            <div class="w-full lg:w-3/12 px-4">
+              <div class="relative w-full mb-3">
+                <label
+                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  for="grid-name"
+                >
+                  Katalog Sağ Açıklama Max: 20-{product.no.value.length?product.no.value.length:0}
+                </label>
+                <Input
+                  bind:value={product.catalogDesc2.value}
+                  bind:isValid={product.catalogDesc2.isValid}
+                  placeholder={"Açıklama Sağ"}
+                  required={true}
+                />
+              </div>
+            </div>
+
             <!-- <div class="w-full lg:w-2/12 px-4">
               <div class="relative w-full mb-3 ap">
                 <label

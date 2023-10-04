@@ -35,12 +35,13 @@
       isValid = _validity.valid;
     }
   });
+  $: console.log(value, "selectteki value");
 
   onDestroy(validityUnsub);
 </script>
 
 <select
-  class="border-0 text-sm rounded shadow focus:outline-none focus:ring  {customClass}"
+  class="border-0 text-sm rounded shadow focus:outline-none focus:ring {customClass}"
   class:field-danger={!$validity.valid}
   class:field-success={$validity.valid}
   use:validate={value}
@@ -50,14 +51,14 @@
 >
   <option disabled={!all} value={null}>{title}</option>
   {#each values as _value}
-    <option value={_value[valuesKey]}>
+    <option disabled={_value[secondTitleKey]} value={_value[valuesKey]}>
       {#if valuesTitleKeySub}
         {_value[valuesTitleKey][valuesTitleKeySub]}
       {:else if isUnit && _value["number"]}
         {_value[valuesTitleKey] + " (" + _value["number"] + ")"}
       {:else}{_value[valuesTitleKey]}
-        {#if secondTitleKey}
-          - {_value[secondTitleKey]}
+        {#if secondTitleKey} {_value[secondTitleKey]?
+          `- ${_value[secondTitleKey]}`:""}
         {/if}
       {/if}
     </option>
