@@ -9,7 +9,7 @@
   import Image from "$components/Form/Image.svelte";
 
   export let products;
-export let catalogPages 
+  export let catalogPages;
   let page = {};
   page = $activeCatalogPage;
   console.log(page, "pahe");
@@ -73,7 +73,15 @@ export let catalogPages
   };
   const findProductImage = (id) => {
     if (products.find(({ _id }) => _id == id)?.images[0]?.image) {
-      return products.find(({ _id }) => _id == id).images[0].image;
+      let images = products.find(({ _id }) => _id == id).images;
+
+      let image = images.find((x) => x.order == 0)
+        ? images.find((x) => x.order == 0).image
+        : images.find((x) => x.order == 1)
+        ? images.find((x) => x.order == 1).image
+        : products.find(({ _id }) => _id == id)?.images[0]?.image;
+      console.log(image, "rrre");
+      return image;
     } else {
       return undefined;
     }
@@ -90,14 +98,14 @@ export let catalogPages
   };
 
   $: if (catalogPages && $activeCatalogPage) {
-  console.log(catalogPages,"girdii")
-  catalogPages.map((page, i) => {
-    console.log(page,"iiiii")
+    console.log(catalogPages, "girdii");
+    catalogPages.map((page, i) => {
+      console.log(page, "iiiii");
       if (page.firstOne) {
         page.firstOne.map((_page) => {
-          console.log("ddfdfds")
+          console.log("ddfdfds");
           let pIndex = products.findIndex((x) => x._id == _page._id);
-          if ( pIndex > -1) {
+          if (pIndex > -1) {
             products[pIndex].pageNumber = page.number;
           }
         });
@@ -106,7 +114,7 @@ export let catalogPages
       if (page.firstTwo) {
         page.firstTwo.map((_page) => {
           let pIndex = products.findIndex((x) => x._id == _page._id);
-          if ( pIndex > -1) {
+          if (pIndex > -1) {
             products[pIndex].pageNumber = page.number;
           }
         });
@@ -114,7 +122,7 @@ export let catalogPages
       if (page.firstDouble) {
         page.firstDouble.map((_page) => {
           let pIndex = products.findIndex((x) => x._id == _page._id);
-          if ( pIndex > -1) {
+          if (pIndex > -1) {
             products[pIndex].pageNumber = page.number;
           }
         });
@@ -122,7 +130,7 @@ export let catalogPages
       if (page.secondOne) {
         page.secondOne.map((_page) => {
           let pIndex = products.findIndex((x) => x._id == _page._id);
-          if ( pIndex > -1) {
+          if (pIndex > -1) {
             products[pIndex].pageNumber = page.number;
           }
         });
@@ -130,7 +138,7 @@ export let catalogPages
       if (page.secondTwo) {
         page.secondTwo.map((_page) => {
           let pIndex = products.findIndex((x) => x._id == _page._id);
-          if ( pIndex > -1) {
+          if (pIndex > -1) {
             products[pIndex].pageNumber = page.number;
           }
         });
@@ -138,7 +146,7 @@ export let catalogPages
       if (page.secondDouble) {
         page.secondDouble.map((_page) => {
           let pIndex = products.findIndex((x) => x._id == _page._id);
-          if ( pIndex > -1) {
+          if (pIndex > -1) {
             products[pIndex].pageNumber = page.number;
           }
         });
@@ -148,12 +156,7 @@ export let catalogPages
       //   currentProducts.push({ _id: page.firstTwo, number: page.number });
       // }
     });
-
-  
-
-
   }
-
 
   // $: if ($activeCatalogPage) {
   //   products.map((product, i) => {
@@ -257,8 +260,6 @@ export let catalogPages
   >
 </div> -->
 
-
-
 <div class="flex justify-center items-center gap-2 pt-4">
   {#if page}
     <Input
@@ -274,7 +275,7 @@ export let catalogPages
   {#if page?.type == "Full"}
     <div class="h-full w-full">
       <Image bind:value={page.image} />
-      <div class="col-span-2 grid grid-cols-6 gap-2 p-4 ">
+      <div class="col-span-2 grid grid-cols-6 gap-2 p-4">
         {#each page.firstFull as product, index}
           <div class="col-span-3 grid grid-cols-3 h-28 border items-center">
             {#if products}
@@ -297,10 +298,7 @@ export let catalogPages
                 on:click={() => deleteFirstFull(index)}
                 ><i class="text-3xl text-red-500 bi bi-trash" />
               </button>
-              <div
-                class="relative h-24"
-               
-              >
+              <div class="relative h-24">
                 {#if page.firstFull[index]}
                   <img
                     class="h-full"
@@ -321,18 +319,17 @@ export let catalogPages
           </div>
         {/each}
 
-          <div class="col-span-6 flex justify-center gap-2">
-            <button
-              on:click={() => {
-                page.firstFull = [...page.firstFull, null];
-              }}
-              class="h-8 bg-orange-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
-              type="button"
-            >
-              Ekle
-            </button>
-          </div>
-      
+        <div class="col-span-6 flex justify-center gap-2">
+          <button
+            on:click={() => {
+              page.firstFull = [...page.firstFull, null];
+            }}
+            class="h-8 bg-orange-400 disabled:bg-red-300 text-white active:bg-[#6e6e85] font-bold uppercase text-xs px-4 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+            type="button"
+          >
+            Ekle
+          </button>
+        </div>
       </div>
     </div>
   {:else}

@@ -1,12 +1,11 @@
 <script>
-  import Catalog from "./Catalog.svelte";
   import CatalogBuilder from "./CatalogBuilder.svelte";
   import RestService from "$services/rest";
   import { activeCatalogPage,refreshCatalogSide } from "$services/store";
+  import { link } from "svelte-navigator";
 
   import ToastService from "$services/toast";
   import Select from "$components/Form/Select.svelte";
-  import Input from "$components/Form/Input.svelte";
   import NumberInputV2 from "$components/Form/NumberInputV2.svelte";
   import { Modal, bind } from "svelte-simple-modal";
   import { modal } from "$services/store";
@@ -186,7 +185,7 @@
         />
         <button
           class="bg-slate-600  px-2 h-10 text-sm shadow text-white rounded cursor-pointer hover:bg-[#1db656]"
-          disabled={!newPageNumber || !newPageType}
+          disabled={(!newPageNumber && newPageNumber!=0) || !newPageType }
           on:click={() => {
             addCatalogPage({
               number: newPageNumber,
@@ -198,7 +197,13 @@
           Sayfa Ekle
         </button>
       </div>
+     
     {/if}
+    <a use:link href="/panel" class="flex justify-center w-full">
+    <button class="bg-slate-600 w-20 px-2 h-10 text-sm shadow text-white rounded cursor-pointer hover:bg-[#1db656] ">
+      Geri
+            </button>
+          </a>
   </div>
   {#if products}
     <div class="col-span-3 border h-full">

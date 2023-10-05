@@ -146,7 +146,7 @@
     <div class="flex flex-col justify-center items-center text-black">
       {#each sortedPage as page, a}
         <div
-          class="relative grid grid-cols-2 grid-rows-2 gap-8 h-[297mm] w-[210mm] p-10 pt-32 pb-20"
+          class="relative grid grid-cols-2 grid-rows-2 gap-8 h-[297mm] w-[210mm] p-10 pt-28"
         >
           <div
             class="absolute bottom-2 left-2 opacity-40 italic font-semibold text-lg"
