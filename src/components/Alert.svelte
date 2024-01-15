@@ -3,7 +3,7 @@
   export let answer = () => {};
 </script>
 
-<div class="text-center">
+<div class="text-center pt-6">
   {message}
 </div>
 

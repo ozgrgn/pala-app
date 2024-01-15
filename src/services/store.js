@@ -46,6 +46,7 @@ export const activeCatalogPage = writable(null);
 export const refreshCatalogSide= writable(false);
 
 
+
 let salesItemsInStorage = localStorage.getItem("salesItems")
 const _sales = salesItemsInStorage && salesItemsInStorage != "null"
   ? []

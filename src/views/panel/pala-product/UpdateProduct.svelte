@@ -13,6 +13,7 @@
   import { navigate, useParams } from "svelte-navigator";
   import { bind } from "svelte-simple-modal";
   import { modal } from "$services/store";
+  import { params } from "$services/utils";
 
   const deleteProductApprove = (productId) => {
     modal.set(
@@ -28,7 +29,7 @@
     );
   };
 
-  const params = useParams();
+  const editParams = useParams();
   const unitPiece = async (i) => {
     product.units[i].number = 1;
   };
@@ -66,11 +67,10 @@
     { key: "catalogDesc2", customValue: null },
   ];
 
- 
   const updateProduct = async () => {
-    if(product.stockCount.value==null){
-        product.stockCount.value=0
-      }
+    if (product.stockCount.value == null) {
+      product.stockCount.value = 0;
+    }
     let editedProduct = {};
     editedProduct.prices = product.prices;
     editedProduct.units = product.units;
@@ -84,7 +84,11 @@
     let response = await RestService.updateProduct(product._id, editedProduct);
     if (response["status"]) {
       ToastService.success($Translate("Successfully-completed"));
-      navigate("/panel/products");
+      navigate(
+        `/panel/products?limit=${params(location.search)["limit"]}&skip=${
+          params(location.search)["skip"]
+        }&isActive=${params(location.search)["isActive"]}`
+      );
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -92,10 +96,9 @@
 
   const getProduct = async () => {
     processing = true;
-    let response = await RestService.getProduct($params.productId);
+    let response = await RestService.getProduct($editParams.productId);
 
     if (response["status"]) {
- 
       console.log(response, "responseresponseresponse");
       values.map((v) => {
         if (v.customValue) {
@@ -110,8 +113,8 @@
       product = {
         ...response["product"],
       };
-      if(product.stockCount.value==0){
-        product.stockCount.value=null
+      if (product.stockCount.value == 0) {
+        product.stockCount.value = null;
       }
       getMemberships();
     } else {
@@ -142,12 +145,12 @@
         product.prices.push({ _id: membership._id, name: membership.name });
       }
 
-      product.prices.map((price,index)=>{
+      product.prices.map((price, index) => {
         const result1 = memberships.find(({ _id }) => _id == price._id);
         if (!result1) {
-        product.prices.splice(index,1);
-      }
-      })
+          product.prices.splice(index, 1);
+        }
+      });
 
       console.log(product.prices, "agaga");
     });
@@ -174,7 +177,11 @@
     let response = await RestService.deleteProduct(productId);
     if (response["status"]) {
       ToastService.success("İşlem başarılı");
-      navigate("/panel/products");
+      navigate(
+        `/panel/products?limit=${params(location.search)["limit"]}&skip=${
+          params(location.search)["skip"]
+        }&isActive=${params(location.search)["isActive"]}`
+      );
     } else {
       ToastService.success("İşlem başarılı");
     }
@@ -182,13 +189,17 @@
 </script>
 
 <div class="flex flex-wrap mt-4 h-screen relative">
-  <div class="w-full mb-12 px-2 lg:px-4 ">
+  <div class="w-full mb-12 px-2 lg:px-4">
     <div class="flex justify-between">
       <button
-        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
+        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
         type="button"
         on:click={() => {
-          navigate("/panel/products");
+          navigate(
+            `/panel/products?limit=${params(location.search)["limit"]}&skip=${
+              params(location.search)["skip"]
+            }&isActive=${params(location.search)["isActive"]}`
+          );
         }}
       >
         <i class="fa fa-arrow-left" />
@@ -196,9 +207,9 @@
       </button>
 
       <button
-        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
+        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
         type="button"
-        on:click={() => deleteProductApprove($params.productId)}
+        on:click={() => deleteProductApprove($editParams.productId)}
       >
         <i class="fa fa-trash" />
         Sil
@@ -213,7 +224,7 @@
           <h3 class="font-semibold text-lg text-blueGray-700">Ürün Güncelle</h3>
           <div class="relative mb-3 px-10">
             <label
-              class="block  text-blueGray-600 text-xs font-bold mb-2"
+              class="block text-blueGray-600 text-xs font-bold mb-2"
               for="rectangleBanner"
             >
               Aktif mi ?
@@ -230,7 +241,7 @@
             <div class="w-full lg:w-2/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Ürün No
@@ -246,7 +257,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Ürün İsmi
@@ -262,7 +273,7 @@
             <div class="w-full lg:w-1/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Sıra
@@ -278,7 +289,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Kategori
@@ -300,7 +311,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Marka
@@ -321,7 +332,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Katalog Başlık
@@ -337,10 +348,12 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
-                  Katalog Sol Açıklama Max: 20-{product.no.value.length?product.no.value.length:0}
+                  Katalog Sol Açıklama Max: 20-{product.no.value.length
+                    ? product.no.value.length
+                    : 0}
                 </label>
                 <Input
                   bind:value={product.catalogDesc1.value}
@@ -353,10 +366,12 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
-                  Katalog Sağ Açıklama Max: 20-{product.no.value.length?product.no.value.length:0}
+                  Katalog Sağ Açıklama Max: 20-{product.no.value.length
+                    ? product.no.value.length
+                    : 0}
                 </label>
                 <Input
                   bind:value={product.catalogDesc2.value}
@@ -391,7 +406,7 @@
               <div class="">
                 <div class=" ">
                   <label
-                    class="block  text-blueGray-600 text-xs font-bold mb-2"
+                    class="block text-blueGray-600 text-xs font-bold mb-2"
                     for="grid-name"
                   >
                     Fiyatlar
@@ -419,41 +434,40 @@
             <div class="lg:w-3/12 px-4 flex flex-col justify-between">
               <div class="">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Birimler
                 </label>
                 {#if product.units}
                   {#each product.units as unit, index}
-                  {#if unit._id != "63bb0c70f638ea468ffd4942"}
-
-                    <div class="border mt-2 p-1 grid grid-cols-2 ">
-                      <span
-                        class="px-2 flex flex-col justify-center text-blueGray-600 text-sm font-bold"
-                        >{unit.name} Adedi</span
-                      >
-                      <div class=" flex flex-col justify-center">
-                        <NumberInput
-                          bind:value={product.units[index].number}
-                          placeholder={"Adet Sayısı"}
-                          required={false}
-                        />
+                    {#if unit._id != "63bb0c70f638ea468ffd4942"}
+                      <div class="border mt-2 p-1 grid grid-cols-2">
+                        <span
+                          class="px-2 flex flex-col justify-center text-blueGray-600 text-sm font-bold"
+                          >{unit.name} Adedi</span
+                        >
+                        <div class=" flex flex-col justify-center">
+                          <NumberInput
+                            bind:value={product.units[index].number}
+                            placeholder={"Adet Sayısı"}
+                            required={false}
+                          />
+                        </div>
                       </div>
-                    </div>
                     {:else}
-                    <div class="hidden">
-                      {@html unitPiece(index)}
-                    </div>
+                      <div class="hidden">
+                        {@html unitPiece(index)}
+                      </div>
                     {/if}
                   {/each}
                 {/if}
               </div>
             </div>
-            <div class="lg:w-6/12 px-4 ">
+            <div class="lg:w-6/12 px-4">
               <div class="">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Resimler
@@ -467,7 +481,7 @@
                     <div class="col-span-2">
                       <ImageArray bind:value={Image.image} />
                     </div>
-                    <div class="flex justify-end ">
+                    <div class="flex justify-end">
                       <div class="flex flex-col justify-center px-2">Sıra</div>
                       <div class="flex flex-col justify-center">
                         <NumberInput
@@ -501,7 +515,7 @@
               <button
                 on:click={() => updateProduct()}
                 disabled={!product.name}
-                class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+                class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1"
                 type="button"
               >
                 {$Translate("Update")}

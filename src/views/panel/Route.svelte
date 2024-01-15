@@ -51,6 +51,7 @@
   import CatalogImages from "./pala-catalogImage/CatalogImages.svelte";
   import CreateCatalogImage from "./pala-catalogImage/CreateCatalogImage.svelte";
   import UpdateCatalogImage from "./pala-catalogImage/UpdateCatalogImage.svelte";
+  import UpdateProducts from "./pala-updatePrice/UpdateProducts.svelte";
 
   const location = useLocation();
   let adminAuthSubscription;
@@ -209,7 +210,8 @@
            <Route path="create-catalogImage" component={CreateCatalogImage} />
  
            <Route path="catalogImages" component={CatalogImages} />
- 
+           <Route path="updateProducts" component={UpdateProducts} />
+
         </Router>
 
         <FooterAdmin />

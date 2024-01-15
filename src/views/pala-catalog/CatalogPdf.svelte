@@ -15,7 +15,6 @@
   const getMemberships = async () => {
     let response = await RestService.getMemberships(undefined, undefined);
     memberships = response["memberships"];
-    membership=memberships[0]._id
   };
   getMemberships();
 
@@ -78,6 +77,7 @@
       values={memberships}
       title={"Fiyat"}
       valuesKey={"_id"}
+      all={true}
       valuesTitleKey={"name"}
       customClass={"w-48 focus:ring-0 ring-0 "}
     />
@@ -108,15 +108,15 @@
       class="relative flex flex-col justify-start items-center pt-40 h-[297mm] w-[210mm]"
     >
       <div
-        class="absolute top-0 right-4 h-28 w-40 p-3 drop-shadow flex justify-center items-center shadow-xl"
+        class="absolute top-0 right-4 h-28 w-40 p-3 pt-5 drop-shadow flex justify-center items-center shadow-xl"
       >
-        <img src="/assets/img/logos/logo-light.png" alt="" />
+        <img src="/assets/img/logos/kochmaster.png" alt="" />
       </div>
       <div
-      class="absolute bottom-0 right-0 w-full  flex justify-center items-center"
-    >
-      <img src="/assets/img/page-unten.png" alt="" />
-    </div>
+        class="absolute bottom-0 right-0 w-full flex justify-center items-center"
+      >
+        <img src="/assets/img/page-unten.png" alt="" />
+      </div>
       <div class="flex flex-col items-center py-4">
         <h5 class="text-4xl font-semibold">INHALTSVERZEICHNIS</h5>
         <span class="text-2xl">İÇERİK - CONTENT</span>
@@ -159,9 +159,9 @@
             <h5>{page.category.name}</h5>
           </div>
           <div
-            class="absolute top-0 right-4 h-28 w-40 p-3 drop-shadow flex justify-center items-center shadow-xl"
+            class="absolute top-0 right-4 h-28 w-40 p-3 pt-5 drop-shadow flex justify-center items-center shadow-xl"
           >
-            <img src="/assets/img/logos/logo-light.png" alt="" />
+            <img src="/assets/img/logos/kochmaster.png" alt="" />
           </div>
           <!-- FULL PAGE -->
           {#if page.type == "Full"}
@@ -222,22 +222,22 @@
     </div>
   {/each}
   <div
-  class="flex flex-col justify-center items-center w-full h-full text-black"
->
-  <div class="text-black">
-    {#if catalogImages}
-      {#each catalogImages as catalogImage}
-        {#if catalogImage.place == "Çıkış"}
-          <div class="gap-8 h-[297mm] w-[210mm]">
-            <img
-              class="h-full w-full object-cover"
-              src={catalogImage.image}
-              alt=""
-            />
-          </div>
-        {/if}
-      {/each}
-    {/if}
-  </div>
+    class="flex flex-col justify-center items-center w-full h-full text-black"
+  >
+    <div class="text-black">
+      {#if catalogImages}
+        {#each catalogImages as catalogImage}
+          {#if catalogImage.place == "Çıkış"}
+            <div class="gap-8 h-[297mm] w-[210mm]">
+              <img
+                class="h-full w-full object-cover"
+                src={catalogImage.image}
+                alt=""
+              />
+            </div>
+          {/if}
+        {/each}
+      {/if}
+    </div>
   </div>
 {/if}

@@ -23,10 +23,7 @@ export let membership
         <span class="text-2xl font-black italic">  {price.price} € </span>
         <span class="text-md font-semibold italic text-[#878787] opacity-80 leading-7 pl-2">netto</span>
       </div>
-      <div class="flex justify-around items-end">
-        <span class="text-xl font-black italic">  {price.price} € </span>
-        <span class="text-sm font-semibold italic text-[#878787] opacity-80 leading-7">brutto</span>
-      </div>
+     
           {/if}
         {/each}
         {/if}

@@ -14,6 +14,7 @@
   import { bind } from "svelte-simple-modal";
   import { modal } from "$services/store";
   import CountrySelect from "$components/Form/CountrySelect.svelte";
+  import { params } from "$services/utils";
 
   const deleteCustomerApprove = (customerId) => {
     modal.set(
@@ -35,7 +36,7 @@
   };
   getUsers();
 
-  const params = useParams();
+  const editParams = useParams();
 
   let deleteImage = (index) => {
     customer.images.splice(index, 1);
@@ -84,7 +85,11 @@
     );
     if (response["status"]) {
       ToastService.success($Translate("Successfully-completed"));
-      navigate("/panel/customers");
+      navigate(
+        `/panel/customers?limit=${params(location.search)["limit"]}&skip=${
+          params(location.search)["skip"]
+        }`
+      );
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -92,7 +97,7 @@
 
   const getCustomer = async () => {
     processing = true;
-    let response = await RestService.getCustomer($params.customerId);
+    let response = await RestService.getCustomer($editParams.customerId);
 
     if (response["status"]) {
       values.map((v) => {
@@ -111,7 +116,7 @@
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
-    console.log(customer,"xyssdf")
+    console.log(customer, "xyssdf");
   };
 
   getCustomer();
@@ -120,20 +125,29 @@
     let response = await RestService.deleteCustomer(customerId);
     if (response["status"]) {
       ToastService.success("İşlem başarılı");
-      navigate("/panel/customers");
+      navigate(
+        `/panel/customers?limit=${params(location.search)["limit"]}&skip=${
+          params(location.search)["skip"]
+        }`
+      );
     } else {
       ToastService.success("İşlem başarılı");
     }
   };
 </script>
+
 <div class="flex flex-wrap mt-4 h-screen relative">
-  <div class="w-full mb-12 px-2 lg:px-4 ">
+  <div class="w-full mb-12 px-2 lg:px-4">
     <div class="flex justify-between">
       <button
-        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
+        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
         type="button"
         on:click={() => {
-          navigate("/panel/customers");
+          navigate(
+            `/panel/customers?limit=${params(location.search)["limit"]}&skip=${
+              params(location.search)["skip"]
+            }`
+          );
         }}
       >
         <i class="fa fa-arrow-left" />
@@ -141,9 +155,9 @@
       </button>
 
       <button
-        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
+        class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
         type="button"
-        on:click={() => deleteCustomerApprove($params.customerId)}
+        on:click={() => deleteCustomerApprove($editParams.customerId)}
       >
         <i class="fa fa-trash" />
         Sil
@@ -160,7 +174,7 @@
           </h3>
           <div class="relative mb-3 px-10">
             <label
-              class="block  text-blueGray-600 text-xs font-bold mb-2"
+              class="block text-blueGray-600 text-xs font-bold mb-2"
               for="rectangleBanner"
             >
               Aktif mi ?
@@ -177,7 +191,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Müşteri No
@@ -194,7 +208,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Firma/Kişi İsmi
@@ -211,7 +225,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Soyadı
@@ -227,7 +241,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Kullanıcı Seçin
@@ -249,7 +263,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Yetkili İsmi
@@ -265,7 +279,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Mobil Telefon
@@ -281,7 +295,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Firma Telefon
@@ -297,7 +311,7 @@
             <div class="w-full lg:w-3/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   E-mail
@@ -321,20 +335,19 @@
                   Ülke
                 </label>
                 <CountrySelect
-                bind:value={customer.country.value}
-                bind:isValid={customer.country.isValid}
-                bind:isDirty={customer.country.isDirty}
-                customClass={"text-primary placeholder:text-primary placeholder:opacity-50 "}
-                placeholder="Ülke"
-                required={true}
-              />
-               
+                  bind:value={customer.country.value}
+                  bind:isValid={customer.country.isValid}
+                  bind:isDirty={customer.country.isDirty}
+                  customClass={"text-primary placeholder:text-primary placeholder:opacity-50 "}
+                  placeholder="Ülke"
+                  required={true}
+                />
               </div>
             </div>
             <div class="w-full lg:w-2/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Şehir
@@ -350,7 +363,7 @@
             <div class="w-full lg:w-2/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Posta Kodu
@@ -366,7 +379,7 @@
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Adres
@@ -384,7 +397,7 @@
             <div class="w-full lg:w-6/12 px-4">
               <div class="relative w-full mb-3">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold mb-2"
+                  class="block text-blueGray-600 text-xs font-bold mb-2"
                   for="grid-name"
                 >
                   Not
@@ -397,10 +410,10 @@
                 />
               </div>
             </div>
-            <div class="lg:w-6/12 px-4 ">
+            <div class="lg:w-6/12 px-4">
               <div class="">
                 <label
-                  class="block  text-blueGray-600 text-xs font-bold"
+                  class="block text-blueGray-600 text-xs font-bold"
                   for="grid-name"
                 >
                   Evrak
@@ -414,7 +427,7 @@
                     <div class="col-span-2">
                       <ImageArray bind:value={Image.image} />
                     </div>
-                    <div class="flex justify-end ">
+                    <div class="flex justify-end">
                       <button
                         on:click={() => deleteImage(index)}
                         class="w-14 bg-red-500 hover:bg-red-600 text-white font-bold text-xs my-2 ml-4 px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
@@ -441,7 +454,7 @@
               <button
                 on:click={() => updateCustomer()}
                 disabled={!customer.name.isValid}
-                class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 "
+                class="bg-green-500 disabled:bg-red-300 text-white active:bg-bred-400 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1"
                 type="button"
               >
                 {$Translate("Update")}

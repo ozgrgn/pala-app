@@ -172,7 +172,11 @@ const getCatalogImage = (catalogImageId) => {
 };
 
 const deleteCatalogImage = (catalogImageId) => {
-  return Http.delete(`${ENV.API_URL}/catalogImage/${catalogImageId}`, {}, "admin");
+  return Http.delete(
+    `${ENV.API_URL}/catalogImage/${catalogImageId}`,
+    {},
+    "admin"
+  );
 };
 
 // Memberships
@@ -305,8 +309,18 @@ const setCampaign = (productId, campaign) => {
     "admin"
   );
 };
+const updatePrices = (products) => {
+  return Http.put(
+    `${ENV.API_URL}/product/update/updatePrices`,
+    {
+      newProducts: products,
+    },
+    "admin"
+  );
+};
+
 // Customers
-const getCustomers = (limit, skip, isActive, search) => {
+const getCustomers = (limit, skip, isActive, search, sortValue) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -318,8 +332,11 @@ const getCustomers = (limit, skip, isActive, search) => {
     data.isActive = isActive;
   }
 
-  if (search) {
+  if (search!=undefined) {
     data.search = search;
+  }
+  if (sortValue) {
+    data.sortValue = sortValue;
   }
   return Http.get(`${ENV.API_URL}/customer`, { ...data }, "admin");
 };
@@ -419,7 +436,7 @@ const resetPasswordRequestWithEmail = (email) => {
 };
 
 // Users
-const getUsers = (limit, skip, isActive,search) => {
+const getUsers = (limit, skip, isActive, search) => {
   console.log(isActive, "rest");
   let data = {};
   if (limit) {
@@ -579,12 +596,12 @@ export default {
   updateCatalogPage,
   deleteCatalogPage,
 
-    //CatalogImages
-    getCatalogImages,
-    getCatalogImage,
-    addCatalogImage,
-    updateCatalogImage,
-    deleteCatalogImage,
+  //CatalogImages
+  getCatalogImages,
+  getCatalogImage,
+  addCatalogImage,
+  updateCatalogImage,
+  deleteCatalogImage,
   //Memberships
   getMemberships,
   getMembership,
@@ -612,6 +629,7 @@ export default {
   updateProduct,
   deleteProduct,
   setCampaign,
+  updatePrices,
   //Customers
   getCustomers,
   getCustomersByUserId,

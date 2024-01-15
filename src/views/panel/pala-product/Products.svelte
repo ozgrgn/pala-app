@@ -6,12 +6,11 @@
   import Select from "$components/Form/Select.svelte";
   import { bind } from "svelte-simple-modal";
   import Alert from "$components/Alert.svelte";
-  import { modal, search, panelDrawer,activePage } from "$services/store";
+  import { modal, search, panelDrawer, activePage } from "$services/store";
   import Input from "$components/Form/Input.svelte";
   import { onMount } from "svelte";
+  import { params } from "$services/utils";
 
-
-  console.log($activePage,"activvvee")
   const deleteProductApprove = (productId) => {
     modal.set(
       bind(Alert, {
@@ -25,43 +24,56 @@
       })
     );
   };
-  const setCampaign = async (productId,product) => {
-    product.campaign=!product.campaign
-    let response = await RestService.updateProduct(productId,product)
+  const setCampaign = async (productId, product) => {
+    product.campaign = !product.campaign;
+    let response = await RestService.updateProduct(productId, product);
     if (response && response.status) {
-      getProducts($search)
+      getProducts($search);
       ToastService.success("Kampanya değişikliği başarılı");
     }
-  console.log(response,"product ve result")
-}
+  };
   onMount(() => {
     setTimeout(() => {
       panelDrawer.set(false);
     }, 50);
   });
-const navigateAndSkip =async (product) =>{
-activePage.set(skip)
-  navigate(`/panel/update-product/${product._id.toString()}`)
-}
+  const navigateAndSkip = async (product) => {
+    activePage.set(skip);
+    navigate(
+      `/panel/update-product/${product._id.toString()}?limit=${limit}&skip=${skip}&isActive=${isActive}`
+    );
+  };
   let products;
-let active
-let pasive
-  let limit = 20;
-  let skip = 0;
+  let active;
+  let pasive;
+
   let totalDataCount = 0;
-  let activePages=0;
-  let activeCases=[{name:"Tümü",key:undefined},{name:"Aktif",key:true},{name:"Pasif",key:false}];
-  let isActive=undefined
+  let activePages = 0;
+  let activeCases = [
+    { name: "Tümü", key: undefined },
+    { name: "Aktif", key: true },
+    { name: "Pasif", key: false },
+  ];
+  let limit = params(location.search)["limit"]
+    ? params(location.search)["limit"]
+    : 20;
+  let skip = params(location.search)["skip"]
+    ? params(location.search)["skip"]
+    : 0;
+  let isActive =
+    params(location.search)["isActive"] == "null"
+      ? undefined
+      : params(location.search)["isActive"];
+
   const nextProducts = async (search) => {
-skip=0
-getProducts(search)
-  }
+    skip = 0;
+    getProducts(search);
+  };
 
   const getProducts = async (search) => {
-    if($activePage){
-      skip=$activePage
+    if ($activePage) {
+      skip = $activePage;
     }
-    console.log(isActive,"isActive")
     let response = await RestService.getProducts(
       limit,
       skip,
@@ -70,19 +82,16 @@ getProducts(search)
       undefined,
       search
     );
-    console.log(response,"response")
     totalDataCount = response["count"];
-    activeCases[0].count=totalDataCount;
-
-    activeCases[1].count=response["active"];
-    activeCases[2].count=response["pasive"];
-console.log(activeCases,"activeCases")
+    activeCases[0].count = totalDataCount;
+    activeCases[1].count = response["active"];
+    activeCases[2].count = response["pasive"];
 
     products = response["products"];
-activePage.set(null)
+    activePage.set(null);
   };
   $: nextProducts($search);
-  $: pages(totalDataCount);
+  $: pages(totalDataCount,limit);
 
   const deleteProduct = async (productId) => {
     let response = await RestService.deleteProduct(productId);
@@ -100,11 +109,11 @@ activePage.set(null)
     }
   };
 
-  const pages = () => {
+const pages = () => {
     if (totalDataCount > limit) {
-      activePages= new Array(Math.ceil(totalDataCount / limit));
+      activePages = new Array(Math.ceil(totalDataCount / limit));
     } else {
-      activePages= [1];
+      activePages = [1];
     }
   };
 
@@ -112,9 +121,9 @@ activePage.set(null)
 </script>
 
 <div class="flex flex-wrap mt-4 h-screen relative">
-  <div class="w-full mb-12 px-2 lg:px-4 ">
+  <div class="w-full mb-12 px-2 lg:px-4">
     <button
-      class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
+      class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
       type="button"
       on:click={() => {
         navigate("/panel/create-product");
@@ -152,7 +161,7 @@ activePage.set(null)
             <thead>
               <tr>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -160,7 +169,7 @@ activePage.set(null)
                   No
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -168,7 +177,7 @@ activePage.set(null)
                   Sıra
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -176,7 +185,7 @@ activePage.set(null)
                   Kategori
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -184,7 +193,7 @@ activePage.set(null)
                   İsim
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -200,7 +209,7 @@ activePage.set(null)
                   Stok
                 </th> -->
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -208,26 +217,26 @@ activePage.set(null)
                   Kampanya
                 </th>
                 <th
-                class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
-                'light'
-                  ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  : 'bg-red-700 text-red-200 border-red-600'}"
-              >
-                {#if activeCases}
-                  <Select
-                    bind:value={isActive}
-                    change={() => nextProducts()}
-                    values={activeCases}
-                    title={"Durum Seç"}
-                    valuesKey={"key"}
-                    valuesTitleKey={"name"}
-                    secondTitleKey={"count"}
-                    customClass={"w-full border-0 max-w-xs"}
-                  />
-                {/if}
-              </th>
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  {#if activeCases}
+                    <Select
+                      bind:value={isActive}
+                      change={() => nextProducts()}
+                      values={activeCases}
+                      title={"Durum Seç"}
+                      valuesKey={"key"}
+                      valuesTitleKey={"name"}
+                      secondTitleKey={"count"}
+                      customClass={"w-full border-0 max-w-xs"}
+                    />
+                  {/if}
+                </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -270,8 +279,8 @@ activePage.set(null)
                   <td
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
-                    <button  on:click={() => setCampaign(product._id,product)}
-
+                    <button
+                      on:click={() => setCampaign(product._id, product)}
                       class="{product.campaign
                         ? 'bg-green-500'
                         : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold"
@@ -294,7 +303,7 @@ activePage.set(null)
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     <button
-                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
                       type="button"
                       on:click={navigateAndSkip(product)}
                     >
@@ -303,7 +312,7 @@ activePage.set(null)
                     <button
                       on:click={() =>
                         deleteProductApprove(product._id.toString())}
-                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
                       type="button"
                     >
                       {$Translate("Delete")}
@@ -326,16 +335,19 @@ activePage.set(null)
               getProducts();
             }}
             values={[
-              { limit: 20 }
+              { header: "20", limit: 20 },
+              { header: "50", limit: 50 },
+              { header: "100", limit: 100 },
+              { header: "Tümü", limit: 99999999 },
             ]}
             title={"Select page"}
             valuesKey={"limit"}
-            valuesTitleKey={"limit"}
+            valuesTitleKey={"header"}
             customClass={"border border-blue-600 text-blue-600 py-1 w-full mx-16 lg:mx-0 lg:w-auto"}
           />
 
           <button
-            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
@@ -345,25 +357,25 @@ activePage.set(null)
             {$Translate("Prev")}
           </button>
           {#if totalDataCount}
-          {#each activePages as page, i}
-            <button
-              class="border {skip == limit * i
-                ? 'bg-[#6e6e85] text-white'
-                : 'bg-white text-blue-600 border-blue-600'} font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
-              class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
-              type="button"
-              on:click={() => {
-                skip = limit * i;
-                getProducts();
-              }}
-            >
-              {i + 1}
-            </button>
-          {/each}
+            {#each activePages as page, i}
+              <button
+                class="border {skip == limit * i
+                  ? 'bg-[#6e6e85] text-white'
+                  : 'bg-white text-blue-600 border-blue-600'} font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+                class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
+                type="button"
+                on:click={() => {
+                  skip = limit * i;
+                  getProducts();
+                }}
+              >
+                {i + 1}
+              </button>
+            {/each}
           {/if}
           <button
             onclick={ceilAndCalculate}
-            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
             type="button"
           >
             {$Translate("Next")}

@@ -8,6 +8,7 @@
   import Alert from "$components/Alert.svelte";
   import { modal } from "$services/store";
   import Input from "$components/Form/Input.svelte";
+  import { params } from "$services/utils";
 
   const deleteCustomerApprove = (customerId) => {
     modal.set(
@@ -22,21 +23,32 @@
       })
     );
   };
-
+  let sortValue;
   let customers;
-  let limit = 20;
-  let skip = 0;
+
   let totalDataCount = 0;
   let customerSearch;
 
-  const getCustomers = async (search) => {
-    let response = await RestService.getCustomers(limit, skip,undefined,search);
+  let limit = params(location.search)["limit"]
+    ? params(location.search)["limit"]
+    : 20;
+  let skip = params(location.search)["skip"]
+    ? params(location.search)["skip"]
+    : 0;
+
+  const getCustomers = async (search, sortValue) => {
+    let response = await RestService.getCustomers(
+      limit,
+      skip,
+      undefined,
+      search,
+      sortValue
+    );
     customers = response["customers"];
     console.log(customers, "customers");
     totalDataCount = response["count"];
   };
- 
-  $: getCustomers(customerSearch);
+  $: getCustomers(customerSearch, sortValue);
   const deleteCustomer = async (customerId) => {
     let response = await RestService.deleteCustomer(customerId);
     if (response["status"]) {
@@ -62,12 +74,16 @@
   };
 
   export let color = "light";
+
+  $: if (!sortValue) {
+    sortValue = "name";
+  }
 </script>
 
 <div class="flex flex-wrap mt-4 h-screen relative">
-  <div class="w-full mb-12 px-2 lg:px-4 ">
+  <div class="w-full mb-12 px-2 lg:px-4">
     <button
-      class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 "
+      class="bg-white text-blue-600 hover:text-red-700 mb-2 border rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1"
       type="button"
       on:click={() => {
         navigate("/panel/create-customer");
@@ -85,6 +101,7 @@
           <div class="relative w-full px-4 max-w-full flex-grow flex-1">
             <div class="flex justify-between">
               <h3 class="font-semibold text-lg text-blueGray-700">Firmalar</h3>
+
               <div class="relative">
                 <Input
                   bind:value={customerSearch}
@@ -105,7 +122,7 @@
             <thead>
               <tr>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -114,23 +131,40 @@
                 </th>
 
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Firma İsmi
+                  <span
+                    class="cursor-pointer underline {sortValue == 'name'
+                      ? 'font-black'
+                      : 'font-semibold'}"
+                    on:click={() => {
+                      sortValue = sortValue == "name" ? undefined : "name";
+                    }}
+                    >Firma İsmi
+                  </span>
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Kullanıcı İsmi
+                  <span
+                    class="cursor-pointer underline {sortValue == 'username'
+                      ? 'font-black'
+                      : 'font-semibold'}"
+                    on:click={() => {
+                      sortValue =
+                        sortValue == "username" ? undefined : "username";
+                    }}
+                    >Kullanıcı İsmi
+                  </span>
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -138,7 +172,7 @@
                   Kullanıcı Tel
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -147,23 +181,31 @@
                 </th>
 
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Durum
+                  <span
+                    class="cursor-pointer underline {sortValue == 'status'
+                      ? 'font-black'
+                      : 'font-semibold'}"
+                    on:click={() => {
+                      sortValue = sortValue == "status" ? undefined : "status";
+                    }}
+                    >Durum
+                  </span>
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Durum
+                  İşlem
                 </th>
                 <th
-                  class="px-6 align-middle border border-solid py-3 text-xs  border-l-0 border-r-0 whitespace-nowrap font-semibold  {color ===
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
                   'light'
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
@@ -185,7 +227,10 @@
                     {customer.name}
                   </td>
                   <td
-                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center font-medium {customer
+                      .user?.isActive == false
+                      ? 'text-red-500'
+                      : 'text-green-700 '}"
                   >
                     {customer.user?.fullName ? customer.user?.fullName : "-"}
                   </td>
@@ -214,10 +259,10 @@
                     class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
                   >
                     <button
-                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
                       type="button"
                       on:click={navigate(
-                        `/panel/update-customer/${customer._id.toString()}`
+                        `/panel/update-customer/${customer._id.toString()}?limit=${limit}&skip=${skip}`
                       )}
                     >
                       {$Translate("Edit")}
@@ -225,7 +270,7 @@
                     <button
                       on:click={() =>
                         deleteCustomerApprove(customer._id.toString())}
-                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+                      class="bg-white text-blue-600 hover:bg-[#6e6e85] hover:text-white border border-blue-600 rounded font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
                       type="button"
                     >
                       {$Translate("Delete")}
@@ -248,16 +293,19 @@
               getCustomers();
             }}
             values={[
-              { limit: 20 }
+              { header: "20", limit: 20 },
+              { header: "50", limit: 50 },
+              { header: "100", limit: 100 },
+              { header: "Tümü", limit: 99999999 },
             ]}
             title={"Select page"}
             valuesKey={"limit"}
-            valuesTitleKey={"limit"}
+            valuesTitleKey={"header"}
             customClass={"border border-blue-600 text-blue-600 py-1 w-full mx-16 lg:mx-0 lg:w-auto"}
           />
 
           <button
-            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
             type="button"
             on:click={() => {
               skip != 0 ? (skip = skip - limit) : (skip = skip);
@@ -266,25 +314,27 @@
           >
             {$Translate("Prev")}
           </button>
-          {#each pages() as page, i}
-            <button
-              class="border {skip == limit * i
-                ? 'bg-[#6e6e85] text-white'
-                : 'bg-white text-blue-600 border-blue-600'} font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none "
-              class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
-              type="button"
-              on:click={() => {
-                skip = limit * i;
-                getCustomers();
-              }}
-            >
-              {i + 1}
-            </button>
-          {/each}
-
+          {skip}
+          {#key skip}
+            {#each pages() as page, i}
+              <button
+                class="border {skip == limit * i
+                  ? 'bg-[#6e6e85] text-white'
+                  : 'bg-white text-blue-600 border-blue-600'} font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
+                class:hidden={i - skip / limit > 5 || skip / limit - i > 5}
+                type="button"
+                on:click={() => {
+                  skip = limit * i;
+                  getCustomers(customerSearch, sortValue);
+                }}
+              >
+                {i + 1}
+              </button>
+            {/each}
+          {/key}
           <button
             onclick={ceilAndCalculate}
-            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold  text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none  "
+            class="bg-[#6e6e85] text-white active:bg-orange-500 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none"
             type="button"
           >
             {$Translate("Next")}

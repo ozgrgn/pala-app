@@ -12,3 +12,8 @@ export function isDesktop() {
     return true;
   }
 }
+export const params = (searchQueryString) => {
+  return Object.fromEntries(
+    new URLSearchParams(searchQueryString || window.location.search).entries()
+  );
+};

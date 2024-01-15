@@ -3,3 +3,4 @@ const env = {
 };
 export default env
     // API_URL: "https://pala-backend.herokuapp.com" ,
+    // API_URL: "http://localhost:3000" ,
