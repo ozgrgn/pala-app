@@ -312,7 +312,7 @@
               getCustomers();
             }}
           >
-            {$Translate("Prev")}
+            {$Translate("Prev")} 
           </button>
           {#key skip}
             {#each pages() as page, i}
