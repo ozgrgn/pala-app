@@ -14,12 +14,15 @@
   import { bind } from "svelte-simple-modal";
   import { modal, panelDrawer } from "$services/store";
   import { onMount } from "svelte";
+  import PasswordInput from "../../../components/Form/PasswordInput.svelte";
+
   let products;
   let basePriceId;
   let targetPriceId;
   let newPrices;
-  let percent = 1;
+  let percent = 0;
   let _memberships = [];
+  let pass
   onMount(() => {
     setTimeout(() => {
       panelDrawer.set(false);
@@ -42,13 +45,15 @@
       })
     );
   };
+  $: if (targetPriceId) {
+    getProducts();
+  }
   const getProducts = async () => {
     let response = await RestService.getProducts();
     if (response && response["status"]) {
       products = response["products"];
     } else console.log("ürünler gelemedi");
   };
-  getProducts();
   const send = async () => {
     let response = await RestService.updatePrices(products);
     if (response["status"]) {
@@ -56,21 +61,50 @@
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
-
   };
 
   const updatePrices = async () => {
     products.map((product, i) => {
+      let a = product.prices.find((price) => price._id == targetPriceId);
+      console.log(a, "aaaa");
+      if (a) {
+        console.log("no");
+      } else {
+        let addMembership = memberships.find(
+          (membership) => membership._id == targetPriceId
+        );
+        products[i].prices.push({
+          name: addMembership.name,
+          _id: addMembership._id,
+        });
+        console.log(product.no, products[i].prices, "şşş");
+      }
       product.prices.map((price, y) => {
+        console.log(product.no, price, "----");
         if (price._id == targetPriceId) {
+          console.log(product.no, price, "price");
           let basePrice = product.prices.find(
             (price) => price._id == basePriceId
           ).price
             ? product.prices.find((price) => price._id == basePriceId).price
             : 0;
+          console.log(product.no, basePrice, "basePrice");
           products[i].prices[y].price = Number(
             basePrice + (basePrice * percent) / 100
           ).toFixed(2);
+          products[i].prices[y].price=Number(products[i].prices[y].price)
+          
+          console.log(
+            product.no,
+            products[i].prices[y],
+            products[i].prices[y].price,
+            basePrice + (basePrice * percent) / 100,
+            "products[i].prices[y]"
+          );
+
+          // console.log(product.no,Number(
+          //   basePrice + (basePrice * percent) / 100
+          // ).toFixed(2))
         }
       });
     });
@@ -81,17 +115,20 @@
   const getMemberships = async () => {
     let response = await RestService.getMemberships();
     memberships = response["memberships"];
-    console.log(memberships, "aaa");
+    memberships.map((membership, i) => {
+      memberships[i]["price"] = 0;
+    });
+    console.log(memberships, "bbbbb");
   };
 
   getMemberships();
   $: if (basePriceId) {
     console.log(basePriceId);
     _memberships = memberships.filter((item) => item._id != basePriceId);
-    console.log(memberships, _memberships, " , _");
+    console.log(memberships, _memberships, " ,a_");
   }
 </script>
-
+{#if pass && pass=="1453"}
 <div class="flex flex-wrap mt-4 h-screen relative">
   <div class="w-full mb-12 px-2 lg:px-4">
     <button
@@ -132,6 +169,7 @@
                   valuesKey={"_id"}
                   valuesTitleKey={"name"}
                   customClass={"w-full bg-slate-200 h-10"}
+                  disabled={newPrices}
                 />
               {/if}
             </div>
@@ -152,6 +190,7 @@
                   valuesKey={"_id"}
                   valuesTitleKey={"name"}
                   customClass={"w-full bg-slate-200 h-10"}
+                  disabled={newPrices}
                 />
               {/if}
             </div>
@@ -169,6 +208,7 @@
                   bind:value={percent}
                   customClass="appearance-none h-10"
                   required={false}
+                  disabled={newPrices}
                 />
                 <div class="absolute top-[2rem] right-2">%</div>
               {/if}
@@ -239,22 +279,27 @@
               {#each products as product}
                 <tr class="">
                   <td
-                    class="border-t-0 px-2 flex justify-center align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center font-medium"
-                    ><img
-                      class="w-10"
-                      src={product.images[0]?.image}
-                      alt=""
-                    /></td
+                    class="border-t-0 border px-2 flex justify-center align-middle border-l-0 border-r-0 text-xs whitespace-nowrap text-center font-medium"
                   >
+                    {#if product.images[0]?.image}
+                      <img
+                        class="w-10 h-16 object-contain"
+                        src={product.images[0]?.image}
+                        alt=""
+                      />
+                    {:else}
+                      <div class="h-16 flex justify-center items-center">-</div>
+                    {/if}
+                  </td>
                   <td
-                    class="border-t-0 px-2 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center font-medium {product?.isActive ==
+                    class="border-t-0 border px-2 align-middle text-xs whitespace-nowrap text-center font-medium {product?.isActive ==
                     false
                       ? 'text-red-500'
                       : 'text-green-700 '}">{product.no}</td
                   >
 
                   <td
-                    class="border-t-0 px-2 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center font-semibold"
+                    class="border-t-0 border px-2 align-middle border text-xs whitespace-nowrap text-center font-semibold"
                   >
                     {product.prices.find((price) => price._id == basePriceId)
                       .price
@@ -267,16 +312,16 @@
                       : ""}</td
                   >
                   <td
-                    class="border-t-0 px-2 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center font-semibold"
+                    class="border-t-0 border px-2 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap text-center font-semibold"
                   >
                     {product.prices.find((price) => price._id == targetPriceId)
-                      .price
+                      ?.price
                       ? product.prices.find(
                           (price) => price._id == targetPriceId
                         ).price
                       : "-"}
                     {product.prices.find((price) => price._id == targetPriceId)
-                      .price
+                      ?.price
                       ? "€"
                       : ""}</td
                   >
@@ -288,3 +333,26 @@
     </div>
   </div>
 </div>
+{:else}
+<div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+  <div class="flex flex-wrap my-4">
+<div class="relative w-full mb-3">
+  <label
+    class="block  text-blueGray-600 text-xs font-bold mb-2"
+    for="grid-password"
+  >
+    {$Translate("Password")}
+  </label>
+
+  <Input
+    bind:value={pass}
+    name={"password"}
+
+    placeholder={$Translate("Your-password")}
+    required={true}
+    autocomplete={"new-password"}
+  />
+</div>
+  </div>
+</div>
+{/if}

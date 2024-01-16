@@ -41,8 +41,8 @@ let search;
  $: getUsers(search);
   const getCustomers = async () => {
     let response = await RestService.getCustomers(
-      undefined,
-      undefined,
+      99999999999,
+      0,
       undefined,
       undefined
     );

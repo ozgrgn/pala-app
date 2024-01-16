@@ -281,6 +281,7 @@ const addProduct = (data) => {
 };
 
 const updateProduct = (productId, data) => {
+  console.log(productId,data,"rest")
   return Http.put(
     `${ENV.API_URL}/product/${productId}`,
     {

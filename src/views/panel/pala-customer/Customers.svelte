@@ -314,7 +314,6 @@
           >
             {$Translate("Prev")}
           </button>
-          {skip}
           {#key skip}
             {#each pages() as page, i}
               <button

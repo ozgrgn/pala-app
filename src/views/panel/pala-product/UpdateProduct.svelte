@@ -80,7 +80,7 @@
         editedProduct[v.key] = product[v.key].value;
       }
     });
-
+console.log(editedProduct,"editedProduct")
     let response = await RestService.updateProduct(product._id, editedProduct);
     if (response["status"]) {
       ToastService.success($Translate("Successfully-completed"));
