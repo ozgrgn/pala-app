@@ -1,9 +1,9 @@
 <script>
   import { link } from "svelte-navigator";
-  import { salesItems, search, campaign } from "$services/store";
+  import { membership, search, campaign } from "$services/store";
   import RestService from "$services/rest";
   import { Translate } from "$services/language";
-
+console.log($membership,"membership")
   let cats;
 
   import { useParams } from "svelte-navigator";
@@ -39,6 +39,7 @@
     );
     products=[]
     products = response["products"];
+    products=products.filter((product)=>product.prices.find((price)=>price._id==$membership && price.price && price.price>0 ))
     totalDataCount = response["count"];
   };
   $: getProducts($params, $search, $campaign);
