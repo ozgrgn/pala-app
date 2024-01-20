@@ -10,6 +10,7 @@
   import Input from "$components/Form/Input.svelte";
   import { onMount } from "svelte";
   import { params } from "$services/utils";
+  import id from "date-fns/locale/id";
 
   const deleteProductApprove = (productId) => {
     modal.set(
@@ -73,10 +74,12 @@
     params(location.search)["catalogActive"] == "null"
       ? undefined
       : params(location.search)["catalogActive"];
-  let cat = params(location.search)["cat"]== "undefined"
-    ? undefined 
-    : params(location.search)["cat"];
-
+  let cat =
+    params(location.search)["cat"] == null ||
+    params(location.search)["cat"] == "null"
+      ? undefined
+      : params(location.search)["cat"];
+$:console.log(params(location.search)["cat"],cat,"iiiii")
   const nextProducts = async (search) => {
     skip = 0;
     getProducts(search);
@@ -88,8 +91,12 @@
   };
   getCats();
   const getProducts = async (search) => {
+   
     if ($activePage) {
       skip = $activePage;
+    }
+    if(cat=="null") {
+      cat=undefined
     }
     let response = await RestService.getProducts(
       limit,
