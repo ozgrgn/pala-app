@@ -94,9 +94,12 @@
     let response = await RestService.getProducts(
       undefined,
       undefined,
-      true,
+      undefined,
       activeCategory,
-      undefined
+      undefined,
+      undefined,
+      undefined,
+      true
     );
     if (response["status"]) {
       products = response["products"];

@@ -250,7 +250,7 @@ const deleteUnit = (unitId) => {
 };
 
 // Products
-const getProducts = (limit, skip, isActive, cat, brand, search, campaign) => {
+const getProducts = (limit, skip, isActive, cat, brand, search, campaign,catalogActive) => {
   let data = {};
   if (limit) {
     data.limit = limit;
@@ -272,6 +272,9 @@ const getProducts = (limit, skip, isActive, cat, brand, search, campaign) => {
   }
   if (search) {
     data.search = search;
+  }
+  if (catalogActive!= undefined) {
+    data.catalogActive = catalogActive;
   }
 
   return Http.get(`${ENV.API_URL}/product`, { ...data });
@@ -319,6 +322,13 @@ const updatePrices = (products) => {
     "admin"
   );
 };
+// const tmp = () => {
+//   return Http.put(
+//     `${ENV.API_URL}/product/rrr/tmp`,
+//  {},
+//     "admin"
+//   );
+// };
 
 // Customers
 const getCustomers = (limit, skip, isActive, search, sortValue) => {

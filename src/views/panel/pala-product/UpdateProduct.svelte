@@ -65,6 +65,7 @@
     { key: "catalogName", customValue: null },
     { key: "catalogDesc1", customValue: null },
     { key: "catalogDesc2", customValue: null },
+    { key: "catalogActive", customValue: null },
   ];
 
   const updateProduct = async () => {
@@ -80,15 +81,15 @@
         editedProduct[v.key] = product[v.key].value;
       }
     });
-console.log(editedProduct,"editedProduct")
+    console.log(editedProduct, "editedProduct");
     let response = await RestService.updateProduct(product._id, editedProduct);
     if (response["status"]) {
       ToastService.success($Translate("Successfully-completed"));
       navigate(
-        `/panel/products?limit=${params(location.search)["limit"]}&skip=${
-          params(location.search)["skip"]
-        }&isActive=${params(location.search)["isActive"]}`
-      );
+            `/panel/products?limit=${params(location.search)["limit"]}&skip=${
+              params(location.search)["skip"]
+            }&isActive=${params(location.search)["isActive"]}&catalogActive=${params(location.search)["catalogActive"]}&cat=${params(location.search)["cat"]}`
+          );
     } else {
       ToastService.error($TranslateApiMessage(response.message));
     }
@@ -178,10 +179,10 @@ console.log(editedProduct,"editedProduct")
     if (response["status"]) {
       ToastService.success("İşlem başarılı");
       navigate(
-        `/panel/products?limit=${params(location.search)["limit"]}&skip=${
-          params(location.search)["skip"]
-        }&isActive=${params(location.search)["isActive"]}`
-      );
+            `/panel/products?limit=${params(location.search)["limit"]}&skip=${
+              params(location.search)["skip"]
+            }&isActive=${params(location.search)["isActive"]}&catalogActive=${params(location.search)["catalogActive"]}&cat=${params(location.search)["cat"]}`
+          );
     } else {
       ToastService.success("İşlem başarılı");
     }
@@ -198,7 +199,7 @@ console.log(editedProduct,"editedProduct")
           navigate(
             `/panel/products?limit=${params(location.search)["limit"]}&skip=${
               params(location.search)["skip"]
-            }&isActive=${params(location.search)["isActive"]}`
+            }&isActive=${params(location.search)["isActive"]}&catalogActive=${params(location.search)["catalogActive"]}&cat=${params(location.search)["cat"]}`
           );
         }}
       >
@@ -222,16 +223,29 @@ console.log(editedProduct,"editedProduct")
       <div class="rounded-t mb-0 px-4 py-3 border-0">
         <div class="text-center flex justify-between">
           <h3 class="font-semibold text-lg text-blueGray-700">Ürün Güncelle</h3>
-          <div class="relative mb-3 px-10">
-            <label
-              class="block text-blueGray-600 text-xs font-bold mb-2"
-              for="rectangleBanner"
-            >
-              Aktif mi ?
-            </label>
-            {#if product}
-              <Switch bind:value={product.isActive.value} />
-            {/if}
+          <div class="flex justify-end">
+            <div class="relative mb-3 px-10">
+              <label
+                class="block text-blueGray-600 text-xs font-bold mb-2"
+                for="rectangleBanner"
+              >
+                Aktif mi ?
+              </label>
+              {#if product}
+                <Switch bind:value={product.isActive.value} />
+              {/if}
+            </div>
+            <div class="relative mb-3 px-10">
+              <label
+                class="block text-blueGray-600 text-xs font-bold mb-2"
+                for="rectangleBanner"
+              >
+                Katalog ?
+              </label>
+              {#if product}
+                <Switch bind:value={product.catalogActive.value} />
+              {/if}
+            </div>
           </div>
         </div>
       </div>

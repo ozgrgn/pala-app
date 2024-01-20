@@ -127,6 +127,10 @@
     _memberships = memberships.filter((item) => item._id != basePriceId);
     console.log(memberships, _memberships, " ,a_");
   }
+  // const tmp = async () => {
+  //   let response = await RestService.tmp();
+  // }
+  // tmp()
 </script>
 {#if pass && pass=="1453"}
 <div class="flex flex-wrap mt-4 h-screen relative">

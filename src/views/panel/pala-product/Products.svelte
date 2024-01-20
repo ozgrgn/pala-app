@@ -40,16 +40,21 @@
   const navigateAndSkip = async (product) => {
     activePage.set(skip);
     navigate(
-      `/panel/update-product/${product._id.toString()}?limit=${limit}&skip=${skip}&isActive=${isActive}`
+      `/panel/update-product/${product._id.toString()}?limit=${limit}&skip=${skip}&isActive=${isActive}&catalogActive=${catalogActive}&cat=${cat}`
     );
   };
   let products;
   let active;
   let pasive;
-
+  let cats;
   let totalDataCount = 0;
   let activePages = 0;
   let activeCases = [
+    { name: "Tümü", key: undefined },
+    { name: "Aktif", key: true },
+    { name: "Pasif", key: false },
+  ];
+  let catalogActiveCases = [
     { name: "Tümü", key: undefined },
     { name: "Aktif", key: true },
     { name: "Pasif", key: false },
@@ -64,12 +69,24 @@
     params(location.search)["isActive"] == "null"
       ? undefined
       : params(location.search)["isActive"];
+  let catalogActive =
+    params(location.search)["catalogActive"] == "null"
+      ? undefined
+      : params(location.search)["catalogActive"];
+  let cat = params(location.search)["cat"]== "undefined"
+    ? undefined 
+    : params(location.search)["cat"];
 
   const nextProducts = async (search) => {
     skip = 0;
     getProducts(search);
   };
-
+  const getCats = async () => {
+    let response = await RestService.getCats(undefined, undefined, true);
+    cats = response["cats"];
+    console.log(cats, "cats");
+  };
+  getCats();
   const getProducts = async (search) => {
     if ($activePage) {
       skip = $activePage;
@@ -78,9 +95,11 @@
       limit,
       skip,
       isActive,
+      cat,
       undefined,
+      search,
       undefined,
-      search
+      catalogActive
     );
     totalDataCount = response["count"];
     activeCases[0].count = totalDataCount;
@@ -91,7 +110,7 @@
     activePage.set(null);
   };
   $: nextProducts($search);
-  $: pages(totalDataCount,limit);
+  $: pages(totalDataCount, limit);
 
   const deleteProduct = async (productId) => {
     let response = await RestService.deleteProduct(productId);
@@ -109,7 +128,7 @@
     }
   };
 
-const pages = () => {
+  const pages = () => {
     if (totalDataCount > limit) {
       activePages = new Array(Math.ceil(totalDataCount / limit));
     } else {
@@ -182,7 +201,18 @@ const pages = () => {
                     ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                     : 'bg-red-700 text-red-200 border-red-600'}"
                 >
-                  Kategori
+                  {#if cats}
+                    <Select
+                      bind:value={cat}
+                      change={() => nextProducts()}
+                      values={cats}
+                      title={"Kategori"}
+                      valuesKey={"_id"}
+                      valuesTitleKey={"name"}
+                      customClass={"w-full border-0 max-w-xs"}
+                      textSmall={true}
+                    />
+                  {/if}
                 </th>
                 <th
                   class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
@@ -227,11 +257,31 @@ const pages = () => {
                       bind:value={isActive}
                       change={() => nextProducts()}
                       values={activeCases}
-                      title={"Durum Seç"}
+                      title={"Durum"}
                       valuesKey={"key"}
                       valuesTitleKey={"name"}
                       secondTitleKey={"count"}
                       customClass={"w-full border-0 max-w-xs"}
+                      textSmall={true}
+                    />
+                  {/if}
+                </th>
+                <th
+                  class="px-6 align-middle border border-solid py-3 text-xs border-l-0 border-r-0 whitespace-nowrap font-semibold {color ===
+                  'light'
+                    ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    : 'bg-red-700 text-red-200 border-red-600'}"
+                >
+                  {#if catalogActiveCases}
+                    <Select
+                      bind:value={catalogActive}
+                      change={() => nextProducts()}
+                      values={catalogActiveCases}
+                      title={"Katalog"}
+                      valuesKey={"key"}
+                      valuesTitleKey={"name"}
+                      customClass={"w-full border-0 max-w-xs text-xs"}
+                      textSmall={true}
                     />
                   {/if}
                 </th>
@@ -297,6 +347,17 @@ const pages = () => {
                         : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold"
                     >
                       {product.isActive ? "Aktif" : "Pasif"}
+                    </button>
+                  </td>
+                  <td
+                    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center"
+                  >
+                    <button
+                      class="{product.catalogActive
+                        ? 'bg-green-500'
+                        : 'bg-red-500'} bg-green-500 p-2 rounded text-white font-semibold"
+                    >
+                      {product.catalogActive ? "Aktif" : "Pasif"}
                     </button>
                   </td>
                   <td
