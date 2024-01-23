@@ -23,7 +23,6 @@
 
     if (response["status"]) {
       cats = response["cats"];
-      console.log(cats);
 
       cats.map((cat, i) => {
         let filteredPages = catalogPages.filter(
@@ -39,7 +38,6 @@
           sortedPages.push(filteredPages);
         }
       });
-      console.log(catalogIndex, "catalogIndex");
     }
   };
 
@@ -54,7 +52,6 @@
     );
     if (response && response["catalogPages"]) {
       catalogPages = response["catalogPages"];
-      console.log(catalogPages, "catalgoPages");
       getCats();
     }
   };
@@ -64,7 +61,6 @@
     let response = await RestService.getCatalogImages();
     if (response && response["catalogImages"]) {
       catalogImages = response["catalogImages"];
-      console.log(catalogImages, "catalgoImages");
     }
   };
   getCatalogImages();
