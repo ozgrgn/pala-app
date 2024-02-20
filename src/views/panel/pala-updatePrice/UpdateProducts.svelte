@@ -227,7 +227,7 @@
                       updatePrices();
                     }}
                     class="bg-orange-500 disabled:bg-red-300 h-9 text-white active:bg-bred-400 font-bold text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1"
-                    disabled={!basePriceId || !targetPriceId || !percent}
+                    disabled={!basePriceId || !targetPriceId}
                   >
                     Fiyatları Güncelle
                   </button>
