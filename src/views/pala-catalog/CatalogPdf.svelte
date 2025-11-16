@@ -66,6 +66,31 @@
   getCatalogImages();
 </script>
 
+<style>
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page-container {
+      page-break-after: always;
+      page-break-inside: avoid;
+    }
+
+    .page-container:last-child {
+      page-break-after: auto;
+    }
+  }
+</style>
+
 <div class="not-printable flex justify-center my-5">
   {#if memberships}
     <SelectV2
@@ -86,7 +111,7 @@
     {#if catalogImages}
       {#each catalogImages as catalogImage}
         {#if catalogImage.place == "Giriş"}
-          <div class="h-[297mm] w-[210mm]">
+          <div class="page-container h-[297mm] w-[210mm]">
             <img
               class="h-[297mm] w-[210mm] object-cover"
               src={catalogImage.image}
@@ -101,7 +126,7 @@
     class="flex flex-col justify-center items-center w-full h-full text-black h-full w-full"
   >
     <div
-      class="relative flex flex-col justify-start items-center pt-40 h-[297mm] w-[210mm]"
+      class="page-container relative flex flex-col justify-start items-center pt-40 h-[297mm] w-[210mm]"
     >
       <div
         class="absolute top-0 right-4 h-28 w-40 p-3 pt-5 drop-shadow flex justify-center items-center shadow-xl"
@@ -142,7 +167,7 @@
     <div class="flex flex-col justify-center items-center text-black">
       {#each sortedPage as page, a}
         <div
-          class="relative grid grid-cols-2 grid-rows-2 gap-8 h-[297mm] w-[210mm] p-10 pt-32 pb-20"
+          class="page-container relative grid grid-cols-2 grid-rows-2 gap-8 h-[297mm] w-[210mm] p-10 pt-32 pb-20"
         >
           <div
             class="absolute bottom-2 left-2 opacity-40 italic font-semibold text-lg"
@@ -224,7 +249,7 @@
       {#if catalogImages}
         {#each catalogImages as catalogImage}
           {#if catalogImage.place == "Çıkış"}
-            <div class="gap-8 h-[297mm] w-[210mm]">
+            <div class="page-container gap-8 h-[297mm] w-[210mm]">
               <img
                 class="h-full w-full object-cover"
                 src={catalogImage.image}
